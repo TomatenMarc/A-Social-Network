@@ -1,0 +1,18 @@
+image: docker
+
+services:
+  - docker:stable-dind
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - echo "Building ..."
+
+test:
+  stage: test
+  script:
+    - echo "Testing ..."
