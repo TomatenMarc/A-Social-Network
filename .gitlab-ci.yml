@@ -7,6 +7,11 @@ stages:
   - build
   - test
 
+before_script:
+  - docker info
+  - apk add --no-cache docker-compose
+  - docker-compose info
+
 build:
   stage: build
   script:
