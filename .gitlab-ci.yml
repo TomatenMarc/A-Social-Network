@@ -8,9 +8,9 @@ stages:
   - test
 
 before_script:
-  - docker info
+  - docker version
   - apk add --no-cache docker-compose
-  - docker-compose info
+  - docker-compose version
 
 build:
   stage: build
