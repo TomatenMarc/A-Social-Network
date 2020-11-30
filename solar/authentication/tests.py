@@ -4,11 +4,19 @@ from rest_framework.response import Response
 from rest_framework.test import APITestCase, APIClient
 
 
-class TestSignUp(APITestCase):
+class TestObtainingAToken(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(username="Rudiger", email="Rudiger@Dog.com", password="Rudiger")
         self.user.save()
+
+    def tearDown(self):
+        self.user.delete()
+        try:
+            user = User.objects.get(username="Rudiger")
+        except Exception as exception:
+            user = None
+        self.assertIsNone(user)
 
     def test_valid_user_obtains_token(self):
         response: Response = self.client.post(path="/authentication/obtain/", data={
