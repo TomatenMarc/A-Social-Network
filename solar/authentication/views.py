@@ -20,7 +20,7 @@ class Register(APIView):
     """
 
     @staticmethod
-    def validate(data: dict):
+    def validate(data: dict) -> Response:
         """
         This method validates the data provided for the new user.
         It validates if the username, email and the password is set and they are not empty.
@@ -39,7 +39,7 @@ class Register(APIView):
                                 data={"error": "{} is empty!".format(field)})
         return Response(status=status.HTTP_200_OK)
 
-    def post(self, request: Request):
+    def post(self, request: Request) -> Response:
         """
         This method handles the actual POST-request of the new user.
         First the data send is checked for mistakes, missing or empty values.
