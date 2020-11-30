@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -38,7 +39,7 @@ class Register(APIView):
                                 data={"error": "{} is empty!".format(field)})
         return Response(status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request: Request):
         """
         This method handles the actual POST-request of the new user.
         First the data send is checked for mistakes, missing or empty values.
@@ -55,12 +56,12 @@ class Register(APIView):
         if valid.status_code != 200:
             return valid
 
-        username = data["username"]
-        email = data["email"]
-        password = data["password"]
+        username: str = data["username"]
+        email: str = data["email"]
+        password: str = data["password"]
         try:
             user: User = User.objects.create_user(username=username, email=email, password=password)
             login(request, user)
         except IntegrityError as error:
-            return Response(status=status.HTTP_409_CONFLICT, data={"error": str(error)})
-        return Response(status=status.HTTP_201_CREATED, data={"token": str(Token.objects.create(user=user))})
+            return Response(status=status.HTTP_409_CONFLICT, data={"error": error.__str__()})
+        return Response(status=status.HTTP_201_CREATED, data={"token": Token.objects.create(user=user).__str__()})
