@@ -11,16 +11,23 @@ before_script:
   - docker version
   - apk add --no-cache docker-compose
   - docker-compose version
+  - docker login -u gitlab-ci-token -p $REGISTRY_TOKEN $REGISTRY
+
+after_script:
+  - docker-compose down
+  - docker-compose ps
+
 
 build:
   stage: build
   script:
     - echo "Building ..."
-    - docker login -u gitlab-ci-token -p $REGISTRY_TOKEN $REGISTRY
     - docker-compose -f docker-compose.ci.yml build
     - docker-compose -f docker-compose.ci.yml push
 
-test:
+test_authentication:
   stage: test
   script:
     - echo "Testing ..."
+    - docker-compose pull
+    - docker-compose run web sh -c "pipenv run python solar/manage.py makemigrations && pipenv run python solar/manage.py migrate && pipenv run python solar/manage.py test authentication"
