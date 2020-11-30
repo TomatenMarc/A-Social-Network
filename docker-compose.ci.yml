@@ -2,6 +2,6 @@ version: "3"
 services:
   web:
     build: .
-    image: ${REGISTRY}/feger/docker-compose-ci/web:latest
+    image: ${REGISTRY}/cn-tsn/students/master/ma-feger-code/web:latest
     volumes:
       - .:/code
