@@ -27,6 +27,8 @@ build:
 
 test_authentication:
   stage: test
+  needs:
+    - build
   script:
     - echo "Testing ..."
     - docker-compose -f docker-compose.ci.yml pull
