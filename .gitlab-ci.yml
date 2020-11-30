@@ -16,6 +16,9 @@ build:
   stage: build
   script:
     - echo "Building ..."
+    - docker login -u gitlab-ci-token -p $REGISTRY_TOKEN $REGISTRY
+    - docker-compose build
+    - docker-compose push
 
 test:
   stage: test
