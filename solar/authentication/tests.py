@@ -109,3 +109,97 @@ class TestRegistration(APITestCase):
         token: Token = Token.objects.get(key=response.data["token"]).user
         user: User = User.objects.get(username="another_user")
         self.assertEqual(token, user)
+
+
+class TestLogin(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="Bernd", email="Bernd@Brot.com", password="Brot")
+        self.user.save()
+
+    def test_valid_user_can_login(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd", "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        user: User = Token.objects.get(key=response.data["token"]).user
+        self.assertEqual(self.user, user)
+
+    def test_token_gets_refreshed_after_new_login(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd", "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        token_old: Token = Token.objects.get(key=response.data["token"])
+        self.assertIsNotNone(token_old)
+
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd", "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        token_new: Token = Token.objects.get(key=response.data["token"])
+        self.assertIsNotNone(token_new)
+
+        self.assertNotEqual(token_old, token_new)
+
+    def test_user_can_not_login_with_wrong_username(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Berndy", "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Username or password invalid!")
+
+    def test_user_can_not_login_with_wrong_password(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd", "password": "Brötchen"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Username or password invalid!")
+
+    def test_user_can_not_login_without_username(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "username is missing!")
+
+    def test_user_can_not_login_with_empty_username(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "", "password": "Brot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "username is empty!")
+
+    def test_user_can_not_login_without_password(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "password is missing!")
+
+    def test_user_can_not_login_with_empty_password(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Bernd", "password": ""
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "password is empty!")
+
+    def tearDown(self):
+        self.user.delete()
+        try:
+            user = User.objects.get(username="Bernd")
+        except Exception as exception:
+            user = None
+        self.assertIsNone(user)

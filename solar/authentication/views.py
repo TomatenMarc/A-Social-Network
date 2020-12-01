@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework import status
@@ -65,3 +65,68 @@ class Register(APIView):
         except IntegrityError as error:
             return Response(status=status.HTTP_409_CONFLICT, data={"error": error.__str__()})
         return Response(status=status.HTTP_201_CREATED, data={"token": Token.objects.create(user=user).__str__()})
+
+
+class Login(APIView):
+    """
+    This APIView takes care of the login of a requesting users.
+    It checks if the user has entered all fields for login.
+    When a user logs in, he receives a token.
+    """
+
+    @staticmethod
+    def validate(data: dict) -> Response:
+        """
+        This method validates the data provided for the new user.
+        It validates if the username and the password is set and they are not empty.
+
+        :param data: The data provided by the new user.
+        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
+                 200_OK otherwise.
+        """
+        fields = ["username", "password"]
+        for field in fields:
+            if field not in data.keys():
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={"error": "{} is missing!".format(field)})
+            if not data[field]:
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={"error": "{} is empty!".format(field)})
+        return Response(status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """
+        This method handles the actual POST-request of the requesting user.
+        First the data send is checked for mistakes, missing or empty values.
+        Afterwards the User is authenticated and logged in.
+        
+        :param request: The request of the user containing all necessary information for an login.
+        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong.
+                 201_CREATE if the user is authenticated (Contains the token in the data-section).
+        """
+        data: dict = request.data
+
+        valid: Response = self.validate(data)
+        if valid.status_code != 200:
+            return valid
+
+        username: str = data["username"]
+        password: str = data["password"]
+
+        user: User = authenticate(username=username, password=password)
+
+        if not user:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Username or password invalid!"})
+
+        token, operation_was_create = Token.objects.get_or_create(user=user)
+
+        if not operation_was_create:
+            # refresh the token if there was a previous token detected
+            token.delete()
+            token = Token.objects.create(user=user)
+
+        if user:
+            login(request, user)
+            return Response(status=status.HTTP_200_OK, data={"token": token.key.__str__()})
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
