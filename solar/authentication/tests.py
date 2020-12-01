@@ -24,7 +24,7 @@ class TestObtainingAToken(APITestCase):
             "username": "Rudiger",
             "password": "Rudiger"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_200_OK).status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue("token" in response.data.keys())
         self.assertIsNotNone(response.data["token"])
 
@@ -33,7 +33,7 @@ class TestObtainingAToken(APITestCase):
             "username": "Klaus",
             "password": "Klaus"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class TestRegistration(APITestCase):
@@ -42,7 +42,7 @@ class TestRegistration(APITestCase):
 
     def test_everything_is_missing(self):
         response: Response = self.client.post(path="/authentication/register/", data={})
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "username is missing!")
 
     def test_everything_is_empty(self):
@@ -51,7 +51,7 @@ class TestRegistration(APITestCase):
             "email": "",
             "password": ""
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "username is empty!")
 
     def test_password_is_missing(self):
@@ -59,7 +59,7 @@ class TestRegistration(APITestCase):
             "username": "username",
             "email": "e@mail.de"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "password is missing!")
 
     def test_password_is_empty(self):
@@ -68,7 +68,7 @@ class TestRegistration(APITestCase):
             "password": "",
             "email": "e@mail.de"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "password is empty!")
 
     def test_email_is_missing(self):
@@ -76,7 +76,7 @@ class TestRegistration(APITestCase):
             "username": "username",
             "password": "password"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "email is missing!")
 
     def test_email_is_empty(self):
@@ -85,7 +85,7 @@ class TestRegistration(APITestCase):
             "password": "",
             "email": ""
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_400_BAD_REQUEST).status_code)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "email is empty!")
 
     def test_user_already_exists(self):
@@ -95,7 +95,7 @@ class TestRegistration(APITestCase):
             "username": "Peter", "password": "password", "email": "e@mail.de"
         })
 
-        self.assertEqual(response.status_code, Response(status=status.HTTP_409_CONFLICT).status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
 
         self.assertEqual(response.data["error"], "UNIQUE constraint failed: auth_user.username")
 
@@ -105,10 +105,10 @@ class TestRegistration(APITestCase):
             "password": "another_password",
             "email": "another_e@mail.de"
         })
-        self.assertEqual(response.status_code, Response(status=status.HTTP_201_CREATED).status_code)
-        token: Token = Token.objects.get(key=response.data["token"]).user
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        token_user: User = Token.objects.get(key=response.data["token"]).user
         user: User = User.objects.get(username="another_user")
-        self.assertEqual(token, user)
+        self.assertEqual(token_user, user)
 
 
 class TestLogin(APITestCase):
