@@ -203,3 +203,108 @@ class TestLogin(APITestCase):
         except Exception as exception:
             user = None
         self.assertIsNone(user)
+
+
+class TestLogout(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="Beate", email="Rote@Beate.com", password="Rote")
+        self.user.save()
+
+    def test_valid_user_can_logout(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Beate", "password": "Rote"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        token: Token = Token.objects.get(key=response.data["token"])
+        user: User = token.user
+        self.assertEqual(self.user, user)
+
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Beate", "password": "Rote"
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        token: Token = Token.objects.filter(user=user).first()
+        self.assertIsNone(token)
+
+    def test_valid_user_can_not_logout_twice(self):
+        response: Response = self.client.post(path="/authentication/login/", data={
+            "username": "Beate", "password": "Rote"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        user: User = Token.objects.get(key=response.data["token"]).user
+        token: Token = Token.objects.get(key=response.data["token"])
+        self.assertEqual(self.user, user)
+
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Beate", "password": "Rote"
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        token: Token = Token.objects.filter(user=user).first()
+        self.assertIsNone(token)
+
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Beate", "password": "Rote"
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "User is not logged in!")
+
+    def test_user_can_not_logout_with_wrong_username(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Berndy", "password": "Rot"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Username or password invalid!")
+
+    def test_user_can_not_logout_with_wrong_password(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Beate", "password": "Roten"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Username or password invalid!")
+
+    def test_user_can_not_logout_without_username(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "password": "Rote"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "username is missing!")
+
+    def test_user_can_not_logout_with_empty_username(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "", "password": "Rote"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "username is empty!")
+
+    def test_user_can_not_logout_without_password(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Rote"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "password is missing!")
+
+    def test_user_can_not_logout_with_empty_password(self):
+        response: Response = self.client.post(path="/authentication/logout/", data={
+            "username": "Rote", "password": ""
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "password is empty!")
+
+    def tearDown(self):
+        self.user.delete()
+        try:
+            user = User.objects.get(username="Rote")
+        except Exception as exception:
+            user = None
+        self.assertIsNone(user)
