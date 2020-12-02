@@ -33,3 +33,12 @@ test_authentication:
     - echo "Testing ..."
     - docker-compose -f docker-compose.ci.yml pull
     - docker-compose -f docker-compose.ci.yml run web sh -c "pipenv run python solar/manage.py makemigrations && pipenv run python solar/manage.py migrate && pipenv run python solar/manage.py test authentication -v 2"
+
+test_accounts:
+  stage: test
+  needs:
+    - build
+  script:
+    - echo "Testing ..."
+    - docker-compose -f docker-compose.ci.yml pull
+    - docker-compose -f docker-compose.ci.yml run web sh -c "pipenv run python solar/manage.py makemigrations && pipenv run python solar/manage.py migrate && pipenv run python solar/manage.py test accounts -v 2"

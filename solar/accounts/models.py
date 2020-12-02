@@ -1,0 +1,61 @@
+import logging
+
+from django.contrib.auth.models import User
+from django.db import models
+
+logger = logging.getLogger(__name__)
+
+
+class Account(models.Model):
+    """
+    This model is for handling user accounts.
+    Therefore all data regarding an user is stored in this model.
+    The account is separated from the user since the default user model is used.
+    """
+    # Link the account to an user
+    user: User = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
+    # Add an relationship between accounts over the relationship model
+    relationships = models.ManyToManyField('self',
+                                           blank=True,
+                                           through='Relationship',
+                                           symmetrical=True,
+                                           related_name='related_to',
+                                           default=None)
+    # The default manager
+    objects = models.Manager()
+
+    def __str__(self):
+        return "{username}".format(username=self.user.username)
+
+    def add_relationship(self, account):
+        """
+        This method adds an relationship for an instance.
+
+        :param account: Who should be added to an relation with the instance.
+        :return: The relationship.
+        """
+        relationship, created = Relationship.objects.get_or_create(
+            from_account=self,
+            to_account=account)
+        return relationship
+
+
+class Relationship(models.Model):
+    """
+    This model handles relations between users.
+    By using this model it is possible to create more detailed relationships.
+    """
+    # Who wants to have an relation?
+    from_account = models.ForeignKey(Account, related_name='from_account', on_delete=models.CASCADE)
+    # To whom should a relationship be established?
+    to_account = models.ForeignKey(Account, related_name='to_account', on_delete=models.CASCADE)
+    # When was this relation created?
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    # The default manager
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "{from_user} related to {to_user}".format(from_user=self.from_account, to_user=self.to_account)
