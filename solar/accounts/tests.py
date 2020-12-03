@@ -65,3 +65,11 @@ class TestAccounts(TestCase):
         self.assertEqual(related_accounts_of_bernd, [])
         # Beate has relation to Bernd
         self.assertEqual(related_accounts_of_beate[0], self.account_bernd)
+
+    def test_accounts_can_provides_accounts_who_relates_with_them(self):
+        self.test_account_can_follow_accounts()
+        accounts_relating_to_beate: List[Account] = self.account_beate.get_related_by()
+        accounts_relating_to_bernd: List[Account] = self.account_bernd.get_related_by()
+        # Beate only relates to Bernd
+        self.assertEqual([], accounts_relating_to_beate)
+        self.assertNotEqual([], accounts_relating_to_bernd)

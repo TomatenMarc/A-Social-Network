@@ -54,11 +54,20 @@ class Account(models.Model):
 
     def get_related_to(self) -> List['Account']:
         """
-        This method returns all Accounts related to the calling instance of this method.
+        This method returns all accounts related to the calling instance of this method.
+        Therefore this returns accounts the calling accounts relates to.
 
-        :return: All related Accounts of the calling instance.
+        :return: All related accounts of the calling instance.
         """
         return list(self.related_to.filter(to_account__from_account=self))
+
+    def get_related_by(self) -> List['Account']:
+        """
+        This method returns all accounts who relates with the calling account.
+        
+        :return: All accounts who relates to the calling account.
+        """
+        return list(self.related_by.filter(from_account__to_account=self))
 
 
 class Relationship(models.Model):
