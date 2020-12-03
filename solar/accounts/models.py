@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -50,6 +51,14 @@ class Account(models.Model):
             from_account=self,
             to_account=account).delete()
         return deleted
+
+    def get_related_to(self) -> List['Account']:
+        """
+        This method returns all Accounts related to the calling instance of this method.
+
+        :return: All related Accounts of the calling instance.
+        """
+        return list(self.related_to.filter(to_account__from_account=self))
 
 
 class Relationship(models.Model):

@@ -1,3 +1,5 @@
+from typing import List
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -52,3 +54,14 @@ class TestAccounts(TestCase):
         # Beate can delete her relationships
         self.assertTrue(deleted)
         self.assertFalse(self.account_beate.related_to.all().exists())
+
+    def test_accounts_provide_related_accounts(self):
+        self.test_account_can_follow_accounts()
+        related_accounts_of_beate: List[Account] = self.account_beate.get_related_to()
+        related_accounts_of_bernd: List[Account] = self.account_bernd.get_related_to()
+        # there are results for the relationships for beate but not for bernd
+        self.assertIsNotNone(related_accounts_of_beate)
+        self.assertIsNotNone(related_accounts_of_bernd)
+        self.assertEqual(related_accounts_of_bernd, [])
+        # Beate has relation to Bernd
+        self.assertEqual(related_accounts_of_beate[0], self.account_bernd)
