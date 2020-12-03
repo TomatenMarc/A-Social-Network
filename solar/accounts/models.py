@@ -27,7 +27,7 @@ class Account(models.Model):
     def __str__(self):
         return "{username}".format(username=self.user.username)
 
-    def add_relationship(self, account):
+    def add_relationship(self, account) -> bool:
         """
         This method adds an relationship for an instance.
 
