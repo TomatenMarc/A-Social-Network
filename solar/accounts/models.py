@@ -27,17 +27,29 @@ class Account(models.Model):
     def __str__(self):
         return "{username}".format(username=self.user.username)
 
-    def add_relationship(self, account) -> bool:
+    def add_relationship(self, account: 'Account') -> bool:
         """
         This method adds an relationship for an instance.
 
         :param account: Who should be added to an relation with the instance.
-        :return: The relationship.
+        :return: True if the relationship was created, false otherwise.
         """
         relationship, created = Relationship.objects.get_or_create(
             from_account=self,
             to_account=account)
         return created
+
+    def remove_relationship(self, account: 'Account'):
+        """
+        This method deletes the relationship to an other Account.
+
+        :param account: The user with whom the relationship is to be terminated.
+        :return: True if the relationship was deleted, false otherwise.
+        """
+        deleted: bool = Relationship.objects.filter(
+            from_account=self,
+            to_account=account).delete()
+        return deleted
 
 
 class Relationship(models.Model):

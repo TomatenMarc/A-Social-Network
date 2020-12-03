@@ -45,3 +45,10 @@ class TestAccounts(TestCase):
         self.assertEqual(beates_relations[0], self.account_bernd)
         # But Bernd should not have an relationship to Beate
         self.assertFalse(self.account_bernd.relates_to.all().exists())
+
+    def test_account_can_unfollow_accounts(self):
+        self.test_account_can_follow_accounts()
+        deleted: bool = self.account_beate.remove_relationship(self.account_bernd)
+        # Beate can delete her relationships
+        self.assertTrue(deleted)
+        self.assertFalse(self.account_beate.relates_to.all().exists())
