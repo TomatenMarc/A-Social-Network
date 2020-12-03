@@ -15,12 +15,12 @@ class Account(models.Model):
     # Link the account to an user
     user: User = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     # Add an relationship between accounts over the relationship model
-    relationships = models.ManyToManyField('self',
-                                           blank=True,
-                                           through='Relationship',
-                                           symmetrical=True,
-                                           related_name='related_to',
-                                           default=None)
+    relates_to = models.ManyToManyField('self',
+                                        blank=True,
+                                        through='Relationship',
+                                        symmetrical=False,
+                                        related_name='related_to',
+                                        default=None)
     # The default manager
     objects = models.Manager()
 
@@ -37,7 +37,7 @@ class Account(models.Model):
         relationship, created = Relationship.objects.get_or_create(
             from_account=self,
             to_account=account)
-        return relationship
+        return created
 
 
 class Relationship(models.Model):
