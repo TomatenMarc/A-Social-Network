@@ -35,20 +35,20 @@ class TestAccounts(TestCase):
     def test_account_can_follow_accounts(self):
         self.assertIsNotNone(self.account_bernd)
         self.assertIsNotNone(self.account_beate)
-        self.assertFalse(self.account_bernd.relates_to.all().exists())
-        self.assertFalse(self.account_beate.relates_to.all().exists())
+        self.assertFalse(self.account_bernd.related_to.all().exists())
+        self.assertFalse(self.account_beate.related_to.all().exists())
 
         created: bool = self.account_beate.add_relationship(self.account_bernd)
         self.assertTrue(created)
         # Beate should have an relationship to Bernd
-        beates_relations = self.account_beate.relates_to.all()
+        beates_relations = self.account_beate.related_to.all()
         self.assertEqual(beates_relations[0], self.account_bernd)
         # But Bernd should not have an relationship to Beate
-        self.assertFalse(self.account_bernd.relates_to.all().exists())
+        self.assertFalse(self.account_bernd.related_to.all().exists())
 
     def test_account_can_unfollow_accounts(self):
         self.test_account_can_follow_accounts()
         deleted: bool = self.account_beate.remove_relationship(self.account_bernd)
         # Beate can delete her relationships
         self.assertTrue(deleted)
-        self.assertFalse(self.account_beate.relates_to.all().exists())
+        self.assertFalse(self.account_beate.related_to.all().exists())

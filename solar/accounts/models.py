@@ -15,11 +15,11 @@ class Account(models.Model):
     # Link the account to an user
     user: User = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     # Add an relationship between accounts over the relationship model
-    relates_to = models.ManyToManyField('self',
+    related_to = models.ManyToManyField('self',
                                         blank=True,
                                         through='Relationship',
                                         symmetrical=False,
-                                        related_name='related_to',
+                                        related_name='related_by',
                                         default=None)
     # The default manager
     objects = models.Manager()
