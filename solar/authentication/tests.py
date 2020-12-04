@@ -4,6 +4,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.test import APITestCase, APIClient
 
+from accounts.models import Account
+
 
 class TestObtainingAToken(APITestCase):
     def setUp(self):
@@ -108,6 +110,9 @@ class TestRegistration(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         token_user: User = Token.objects.get(key=response.data["token"]).user
         user: User = User.objects.get(username="another_user")
+        account: Account = Account.objects.get(user=user)
+        self.assertIsNotNone(account)
+        self.assertEqual(account.user, user)
         self.assertEqual(token_user, user)
 
 

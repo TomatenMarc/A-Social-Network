@@ -9,6 +9,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from accounts.models import Account
 logger = logging.getLogger(__name__)
 
 
@@ -61,6 +62,7 @@ class Register(APIView):
         password: str = data["password"]
         try:
             user: User = User.objects.create_user(username=username, email=email, password=password)
+            account: Account = Account.objects.create(user=user)
             login(request, user)
         except IntegrityError as error:
             return Response(status=status.HTTP_409_CONFLICT, data={"error": error.__str__()})
