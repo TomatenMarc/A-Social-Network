@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
@@ -10,6 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
+from authentication import Operations
+from authentication.validation import validate_request_data_for
+
 logger = logging.getLogger(__name__)
 
 
@@ -21,24 +23,16 @@ class Register(APIView):
     """
 
     @staticmethod
-    def validate(data: dict) -> Response:
+    def validate(request: Request) -> Response:
         """
         This method validates the data provided for the new user.
         It validates if the username, email and the password is set and they are not empty.
 
-        :param data: The data provided by the new user.
+        :param request: The request which should be validated.
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
-                 200_OK otherwise.
+                 201_CREATED otherwise.
         """
-        fields = ["username", "email", "password"]
-        for field in fields:
-            if field not in data.keys():
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is missing!".format(field)})
-            if not data[field]:
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is empty!".format(field)})
-        return Response(status=status.HTTP_200_OK)
+        return validate_request_data_for(Operations.REGISTER, request)
 
     def post(self, request: Request) -> Response:
         """
@@ -47,26 +41,20 @@ class Register(APIView):
         Afterwards the User is created and logged in.
 
         :param request: The request of the new user containing all necessary information for an registration.
-        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
-                 409_CONFLICT if the user is allready in the system.
+        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or the user existing.
                  201_CREATE if the new user is created (Contains the token in the data-section).
         """
         data: dict = request.data
 
-        valid: Response = self.validate(data)
-        if valid.status_code != 200:
+        valid: Response = self.validate(request)
+        if valid.status_code != 201:
             return valid
 
         username: str = data["username"]
-        email: str = data["email"]
-        password: str = data["password"]
-        try:
-            user: User = User.objects.create_user(username=username, email=email, password=password)
-            account: Account = Account.objects.create(user=user)
-            login(request, user)
-        except IntegrityError as error:
-            return Response(status=status.HTTP_409_CONFLICT, data={"error": error.__str__()})
-        return Response(status=status.HTTP_201_CREATED, data={"token": Token.objects.create(user=user).__str__()})
+        user: User = User.objects.filter(username=username).first()
+        account: Account = Account.objects.create(user=user)
+        login(request, account.user)
+        return Response(status=valid.status_code, data={"token": Token.objects.create(user=account.user).__str__()})
 
 
 class Login(APIView):

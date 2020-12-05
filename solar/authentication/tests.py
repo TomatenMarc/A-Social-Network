@@ -45,7 +45,9 @@ class TestRegistration(APITestCase):
     def test_everything_is_missing(self):
         response: Response = self.client.post(path="/authentication/register/", data={})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is missing!")
+        self.assertEqual(response.data["username"][0].code, "required")
+        self.assertEqual(response.data["password"][0].code, "required")
+        self.assertEqual(response.data["email"][0].code, "required")
 
     def test_everything_is_empty(self):
         response: Response = self.client.post(path="/authentication/register/", data={
@@ -54,52 +56,22 @@ class TestRegistration(APITestCase):
             "password": ""
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is empty!")
+        self.assertEqual(response.data["username"][0].code, "blank")
+        self.assertEqual(response.data["password"][0].code, "blank")
+        self.assertEqual(response.data["email"][0].code, "blank")
 
-    def test_password_is_missing(self):
-        response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "username",
-            "email": "e@mail.de"
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is missing!")
-
-    def test_password_is_empty(self):
-        response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "username",
-            "password": "",
-            "email": "e@mail.de"
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is empty!")
-
-    def test_email_is_missing(self):
-        response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "username",
-            "password": "password"
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "email is missing!")
-
-    def test_email_is_empty(self):
-        response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "username",
-            "password": "",
-            "email": ""
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "email is empty!")
-
-    def test_user_already_exists(self):
+    def test_user_and_email_already_exists(self):
         user = User.objects.create_user(username="Peter", password="password", email="e@mail.de")
 
         response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "Peter", "password": "password", "email": "e@mail.de"
+            "username": "Peter",
+            "password": "password",
+            "email": "e@mail.de"
         })
 
-        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
-
-        self.assertEqual(response.data["error"], "UNIQUE constraint failed: auth_user.username")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["username"][0].code, "unique")
+        self.assertEqual(response.data["email"][0].code, "unique")
 
     def test_register_valid_user(self):
         response: Response = self.client.post(path="/authentication/register/", data={
