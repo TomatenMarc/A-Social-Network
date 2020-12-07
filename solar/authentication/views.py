@@ -1,9 +1,9 @@
 import logging
 
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -102,7 +102,7 @@ class Login(APIView):
             token = Token.objects.create(user=user)
         login(request, user)
 
-        return Response(status=status.HTTP_200_OK, data={"token": token.key.__str__()})
+        return Response(status=valid.status_code, data={"token": token.key.__str__()})
 
 
 class Logout(APIView):
@@ -113,24 +113,16 @@ class Logout(APIView):
     """
 
     @staticmethod
-    def validate(data: dict) -> Response:
+    def validate(request: Request) -> Response:
         """
         This method validates the data provided for the requesting user.
         It validates if the username and the password is set and they are not empty.
 
-        :param data: The data provided by the new user.
+        :param request: The request of the user containing all necessary information for an logout.
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
                  200_OK otherwise.
         """
-        fields = ["username", "password"]
-        for field in fields:
-            if field not in data.keys():
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is missing!".format(field)})
-            if not data[field]:
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is empty!".format(field)})
-        return Response(status=status.HTTP_200_OK)
+        return validate_request_data_for(Operations.LOGIN, request)
 
     def post(self, request):
         """
@@ -139,31 +131,22 @@ class Logout(APIView):
         Afterwards the User is authenticated and logged out.
 
         :param request: The request of the user containing all necessary information for an logout.
-        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong.
+        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong or the user is not logged in.
                  200_OK if the user is authenticated (will destroy the users token).
         """
         data: dict = request.data
 
-        valid: Response = self.validate(data)
+        valid: Response = self.validate(request)
         if valid.status_code != 200:
             return valid
 
         username: str = data["username"]
-        password: str = data["password"]
-
-        user: User = authenticate(username=username, password=password)
-
-        if not user:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Username or password invalid!"})
-
-        try:
-            token = Token.objects.get(user=user)
-            if token:
-                # if there is a token delete it and logout the users
-                # by deleting the token it is mode sure that the client cant use an expired token
-                token.delete()
-        except Exception:
-            logout(request)
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "User is not logged in!"})
+        user: User = User.objects.filter(username=username).first()
+        token: Token = Token.objects.filter(user=user).first()
+        if token:
+            token.delete()
+        else:
+            raise ValidationError({"user": "User is not logged in"}, code='invalid')
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+
+        return Response(status=valid.status_code)

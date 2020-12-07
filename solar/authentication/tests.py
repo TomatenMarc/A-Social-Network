@@ -231,15 +231,15 @@ class TestLogout(APITestCase):
             "username": "Beate", "password": "Rote"
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "User is not logged in!")
+        self.assertEqual(response.data["user"], "User is not logged in")
 
     def test_user_can_not_logout_with_wrong_username(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
-            "username": "Berndy", "password": "Rot"
+            "username": "Berndy", "password": "Rote"
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "Username or password invalid!")
+        self.assertEqual(response.data["user"][0].code, "invalid")
 
     def test_user_can_not_logout_with_wrong_password(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
@@ -247,7 +247,7 @@ class TestLogout(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "Username or password invalid!")
+        self.assertEqual(response.data["user"][0].code, "invalid")
 
     def test_user_can_not_logout_without_username(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
@@ -255,7 +255,7 @@ class TestLogout(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is missing!")
+        self.assertEqual(response.data["username"][0].code, "required")
 
     def test_user_can_not_logout_with_empty_username(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
@@ -263,7 +263,7 @@ class TestLogout(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is empty!")
+        self.assertEqual(response.data["username"][0].code, "blank")
 
     def test_user_can_not_logout_without_password(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
@@ -271,7 +271,7 @@ class TestLogout(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is missing!")
+        self.assertEqual(response.data["password"][0].code, "required")
 
     def test_user_can_not_logout_with_empty_password(self):
         response: Response = self.client.post(path="/authentication/logout/", data={
@@ -279,7 +279,7 @@ class TestLogout(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is empty!")
+        self.assertEqual(response.data["password"][0].code, "blank")
 
     def tearDown(self):
         self.user.delete()
