@@ -1,5 +1,7 @@
 import logging
+from typing import OrderedDict
 
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -11,6 +13,30 @@ class UserDefaultSerializer(serializers.ModelSerializer):
     """
     This is the default serializer to get users and validate their data.
     """
+
+    username = serializers.CharField()
+
+    def validate(self, data: OrderedDict):
+        """
+        This method validates the provided data to check if there is an user existing.
+
+        :param data: Data describing the user.
+        :return: The validated data.
+        """
+        username: str = data.get("username", None)
+        password: str = data.get("password", None)
+
+        if not username:
+            raise serializers.ValidationError("This username is missing", code='blank')
+
+        if not password:
+            raise serializers.ValidationError("This password is missing", code='blank')
+
+        user: User = authenticate(username=username, password=password)
+        if not user:
+            raise serializers.ValidationError({"user": "There is no user like this"}, code='invalid')
+
+        return data
 
     class Meta:
         model = User
@@ -28,6 +54,16 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             UniqueValidator(queryset=User.objects.all())
         ]
     )
+
+    def create(self, validated_data):
+        """
+        This method creates a new user by the validated data.
+
+        :param validated_data: The validated data providing all information to create an user.
+        :return: The created user.
+        """
+        user: User = User.objects.create_user(**validated_data)
+        return user
 
     class Meta:
         model = User

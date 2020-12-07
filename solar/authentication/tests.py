@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -103,6 +104,8 @@ class TestLogin(APITestCase):
 
         user: User = Token.objects.get(key=response.data["token"]).user
         self.assertEqual(self.user, user)
+        user: User = authenticate(username="Bernd", password="Brot")
+        self.assertIsNotNone(user)
 
     def test_token_gets_refreshed_after_new_login(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -131,7 +134,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "Username or password invalid!")
+        self.assertEqual(response.data["user"][0].code, "invalid")
 
     def test_user_can_not_login_with_wrong_password(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -139,7 +142,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "Username or password invalid!")
+        self.assertEqual(response.data["user"][0].code, "invalid")
 
     def test_user_can_not_login_without_username(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -147,7 +150,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is missing!")
+        self.assertEqual(response.data["username"][0].code, "required")
 
     def test_user_can_not_login_with_empty_username(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -155,7 +158,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "username is empty!")
+        self.assertEqual(response.data["username"][0].code, "blank")
 
     def test_user_can_not_login_without_password(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -163,7 +166,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is missing!")
+        self.assertEqual(response.data["password"][0].code, "required")
 
     def test_user_can_not_login_with_empty_password(self):
         response: Response = self.client.post(path="/authentication/login/", data={
@@ -171,7 +174,7 @@ class TestLogin(APITestCase):
         })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"], "password is empty!")
+        self.assertEqual(response.data["password"][0].code, "blank")
 
     def tearDown(self):
         self.user.delete()

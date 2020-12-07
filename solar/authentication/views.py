@@ -65,24 +65,16 @@ class Login(APIView):
     """
 
     @staticmethod
-    def validate(data: dict) -> Response:
+    def validate(request: Request) -> Response:
         """
         This method validates the data provided for the requesting user.
         It validates if the username and the password is set and they are not empty.
 
-        :param data: The data provided by the new user.
+        :param request: The data provided by the requesting user.
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
                  200_OK otherwise.
         """
-        fields = ["username", "password"]
-        for field in fields:
-            if field not in data.keys():
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is missing!".format(field)})
-            if not data[field]:
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data={"error": "{} is empty!".format(field)})
-        return Response(status=status.HTTP_200_OK)
+        return validate_request_data_for(Operations.LOGIN, request)
 
     def post(self, request):
         """
@@ -96,30 +88,21 @@ class Login(APIView):
         """
         data: dict = request.data
 
-        valid: Response = self.validate(data)
+        valid: Response = self.validate(request)
         if valid.status_code != 200:
             return valid
 
         username: str = data["username"]
-        password: str = data["password"]
-
-        user: User = authenticate(username=username, password=password)
-
-        if not user:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Username or password invalid!"})
-
+        user: User = User.objects.filter(username=username).first()
         token, operation_was_create = Token.objects.get_or_create(user=user)
 
         if not operation_was_create:
             # refresh the token if there was a previous token detected
             token.delete()
             token = Token.objects.create(user=user)
+        login(request, user)
 
-        if user:
-            login(request, user)
-            return Response(status=status.HTTP_200_OK, data={"token": token.key.__str__()})
-
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK, data={"token": token.key.__str__()})
 
 
 class Logout(APIView):
