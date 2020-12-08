@@ -44,13 +44,11 @@ class Register(APIView):
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or the user existing.
                  201_CREATE if the new user is created (Contains the token in the data-section).
         """
-        data: dict = request.data
-
         valid: Response = self.validate(request)
         if valid.status_code != 201:
             return valid
 
-        username: str = data["username"]
+        username: str = valid.data["username"]
         user: User = User.objects.filter(username=username).first()
         account: Account = Account.objects.create(user=user)
         login(request, account.user)
@@ -86,13 +84,11 @@ class Login(APIView):
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong.
                  200_OK if the user is authenticated (Contains the token in the data-section).
         """
-        data: dict = request.data
-
         valid: Response = self.validate(request)
         if valid.status_code != 200:
             return valid
 
-        username: str = data["username"]
+        username: str = valid.data["username"]
         user: User = User.objects.filter(username=username).first()
         token, operation_was_create = Token.objects.get_or_create(user=user)
 
@@ -134,13 +130,11 @@ class Logout(APIView):
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong or the user is not logged in.
                  200_OK if the user is authenticated (will destroy the users token).
         """
-        data: dict = request.data
-
         valid: Response = self.validate(request)
         if valid.status_code != 200:
             return valid
 
-        username: str = data["username"]
+        username: str = valid.data["username"]
         user: User = User.objects.filter(username=username).first()
         token: Token = Token.objects.filter(user=user).first()
         if token:

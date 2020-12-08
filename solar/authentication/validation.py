@@ -27,8 +27,8 @@ def validate_request_data_for(operation: Operations, request: Request) -> Respon
 
     if serializer.is_valid():
         if operation is Operations.REGISTER:
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer.save()  # this calls update or create based on the existence of the corresponding instance
+            return Response(data=serializer.validated_data, status=status.HTTP_201_CREATED)
+        return Response(data=serializer.validated_data, status=status.HTTP_200_OK)
     else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
