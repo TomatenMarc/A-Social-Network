@@ -94,9 +94,33 @@ class TestGetAccount(APITestCase):
         self.assertEqual(beates_relations[0], self.account_bernd)
         # But Bernd should not have an relationship to Beate
         self.assertFalse(self.account_bernd.related_to.all().exists())
+
         response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_beate.id))
+
+        # public information about beate
         self.assertEqual(response.data[0]["user"]["username"], self.user_beate.username)
-        self.assertEqual(response.data[0]["related_to"][0]["user"], self.user_bernd.id)
+        self.assertEqual(response.data[0]["user"]["id"], self.user_beate.id)
+
+        # public information about the account she is relates to
+        self.assertEqual(response.data[0]["related_to"][0]["user"]["username"], self.user_bernd.username)
+        self.assertEqual(response.data[0]["related_to"][0]["user"]["id"], self.user_bernd.id)
+
+        # public information about the account who relates to her
+        self.assertEqual(response.data[0]["related_by"], [])
+
+        # what do we know about bernd
+        response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
+
+        # public information about bernd
+        self.assertEqual(response.data[0]["user"]["username"], self.user_bernd.username)
+        self.assertEqual(response.data[0]["user"]["id"], self.user_bernd.id)
+
+        # public information about the accounts who relates to Bernd
+        self.assertEqual(response.data[0]["related_by"][0]["user"]["username"], self.user_beate.username)
+        self.assertEqual(response.data[0]["related_by"][0]["user"]["id"], self.user_beate.id)
+
+        # public information about the account Bernd relates to
+        self.assertEqual(response.data[0]["related_to"], [])
 
     def clear_up_users(self, users: list[User]):
         for user in users:
