@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
-from accounts.serializers import AccountSerializer
+from accounts.serializers import AccountPublicSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -27,5 +27,5 @@ class Accounts(APIView):
         :return:
         """
         account: Account = Account.objects.filter(user=int(kwargs.get("id")))
-        serializer: AccountSerializer = AccountSerializer(instance=account, many=True)
+        serializer: AccountPublicSerializer = AccountPublicSerializer(instance=account, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
