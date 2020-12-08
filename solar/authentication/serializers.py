@@ -68,3 +68,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    """
+    This serializer is for the public representation of the user.
+    It only shows the username.
+    """
+
+    class Meta:
+        model = User
+        fields = ('username',)
