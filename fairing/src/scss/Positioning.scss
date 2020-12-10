@@ -1,0 +1,7 @@
+.centered {
+  /* This should center an element in the corresponding parent */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
