@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import "../../scss/Positioning.css"
+import Heading from "./segments/Heading";
+import Socializer from "./segments/Socializer";
+import Footer from "./segments/Footer";
 
 class MainPage extends Component {
     /**
@@ -8,8 +11,10 @@ class MainPage extends Component {
      */
     render() {
         return (
-            <div className="centered">
-                Welcome to SolAr!
+            <div>
+                <Heading/>
+                <Socializer/>
+                <Footer/>
             </div>
         );
     }
