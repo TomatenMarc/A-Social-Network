@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "../../scss/Positioning.css"
 import Heading from "./segments/Heading";
-import Socializer from "./segments/Socializer";
+import SocialExplorer from "./segments/SocialExplorer";
 import Footer from "./segments/Footer";
 
 class MainPage extends Component {
@@ -13,7 +13,7 @@ class MainPage extends Component {
         return (
             <div>
                 <Heading/>
-                <Socializer/>
+                <SocialExplorer/>
                 <Footer/>
             </div>
         );

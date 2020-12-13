@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 
-class Socializer extends Component {
+class SocialExplorer extends Component {
     render() {
         return (
             <Segment style={{padding: '0em'}} vertical>
@@ -41,4 +41,4 @@ class Socializer extends Component {
     }
 }
 
-export default Socializer;
+export default SocialExplorer;
