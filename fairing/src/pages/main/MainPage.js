@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import "../../scss/Positioning.css"
 import Heading from "./segments/Heading";
 import SocialExplorer from "./segments/SocialExplorer";
 import Footer from "./segments/Footer";

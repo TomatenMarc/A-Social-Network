@@ -10,7 +10,7 @@ class Heading extends Component {
     render() {
         return (
             <Segment inverted style={{padding: '8em 0em'}} vertical>
-                <Grid container stackable>
+                <Grid container stackable centered>
                     <Grid.Row>
                         <div className="centered">
                             <Image src={logo} circular size="small"/>
