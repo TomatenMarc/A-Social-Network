@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from contents.models import Statement
 from .models import Account, Relationship
 
 
@@ -14,12 +15,21 @@ class RelationshipInline(admin.StackedInline):
     extra = 0
 
 
+class StatementsInline(admin.StackedInline):
+    """
+    This is the stackable inline representation of the statements.
+    It will not display any more then statements then necessary (extra = 0)
+    """
+    model = Statement
+    extra = 0
+
+
 class AccountAdmin(admin.ModelAdmin):
     """
     This is the admin for the accounts.
     This will add the relationships of an account to admin interface.
     """
-    inlines = [RelationshipInline]
+    inlines = [RelationshipInline, StatementsInline]
 
 
 admin.site.register(Account, AccountAdmin)
