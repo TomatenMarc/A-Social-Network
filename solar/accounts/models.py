@@ -79,6 +79,15 @@ class Account(models.Model):
         """
         return list(self.statement_set.all())
 
+    def add_statement(self, content: str) -> None:
+        """
+        This methods add a statement for the calling account.
+
+        :param content: The content of the statement.
+        :return: None
+        """
+        return self.statement_set.add(Statement(author=self, content=content), bulk=False)
+
 
 class Relationship(models.Model):
     """
