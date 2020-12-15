@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from accounts.models import Account
 from authentication.serializers import UserPublicSerializer
+from contents.serializers import StatementSerializer
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -26,7 +27,9 @@ class AccountPublicSerializer(serializers.ModelSerializer):
     # these are the related (child) accounts
     related_to = serializers.ListField(source='get_related_to', child=AccountSerializer())
     related_by = serializers.ListField(source='get_related_by', child=AccountSerializer())
+    # these are all statements of the account
+    statements = serializers.ListField(source='get_statements', child=StatementSerializer())
 
     class Meta:
         model = Account
-        fields = ('user', 'related_to', 'related_by')
+        fields = ('user', 'related_to', 'related_by', 'statements')

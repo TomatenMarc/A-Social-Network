@@ -122,6 +122,12 @@ class TestGetAccount(APITestCase):
         # public information about the account Bernd relates to
         self.assertEqual(response.data[0]["related_to"], [])
 
+        # Bernd adds an statement
+        self.account_bernd.add_statement("I like Beate")
+        # what do we know about Bernd
+        response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
+        self.assertEqual(response.data[0]["statements"][0]["content"], "I like Beate")
+
     def clear_up_users(self, users: list[User]):
         for user in users:
             user.delete()
