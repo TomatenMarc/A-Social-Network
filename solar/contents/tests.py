@@ -1,3 +1,5 @@
+from typing import List
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -12,8 +14,9 @@ class TestStatement(TestCase):
         self.statement_database: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
 
     def test_account_has_statement_from_database(self):
-        statement: Statement = self.account_bernd.statement_set.first()
-        self.assertEqual(statement, self.statement_database)
+        statements: List[Statement] = self.account_bernd.get_statements()
+        self.assertNotEqual(statements, [])
+        self.assertEqual(statements[0], self.statement_database)
 
     def tearDown(self):
         self.user_bernd.delete()

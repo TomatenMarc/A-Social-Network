@@ -4,6 +4,8 @@ from typing import List
 from django.contrib.auth.models import User
 from django.db import models
 
+from contents.models import Statement
+
 logger = logging.getLogger(__name__)
 
 
@@ -68,6 +70,14 @@ class Account(models.Model):
         :return: All accounts who relates to the calling account.
         """
         return list(self.related_by.filter(from_account__to_account=self))
+
+    def get_statements(self) -> List['Statement']:
+        """
+        This method returns all all statements made by the calling account.
+
+        :return: All statements made by the calling account.
+        """
+        return list(self.statement_set.all())
 
 
 class Relationship(models.Model):
