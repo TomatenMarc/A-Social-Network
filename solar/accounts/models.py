@@ -24,6 +24,10 @@ class Account(models.Model):
                                         symmetrical=False,
                                         related_name='related_by',
                                         default=None)
+    # This is the image of the account
+    image = models.ImageField(upload_to='account/images',
+                              default='account/default/Argunaut.png')
+
     # The default manager
     objects = models.Manager()
 
