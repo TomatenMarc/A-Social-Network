@@ -16,7 +16,9 @@ class Account(models.Model):
     The account is separated from the user since the default user model is used.
     """
     # Link the account to an user
-    user: User = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
+    user: User = models.OneToOneField(to=User,
+                                      on_delete=models.CASCADE,
+                                      primary_key=True)
     # Add an relationship between accounts over the relationship model
     related_to = models.ManyToManyField('self',
                                         blank=True,
@@ -27,6 +29,10 @@ class Account(models.Model):
     # This is the image of the account
     image = models.ImageField(upload_to='account/images',
                               default='account/default/Argunaut.png')
+
+    biography = models.CharField(blank=False,
+                                 max_length=1000,
+                                 default="Hey there, nice to meet you!".format(user))
 
     # The default manager
     objects = models.Manager()
