@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import MainPage from "./pages/main/MainPage";
-import MenuBar from "./components/MenuBar";
+import {BrowserRouter} from "react-router-dom";
+import {Routes} from "./routes/Routes";
 
 class App extends Component {
     /**
@@ -10,10 +10,9 @@ class App extends Component {
      */
     render() {
         return (
-            <div>
-                <MenuBar/>
-                <MainPage/>
-            </div>
+            <BrowserRouter>
+                <Routes/>
+            </BrowserRouter>
         );
     }
 }

@@ -18,7 +18,7 @@ class MenuBar extends Component {
                     <Grid.Row only="computer tablet">
                         {
                             this.items.map((item, index) =>
-                                <Menu.Item name={item}/>
+                                <Menu.Item key={index} name={item}/>
                             )
                         }
                     </Grid.Row>
@@ -27,7 +27,7 @@ class MenuBar extends Component {
                             <Dropdown.Menu>
                                 {
                                     this.items.splice(0, this.items.length - 1).map((item, index) =>
-                                        <Dropdown.Item text={item}/>
+                                        <Dropdown.Item key={index} text={item}/>
                                     )
                                 }
                                 <Dropdown.Divider/>
