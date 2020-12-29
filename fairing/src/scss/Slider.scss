@@ -1,0 +1,28 @@
+.slider {
+  animation: slide 60s ease infinite alternate;
+  background-image: linear-gradient(45deg, #1a1a1a 50%, #38f0ff 50%);
+  top: 0;
+  bottom: 0;
+  left: -50%;
+  right: -50%;
+  opacity: 0.7;
+  position: fixed;
+}
+
+.fast {
+  animation-direction: alternate-reverse;
+  animation-duration: 55s;
+}
+
+.slow {
+  animation-duration: 56s;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(25%);
+  }
+}
