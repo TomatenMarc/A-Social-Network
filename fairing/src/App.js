@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import MainPage from "./pages/main/MainPage";
+import MenuBar from "./components/MenuBar";
 
 class App extends Component {
     /**
@@ -10,6 +11,7 @@ class App extends Component {
     render() {
         return (
             <div>
+                <MenuBar/>
                 <MainPage/>
             </div>
         );
