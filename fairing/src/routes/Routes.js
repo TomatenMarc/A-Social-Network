@@ -6,6 +6,6 @@ import AccountPage from "../pages/account/AccountPage";
 export function Routes() {
     return <Switch>
         <Route path="/" exact component={MainPage}/>
-        <Route path="/hey" exact component={AccountPage}/>
+        <Route path="/account" exact component={AccountPage}/>
     </Switch>
 }

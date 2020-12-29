@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Dropdown, Grid, Image, Menu, Search} from "semantic-ui-react";
 import logo from '../resources/logo.jpg'
+import {Redirect} from "react-router-dom";
 
 class MenuBar extends Component {
 
@@ -8,6 +9,9 @@ class MenuBar extends Component {
         super(props);
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
         this.handleDropdownItemClick = this.handleDropdownItemClick.bind(this)
+        this.state = {
+            navTo: "/"
+        }
     }
 
 
@@ -15,19 +19,25 @@ class MenuBar extends Component {
         e.preventDefault()
         this.setState({activeItem: name});
         if (name === "Account") {
-            console.log("Account")
+            this.setState({
+                navTo: "/account"
+            })
         }
     }
     handleDropdownItemClick = (e, {text}) => {
         e.preventDefault()
         this.setState({activeItem: text});
         if (text === "Account") {
-            console.log("Account")
+            this.setState({
+                navTo: "/account"
+            })
         }
     }
 
     render() {
         this.items = ['Account', 'Logout', 'SignUp']
+        if (this.state.navTo !== "/")
+            return <Redirect to={{pathname: this.state.navTo}}/>
         return (
             <Menu secondary fixed={"top"}
                   inverted={true}
