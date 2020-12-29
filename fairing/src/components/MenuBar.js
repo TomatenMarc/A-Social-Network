@@ -3,6 +3,21 @@ import {Dropdown, Grid, Image, Menu, Search} from "semantic-ui-react";
 import logo from '../resources/logo.jpg'
 
 class MenuBar extends Component {
+
+    constructor(props) {
+        super(props);
+        this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    }
+
+
+    handleMenuItemClick = (e, {name}) => {
+        e.preventDefault()
+        this.setState({activeItem: name});
+        if (name === "Account") {
+            console.log("Account")
+        }
+    }
+
     render() {
         this.items = ['Account', 'Logout', 'SignUp']
         return (
@@ -18,7 +33,7 @@ class MenuBar extends Component {
                     <Grid.Row only="computer tablet">
                         {
                             this.items.map((item, index) =>
-                                <Menu.Item key={index} name={item}/>
+                                <Menu.Item key={index} name={item} onClick={this.handleMenuItemClick}/>
                             )
                         }
                     </Grid.Row>

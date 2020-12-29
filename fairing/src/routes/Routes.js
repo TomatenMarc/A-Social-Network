@@ -1,9 +1,11 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import MainPage from "../pages/main/MainPage";
+import AccountPage from "../pages/account/AccountPage";
 
 export function Routes() {
     return <Switch>
         <Route path="/" exact component={MainPage}/>
+        <Route path="/hey" exact component={AccountPage}/>
     </Switch>
 }
