@@ -7,6 +7,7 @@ class MenuBar extends Component {
     constructor(props) {
         super(props);
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+        this.handleDropdownItemClick = this.handleDropdownItemClick.bind(this)
     }
 
 
@@ -14,6 +15,13 @@ class MenuBar extends Component {
         e.preventDefault()
         this.setState({activeItem: name});
         if (name === "Account") {
+            console.log("Account")
+        }
+    }
+    handleDropdownItemClick = (e, {text}) => {
+        e.preventDefault()
+        this.setState({activeItem: text});
+        if (text === "Account") {
             console.log("Account")
         }
     }
@@ -42,7 +50,7 @@ class MenuBar extends Component {
                             <Dropdown.Menu>
                                 {
                                     this.items.splice(0, this.items.length - 1).map((item, index) =>
-                                        <Dropdown.Item key={index} text={item}/>
+                                        <Dropdown.Item key={index} text={item} onClick={this.handleDropdownItemClick}/>
                                     )
                                 }
                                 <Dropdown.Divider/>
