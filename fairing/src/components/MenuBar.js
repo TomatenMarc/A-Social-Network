@@ -1,46 +1,21 @@
 import React, {Component} from 'react';
 import {Dropdown, Grid, Image, Menu, Search} from "semantic-ui-react";
 import logo from '../resources/logo.jpg'
-import {Redirect} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 class MenuBar extends Component {
-
-    constructor(props) {
-        super(props);
-        this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
-        this.handleDropdownItemClick = this.handleDropdownItemClick.bind(this)
-        this.state = {
-            navTo: "/"
-        }
-    }
-
-
-    handleMenuItemClick = (e, {name}) => {
-        e.preventDefault()
-        this.setState({activeItem: name});
-        if (name === "Account") {
-            this.setState({
-                navTo: "/account"
-            })
-        }
-    }
-    handleDropdownItemClick = (e, {text}) => {
-        e.preventDefault()
-        this.setState({activeItem: text});
-        if (text === "Account") {
-            this.setState({
-                navTo: "/account"
-            })
-        }
-    }
+    /**
+     * This component is for the navigation in SolAr.
+     * By choosing a specific option the user will be directed to a specific page.
+     * @returns {JSX.Element}
+     */
 
     render() {
         this.items = ['Account', 'Logout', 'SignUp']
-        if (this.state.navTo !== "/")
-            return <Redirect to={{pathname: this.state.navTo}}/>
         return (
-            <Menu secondary fixed={"top"}
-                  inverted={true}
+            <Menu secondary
+                  inverted
+                  fixed={"top"}
                   size='large'
                   style={{background: "#1b1c1d"}}
             >
@@ -51,7 +26,10 @@ class MenuBar extends Component {
                     <Grid.Row only="computer tablet">
                         {
                             this.items.map((item, index) =>
-                                <Menu.Item key={index} name={item} onClick={this.handleMenuItemClick}/>
+                                <Menu.Item key={index}
+                                           name={item}
+                                           as={NavLink}
+                                           to={"/".concat(item)}/>
                             )
                         }
                     </Grid.Row>
@@ -60,7 +38,11 @@ class MenuBar extends Component {
                             <Dropdown.Menu>
                                 {
                                     this.items.splice(0, this.items.length - 1).map((item, index) =>
-                                        <Dropdown.Item key={index} text={item} onClick={this.handleDropdownItemClick}/>
+                                        <Dropdown.Item
+                                            key={index}
+                                            text={item}
+                                            as={NavLink}
+                                            to={"/".concat(item)}/>
                                     )
                                 }
                                 <Dropdown.Divider/>
