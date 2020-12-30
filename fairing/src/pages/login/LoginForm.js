@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
-import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
+import {Icon, Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
 import {NavLink, Redirect} from "react-router-dom";
 
 class LoginForm extends Component {
+    handle
+
     constructor(props) {
         super(props);
         this.state = {
-            success: false
+            success: false,
+            error: false
         }
     }
 
@@ -23,7 +26,7 @@ class LoginForm extends Component {
                                circular
                                size="small"
                                centered/>
-                        <Form size='large'>
+                        <Form size='large' error={this.state.error}>
                             <Segment raised>
                                 <Form.Input
                                     fluid
@@ -44,9 +47,15 @@ class LoginForm extends Component {
                                     secondary
                                     fluid
                                     size='large'
-                                    onClick={() => this.setState({success: true})}>
+                                    onClick={() => this.setState({error: true})}>
                                     Login
                                 </Form.Button>
+
+                                <Message error>
+                                    <Message.Header>
+                                        Oh no! Please check your data.
+                                    </Message.Header>
+                                </Message>
                             </Segment>
                         </Form>
                         <Message>
