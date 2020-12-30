@@ -11,7 +11,8 @@ class LoginForm extends Component {
         super(props);
         this.state = {
             success: false,
-            error: false,
+            errorUserField: false,
+            errorPasswordField: false,
             username: "",
             password: ""
         }
@@ -41,8 +42,11 @@ class LoginForm extends Component {
                 })
             }
         }).catch(error => {
+            const response = error.response.data;
+            const keys = Object.keys(response)
             this.setState({
-                error: true
+                errorUserField: keys.includes("user") || keys.includes("username"),
+                errorPasswordField: keys.includes("password")
             })
         })
 
@@ -61,11 +65,12 @@ class LoginForm extends Component {
                                size="small"
                                centered/>
                         <Form size='large'
-                              error={this.state.error}
+                              error={this.state.errorUserField || this.state.errorPasswordField}
                               onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     fluid
+                                    error={this.state.errorUserField}
                                     icon='user'
                                     iconPosition='left'
                                     placeholder='Username'
@@ -75,6 +80,7 @@ class LoginForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    error={this.state.errorPasswordField}
                                     icon='lock'
                                     iconPosition='left'
                                     placeholder='Password'
@@ -87,7 +93,7 @@ class LoginForm extends Component {
                                     secondary
                                     fluid
                                     size='large'
-                                    onClick={() => this.setState({error: true})}>
+                                >
                                     Login
                                 </Form.Button>
 
