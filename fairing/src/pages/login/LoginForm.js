@@ -15,6 +15,7 @@ class LoginForm extends Component {
             password: ""
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange = (event) => {
@@ -23,6 +24,12 @@ class LoginForm extends Component {
             this.setState({username: event.target.value})
         else if (event.target.placeholder === "Password")
             this.setState({password: event.target.value})
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log("Username: ".concat(this.state.username))
+        console.log("Password: ".concat(this.state.password))
     }
 
     render() {
@@ -37,7 +44,9 @@ class LoginForm extends Component {
                                circular
                                size="small"
                                centered/>
-                        <Form size='large' error={this.state.error}>
+                        <Form size='large'
+                              error={this.state.error}
+                              onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     fluid
