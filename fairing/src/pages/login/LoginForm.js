@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
-import {Redirect} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -50,7 +50,7 @@ class LoginForm extends Component {
                             </Segment>
                         </Form>
                         <Message>
-                            New to us? Sign Up
+                            New to us? <NavLink to="/signup">Sign Up!</NavLink>
                         </Message>
                     </Grid.Column>
                 </Grid>
