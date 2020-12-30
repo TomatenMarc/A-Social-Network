@@ -10,8 +10,19 @@ class LoginForm extends Component {
         super(props);
         this.state = {
             success: false,
-            error: false
+            error: false,
+            username: "",
+            password: ""
         }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange = (event) => {
+        event.preventDefault();
+        if (event.target.placeholder === "Username")
+            this.setState({username: event.target.value})
+        else if (event.target.placeholder === "Password")
+            this.setState({password: event.target.value})
     }
 
     render() {
@@ -34,6 +45,8 @@ class LoginForm extends Component {
                                     iconPosition='left'
                                     placeholder='Username'
                                     type='text'
+                                    value={this.state.username}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
@@ -41,6 +54,8 @@ class LoginForm extends Component {
                                     iconPosition='left'
                                     placeholder='Password'
                                     type='password'
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Button
                                     type='submit'
