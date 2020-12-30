@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Icon, Form, Grid, Image, Message, Segment} from "semantic-ui-react";
+import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
 import {NavLink, Redirect} from "react-router-dom";
 
