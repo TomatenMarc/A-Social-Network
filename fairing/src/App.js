@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {BrowserRouter} from "react-router-dom";
 import {Routes} from "./routes/Routes";
+import {withCookies} from "react-cookie";
 
 class App extends Component {
     /**
@@ -17,4 +18,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withCookies(App);

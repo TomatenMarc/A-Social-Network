@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
 import {NavLink, Redirect} from "react-router-dom";
+import {withCookies} from "react-cookie";
+import axios from "axios";
 
 class LoginForm extends Component {
-    handle
 
     constructor(props) {
         super(props);
@@ -28,8 +29,23 @@ class LoginForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Username: ".concat(this.state.username))
-        console.log("Password: ".concat(this.state.password))
+        const {cookies} = this.props
+        axios.post("http://localhost:8000/authentication/login/", {
+            "username": this.state.username,
+            "password": this.state.password
+        }).then(result => {
+            if (result.status === 200) {
+                cookies.set("token", result.data.token)
+                this.setState({
+                    success: true
+                })
+            }
+        }).catch(error => {
+            this.setState({
+                error: true
+            })
+        })
+
     }
 
     render() {
@@ -93,4 +109,4 @@ class LoginForm extends Component {
 
 }
 
-export default LoginForm;
+export default withCookies(LoginForm);
