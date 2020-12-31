@@ -31,7 +31,7 @@ class LoginForm extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const {cookies} = this.props
-        axios.post("http://localhost:8000/authentication/login/", {
+        axios.post("http://192.168.0.3:8000/authentication/login/", {
             "username": this.state.username,
             "password": this.state.password
         }).then(result => {
