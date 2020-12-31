@@ -1,10 +1,26 @@
 import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from "../../resources/logo.jpg";
-import {NavLink} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 
 class SignUpForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            success: false
+        }
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState({
+            success: true
+        })
+    }
+
     render() {
+        if (this.state.success)
+            return <Redirect to={{pathname: '/'}}/>
         return (
             <div>
                 <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
@@ -15,7 +31,8 @@ class SignUpForm extends Component {
                                size="small"
                                centered
                         />
-                        <Form size='large'>
+                        <Form size='large'
+                              onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     fluid
