@@ -6,7 +6,7 @@ import {withCookies} from "react-cookie";
 class LoginPage extends Component {
     render() {
         return (
-            <div className="colored">
+            <div>
                 <div className="slider"/>
                 <div className="slider fast"/>
                 <div className="slider slow"/>
