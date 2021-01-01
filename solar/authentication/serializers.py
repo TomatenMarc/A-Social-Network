@@ -79,3 +79,13 @@ class UserPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username',)
+
+
+class UserOwnSerializer(serializers.ModelSerializer):
+    """
+    This serializer is for the own representation of the user.
+    """
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'date_joined',)
