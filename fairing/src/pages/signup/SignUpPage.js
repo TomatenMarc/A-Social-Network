@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import SignUpForm from "./SignUpForm";
+import {withCookies} from "react-cookie";
 
 class SignUpPage extends Component {
     render() {
@@ -14,4 +15,4 @@ class SignUpPage extends Component {
     }
 }
 
-export default SignUpPage;
+export default withCookies(SignUpPage);

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from "../../resources/logo.jpg";
 import {NavLink, Redirect} from "react-router-dom";
+import {withCookies} from "react-cookie";
+import axios from "axios";
 
 class SignUpForm extends Component {
     constructor(props) {
@@ -10,7 +12,10 @@ class SignUpForm extends Component {
             success: false,
             username: "",
             password: "",
-            email: ""
+            email: "",
+            errorUserField: false,
+            errorPasswordField: false,
+            errorEmailField: false
         }
     }
 
@@ -26,8 +31,26 @@ class SignUpForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            success: true
+        const {cookies} = this.props
+        axios.post("http://192.168.0.3:8000/authentication/register/", {
+            username: this.state.username,
+            password: this.state.password,
+            email: this.state.email
+        }).then(result => {
+            if (result.status === 201) {
+                cookies.set("utkn", result.data.token, {secure: true})
+                this.setState({
+                    success: true
+                })
+            }
+        }).catch(error => {
+            const response = error.response.data;
+            const keys = Object.keys(response)
+            this.setState({
+                errorUserField: keys.includes("user") || keys.includes("username"),
+                errorPasswordField: keys.includes("password"),
+                errorEmailField: keys.includes("email")
+            })
         })
     }
 
@@ -45,10 +68,16 @@ class SignUpForm extends Component {
                                centered
                         />
                         <Form size='large'
+                              error={
+                                  this.state.errorUserField ||
+                                  this.state.errorPasswordField ||
+                                  this.state.errorEmailField
+                              }
                               onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     fluid
+                                    error={this.state.errorUserField}
                                     icon='user'
                                     iconPosition='left'
                                     placeholder='Username'
@@ -58,6 +87,7 @@ class SignUpForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    error={this.state.errorPasswordField}
                                     icon='lock'
                                     iconPosition='left'
                                     placeholder='Password'
@@ -67,6 +97,7 @@ class SignUpForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    error={this.state.errorEmailField}
                                     icon='mail'
                                     iconPosition='left'
                                     placeholder='E-Mail'
@@ -82,6 +113,11 @@ class SignUpForm extends Component {
                                 >
                                     Submit
                                 </Form.Button>
+                                <Message error>
+                                <Message.Header>
+                                    Oh no! Please check your data.
+                                </Message.Header>
+                            </Message>
                             </Segment>
                         </Form>
                         <Message>
@@ -94,4 +130,4 @@ class SignUpForm extends Component {
     }
 }
 
-export default SignUpForm;
+export default withCookies(SignUpForm);

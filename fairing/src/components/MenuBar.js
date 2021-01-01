@@ -37,7 +37,7 @@ class MenuBar extends Component {
                         <Dropdown item icon='bars' simple>
                             <Dropdown.Menu>
                                 {
-                                    this.items.splice(0, this.items.length - 1).map((item, index) =>
+                                    this.items.splice(0, this.items.length).map((item, index) =>
                                         <Dropdown.Item
                                             key={index}
                                             text={item}
@@ -45,8 +45,6 @@ class MenuBar extends Component {
                                             to={"/".concat(item)}/>
                                     )
                                 }
-                                <Dropdown.Divider/>
-                                <Dropdown.Item text={this.items.pop()}/>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Grid.Row>
