@@ -32,4 +32,4 @@ class AccountPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('user', 'related_to', 'related_by', 'statements')
+        fields = ('user', 'image', 'biography', 'related_to', 'related_by', 'statements')
