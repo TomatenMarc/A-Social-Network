@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Heading from "./segments/Heading";
 import SocialExplorer from "./segments/SocialExplorer";
-import Footer from "./segments/Footer";
+import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
 
 class MainPage extends Component {

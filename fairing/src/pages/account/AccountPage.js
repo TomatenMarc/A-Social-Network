@@ -3,6 +3,8 @@ import MenuBar from "../../components/MenuBar";
 import Avatar from "./segments/Avatar";
 import axios from "axios";
 import {withCookies} from "react-cookie";
+import Networking from "./segments/Networking";
+import Footer from "../../components/Footer";
 
 class AccountPage extends Component {
 
@@ -49,6 +51,8 @@ class AccountPage extends Component {
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />
+                <Networking/>
+                <Footer/>
             </div>
         );
     }
