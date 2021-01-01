@@ -7,8 +7,21 @@ class SignUpForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            success: false
+            success: false,
+            username: "",
+            password: "",
+            email: ""
         }
+    }
+
+    handleChange = (event) => {
+        event.preventDefault()
+        if (event.target.placeholder === "Username")
+            this.setState({username: event.target.value})
+        else if (event.target.placeholder === "Password")
+            this.setState({password: event.target.value})
+        else if (event.target.placeholder === "E-Mail")
+            this.setState({email: event.target.value})
     }
 
     handleSubmit = (event) => {
@@ -40,6 +53,8 @@ class SignUpForm extends Component {
                                     iconPosition='left'
                                     placeholder='Username'
                                     type='text'
+                                    value={this.state.username}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
@@ -47,6 +62,8 @@ class SignUpForm extends Component {
                                     iconPosition='left'
                                     placeholder='Password'
                                     type='password'
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
@@ -54,6 +71,8 @@ class SignUpForm extends Component {
                                     iconPosition='left'
                                     placeholder='E-Mail'
                                     type='email'
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Button
                                     type='submit'
