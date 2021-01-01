@@ -43,10 +43,10 @@ class OwnAccount(APIView):
 
     def get(self, request: Request):
         """
-        This methid is used to get the own account data.
+        This method is used to get the own account data.
         :param request: To access the user from its token.
         :return: Data regarding the own account.
         """
         account: Account = Account.objects.filter(user=request.user)
         serializer: AccountOwnSerializer = AccountOwnSerializer(instance=account, many=True)
-        return Response(status=status.HTTP_418_IM_A_TEAPOT, data=serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
