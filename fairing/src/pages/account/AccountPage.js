@@ -47,6 +47,7 @@ class AccountPage extends Component {
                 <Avatar
                     image={"http://192.168.0.3:8000".concat(this.state.account.image)}
                     username={this.state.account.user.username}
+                    biography={this.state.account.biography}
                 />
             </div>
         );
