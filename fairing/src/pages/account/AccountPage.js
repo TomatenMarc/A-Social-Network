@@ -5,6 +5,7 @@ import axios from "axios";
 import {withCookies} from "react-cookie";
 import Networking from "./segments/Networking";
 import Footer from "../../components/Footer";
+import Contents from "./segments/Contents";
 
 class AccountPage extends Component {
 
@@ -54,6 +55,7 @@ class AccountPage extends Component {
                 />
                 <Networking follower={this.state.account["related_by"]}
                             following={this.state.account["related_to"]}/>
+                 <Contents statements={this.state.account["statements"]}/>
                 <Footer/>
             </div>
         );
