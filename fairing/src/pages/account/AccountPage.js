@@ -29,6 +29,7 @@ class AccountPage extends Component {
                     account: result.data[0],
                     loading: false
                 })
+                console.log(this.state.account["related_to"])
             }
         }).catch(error => {
             this.setState({
@@ -51,7 +52,8 @@ class AccountPage extends Component {
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />
-                <Networking/>
+                <Networking follower={this.state.account["related_by"]}
+                            following={this.state.account["related_to"]}/>
                 <Footer/>
             </div>
         );

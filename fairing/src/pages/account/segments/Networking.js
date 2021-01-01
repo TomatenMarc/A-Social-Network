@@ -10,10 +10,10 @@ class Networking extends Component {
                 <Grid celled='internally' columns='equal' stackable>
                     <Grid.Row>
                         <Grid.Column style={{paddingBottom: '5em', paddingTop: '5em'}}>
-                            <Follower follower={["Karl", "Sören"]}/>
+                            <Follower follower={this.props.follower}/>
                         </Grid.Column>
                         <Grid.Column style={{paddingBottom: '5em', paddingTop: '5em'}}>
-                            <Following following={["Peter", "Klaus", "Peter"]}/>
+                            <Following following={this.props.following}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
