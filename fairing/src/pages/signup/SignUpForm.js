@@ -38,7 +38,7 @@ class SignUpForm extends Component {
             email: this.state.email
         }).then(result => {
             if (result.status === 201) {
-                cookies.set("utkn", result.data.token, {secure: true})
+                cookies.set("utkn", result.data.token, {sameSite: 'Lax'})
                 this.setState({
                     success: true
                 })
@@ -114,10 +114,10 @@ class SignUpForm extends Component {
                                     Submit
                                 </Form.Button>
                                 <Message error>
-                                <Message.Header>
-                                    Oh no! Please check your data.
-                                </Message.Header>
-                            </Message>
+                                    <Message.Header>
+                                        Oh no! Please check your data.
+                                    </Message.Header>
+                                </Message>
                             </Segment>
                         </Form>
                         <Message>

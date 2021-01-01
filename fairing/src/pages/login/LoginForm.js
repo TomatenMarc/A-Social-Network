@@ -36,7 +36,7 @@ class LoginForm extends Component {
             "password": this.state.password
         }).then(result => {
             if (result.status === 200) {
-                cookies.set("utkn", result.data.token, {secure: true})
+                cookies.set("utkn", result.data.token, {sameSite: 'Lax'})
                 this.setState({
                     success: true
                 })
