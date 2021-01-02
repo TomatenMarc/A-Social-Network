@@ -121,7 +121,7 @@ class SignUpForm extends Component {
                             </Segment>
                         </Form>
                         <Message>
-                            Account already setup? <NavLink to="/logout">Login!</NavLink>
+                            Account already setup? <NavLink to="/login">Login!</NavLink>
                         </Message>
                     </Grid.Column>
                 </Grid>

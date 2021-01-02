@@ -4,12 +4,13 @@ import MainPage from "../pages/main/MainPage";
 import AccountPage from "../pages/account/AccountPage";
 import LoginPage from "../pages/login/LoginPage";
 import SignUpPage from "../pages/signup/SignUpPage";
+import PrivateRoute from "./PrivateRoute";
 
 export function Routes() {
     return <Switch>
-        <Route path="/" exact component={MainPage}/>
-        <Route path="/account" exact component={AccountPage}/>
-        <Route path="/logout" exact component={LoginPage}/>
+        <Route path="/login" exact component={LoginPage}/>
         <Route path="/signup" exact component={SignUpPage}/>
+        <PrivateRoute path="/" exact component={MainPage}/>
+        <PrivateRoute path="/account" exact component={AccountPage}/>
     </Switch>
 }

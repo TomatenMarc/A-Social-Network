@@ -1,0 +1,66 @@
+.loader {
+  width: 32px;
+  height: 90px;
+  display: block;
+  margin: 40px auto;
+  position: relative;
+  border-radius: 50% 50% 0 0;
+  border-bottom: 10px solid #ff6600;
+  background-color: #d9d9d9;
+  background-image: radial-gradient(ellipse at center, #00d0d0 30%, #03fdee 40%, #050505 50%, #d9d9d9 55%), linear-gradient(#FF3D00 14px, transparent 0);
+  background-size: 28px 28px;
+  background-position: center 20px, center 2px;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  animation: animationDown 1s linear infinite alternate;
+}
+
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 30px;
+  border-radius: 15%;
+  box-shadow: 0px 15px #8a8a8a inset;
+  top: 70px;
+}
+
+.loader::after {
+  content: "";
+  position: absolute;
+  transform: translateX(-50%) rotate(50deg);
+  top: 115%;
+  background: radial-gradient(ellipse at center, #f9ff00 10%, #FF8600 30%, #FF5400 100%);
+  border-radius: 70% 80% 0%;
+  animation: animationUp 1s linear infinite alternate;
+}
+
+@keyframes animationDown {
+  0%, 30%, 70% {
+    transform: translateY(0px);
+  }
+  20%, 40%, 100% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes animationUp {
+  0% {
+    box-shadow: 4px 4px 12px 2px #FFFFFF;
+    width: 34px;
+    height: 34px;
+    background-position: -44px -44px;
+    transform: translateX(-50%) rotate(50deg);
+  }
+  100% {
+    box-shadow: 2px 2px 8px 0px #910000;
+    width: 30px;
+    height: 28px;
+    background-position: -36px -36px;
+    transform: translateX(-50%) rotate(40deg);
+  }
+}
+
+/*# sourceMappingURL=Loading.css.map */

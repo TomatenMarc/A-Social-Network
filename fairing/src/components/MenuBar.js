@@ -11,7 +11,7 @@ class MenuBar extends Component {
      */
 
     render() {
-        this.items = ['Account', 'Logout', 'SignUp']
+        this.items = ['Account', 'Login', 'SignUp']
         return (
             <Menu secondary
                   inverted
