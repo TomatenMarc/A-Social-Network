@@ -39,6 +39,31 @@ class TestObtainingAToken(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
+class TestValidateAToken(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="Rudiger", email="Rudiger@Dog.com", password="Rudiger")
+        self.user_token = Token.objects.create(user=self.user)
+
+    def tearDown(self):
+        self.user.delete()
+        try:
+            user = User.objects.get(username="Rudiger")
+        except Exception as exception:
+            user = None
+        self.assertIsNone(user)
+
+    def test_invalid_user_cant_validate_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + 'Invalid Token')
+        response: Response = self.client.get(path="/authentication/validate/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_valid_user_can_validate_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.user_token))
+        response: Response = self.client.get(path="/authentication/validate/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class TestRegistration(APITestCase):
     def setUp(self):
         self.client = APIClient()

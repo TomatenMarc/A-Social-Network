@@ -2,8 +2,11 @@ import logging
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -144,3 +147,24 @@ class Logout(APIView):
         logout(request)
 
         return Response(status=valid.status_code)
+
+
+class TokenValidation(APIView):
+    """
+    This view can be used to validate a token of an user.
+    Therefore it can be used for the frontend to validate if the token has expired e.g. if the user has logged in
+    on another device.
+
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request) -> Response:
+        """
+        This method is allways called if the token is valid.
+        Otherwise the permission_classes will return 401 indication an invalid token.
+
+        :param request: Unused
+        :return: Status 200 Ok if the token is authorized.
+        """
+        return Response(status=status.HTTP_200_OK)
