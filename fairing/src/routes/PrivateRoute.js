@@ -9,7 +9,7 @@ function PrivateRoute({component: Component, ...rest}) {
 
     const [auth, setAuth] = useState(false);
     const [isTokenValidated, setIsTokenValidated] = useState(false);
-    const [cookies, setCookie, removeCookie] = useCookies(['utkn']);
+    const [cookies, removeCookie] = useCookies(['utkn']);
 
     useEffect(() => {
         axios.get('http://192.168.0.3:8000/authentication/validate/', {
@@ -28,7 +28,7 @@ function PrivateRoute({component: Component, ...rest}) {
                 setIsTokenValidated(true)
             }, 2000)
         );
-    }, [])
+    }, [cookies.utkn, removeCookie])
 
     if (!isTokenValidated) return <LoadingScreen/>
     return (
