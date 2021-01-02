@@ -2,6 +2,7 @@ from typing import List
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.test import APIClient, APITestCase
 
@@ -82,9 +83,56 @@ class TestGetAccount(APITestCase):
         self.client = APIClient()
         self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
         self.user_beate = User.objects.create_user(username="Beate", email="Rote@Beate.de", password="Rote")
+        self.token_bernd = Token.objects.create(user=self.user_bernd)
+        self.token_beate = Token.objects.create(user=self.user_beate)
 
         self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
         self.account_beate: Account = Account.objects.create(user=self.user_beate)
+
+    def test_own_account_provides_own_data(self):
+
+        created: bool = self.account_beate.add_relationship(self.account_bernd)
+        self.assertTrue(created)
+        # Beate should have an relationship to Bernd
+        beates_relations = self.account_beate.related_to.all()
+        self.assertEqual(beates_relations[0], self.account_bernd)
+        # But Bernd should not have an relationship to Beate
+        self.assertFalse(self.account_bernd.related_to.all().exists())
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
+        response: Response = self.client.get(path="/accounts/own/")
+
+        # public information about beate
+        self.assertEqual(response.data[0]["user"]["username"], self.user_beate.username)
+        self.assertEqual(response.data[0]["user"]["id"], self.user_beate.id)
+
+        # public information about the account she is relates to
+        self.assertEqual(response.data[0]["related_to"][0]["user"]["username"], self.user_bernd.username)
+        self.assertEqual(response.data[0]["related_to"][0]["user"]["id"], self.user_bernd.id)
+
+        # public information about the account who relates to her
+        self.assertEqual(response.data[0]["related_by"], [])
+
+        # what do we know about bernd
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
+        response: Response = self.client.get(path="/accounts/own/")
+
+        # public information about bernd
+        self.assertEqual(response.data[0]["user"]["username"], self.user_bernd.username)
+        self.assertEqual(response.data[0]["user"]["id"], self.user_bernd.id)
+
+        # public information about the accounts who relates to Bernd
+        self.assertEqual(response.data[0]["related_by"][0]["user"]["username"], self.user_beate.username)
+        self.assertEqual(response.data[0]["related_by"][0]["user"]["id"], self.user_beate.id)
+
+        # public information about the account Bernd relates to
+        self.assertEqual(response.data[0]["related_to"], [])
+
+        # Bernd adds an statement
+        self.account_bernd.add_statement("I like Beate")
+        # what do we know about Bernd
+        response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
+        self.assertEqual(response.data[0]["statements"][0]["content"], "I like Beate")
 
     def test_account_provide_public_data(self):
         created: bool = self.account_beate.add_relationship(self.account_bernd)
@@ -105,19 +153,12 @@ class TestGetAccount(APITestCase):
         self.assertEqual(response.data[0]["related_to"][0]["user"]["username"], self.user_bernd.username)
         self.assertEqual(response.data[0]["related_to"][0]["user"]["id"], self.user_bernd.id)
 
-        # public information about the account who relates to her
-        self.assertEqual(response.data[0]["related_by"], [])
-
         # what do we know about bernd
         response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
 
         # public information about bernd
         self.assertEqual(response.data[0]["user"]["username"], self.user_bernd.username)
         self.assertEqual(response.data[0]["user"]["id"], self.user_bernd.id)
-
-        # public information about the accounts who relates to Bernd
-        self.assertEqual(response.data[0]["related_by"][0]["user"]["username"], self.user_beate.username)
-        self.assertEqual(response.data[0]["related_by"][0]["user"]["id"], self.user_beate.id)
 
         # public information about the account Bernd relates to
         self.assertEqual(response.data[0]["related_to"], [])
