@@ -28,6 +28,7 @@ class AccountAdmin(admin.ModelAdmin):
     """
     This is the admin for the accounts.
     This will add the relationships of an account to admin interface.
+    This will add content of an account to admin interface.
     """
     inlines = [RelationshipInline, StatementsInline]
 
