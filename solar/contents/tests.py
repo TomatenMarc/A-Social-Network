@@ -4,24 +4,39 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from accounts.models import Account
-from contents.models import Statement
+from contents.models import Statement, Hashtag
 
 
 class TestStatement(TestCase):
     def setUp(self):
         self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
         self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
-        self.statement_database: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
+        self.statement: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
+        self.hashtag: Hashtag = Hashtag.objects.create(tag="Burgerking")
 
     def test_account_has_statement_from_database(self):
         statements: List[Statement] = self.account_bernd.get_statements()
         self.assertNotEqual(statements, [])
-        self.assertEqual(statements[0], self.statement_database)
+        self.assertEqual(statements[0], self.statement)
 
     def test_account_can_add_statement(self):
         self.account_bernd.add_statement("I <3 burgers")
         self.assertEqual(len(self.account_bernd.get_statements()), 2)
         self.assertEqual(self.account_bernd.get_statements()[1].content, "I <3 burgers")
+
+    def test_statement_can_add_hashtag(self):
+        created = self.statement.add_hashtag(self.hashtag)
+        self.assertTrue(created)
+
+        hashtags = self.statement.get_hashtags()
+        self.assertNotEqual(hashtags, [])
+        self.assertEqual(self.hashtag, hashtags[0])
+
+        deleted = self.statement.remove_hashtag(self.hashtag)
+        self.assertTrue(deleted)
+
+        hashtags = self.statement.get_hashtags()
+        self.assertEqual(hashtags, [])
 
     def tearDown(self):
         self.user_bernd.delete()
@@ -42,3 +57,8 @@ class TestStatement(TestCase):
         except Exception as exception:
             statements_exists = None
         self.assertIsNone(statements_exists)
+        try:
+            hashtag_exists = Statement.objects.get(user=self.hashtag)
+        except Exception as exception:
+            hashtag_exists = None
+        self.assertIsNone(hashtag_exists)

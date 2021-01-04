@@ -1,3 +1,5 @@
+from typing import List
+
 from django.db import models
 
 
@@ -18,6 +20,36 @@ class Statement(models.Model):
 
     def __str__(self):
         return "{author} says: {content}".format(author=self.author.user.username, content=self.content)
+
+    def add_hashtag(self, hashtag: 'Hashtag'):
+        """
+        This method is for adding an hashtag to the corresponding statement.
+        :param hashtag: The hashtag to be added.
+        :return: True if the hashtag was created, false otherwise.
+        """
+        tagging, created = StatementTagging.objects.get_or_create(statement=self, hashtag=hashtag)
+        return created
+
+    def get_hashtags(self) -> List['Hashtag']:
+        """
+        This method is to get all hashtags of the calling statement.
+
+        :return: List of all hashtags of the calling statement.
+        """
+        return list(self.tagged.all())
+
+    def remove_hashtag(self, hashtag: 'Hashtag'):
+        """
+        This method is used to delete an specific hashtag for the calling statement.
+
+        :param hashtag: The hashtag to be deleted.
+        :return: True if the hashtag was deleted, false else.
+        """
+        deleted: bool = StatementTagging.objects.filter(
+            statement=self,
+            hashtag=hashtag
+        ).delete()
+        return deleted
 
 
 class Hashtag(models.Model):
