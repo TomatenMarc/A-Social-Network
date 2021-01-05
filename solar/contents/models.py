@@ -1,6 +1,10 @@
-from typing import List
+import logging
+import re
+from typing import List, Tuple
 
 from django.db import models
+
+logger = logging.getLogger(__name__)
 
 
 class Statement(models.Model):
@@ -20,6 +24,31 @@ class Statement(models.Model):
 
     def __str__(self):
         return "{author} says: {content}".format(author=self.author.user.username, content=self.content)
+
+    def save(self, *args, **kwargs) -> None:
+        """
+        This method adds hashtags relations after the statement is saved.
+        Save is ran after update or create.
+
+        :param args: Not used.
+        :param kwargs: Not used.
+        :return: None
+        """
+        super(Statement, self).save(*args, **kwargs)
+        # resolve hashtags after saving the statement
+        used_hashtags: List[str] = self.__extract_hashtags()
+        for used_hashtag in used_hashtags:
+            result: Tuple[Hashtag, bool] = Hashtag.objects.get_or_create(tag=used_hashtag)
+            hashtag: Hashtag = result[0]
+            self.add_hashtag(hashtag=hashtag)
+
+    def __extract_hashtags(self) -> List[str]:
+        """
+        This method extracts the hashtag of the content.
+
+        :return: List of all hashtags used in the content of the statement.
+        """
+        return re.findall(r"#(\w+)", self.content)
 
     def add_hashtag(self, hashtag: 'Hashtag'):
         """

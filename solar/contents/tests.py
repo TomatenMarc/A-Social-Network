@@ -12,6 +12,8 @@ class TestStatement(TestCase):
         self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
         self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
         self.statement: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
+        self.statement_with_hashtags: Statement = Statement.objects.create(author=self.account_bernd,
+                                                                           content="I like #eating the whopper #Burgerking")
         self.hashtag: Hashtag = Hashtag.objects.create(tag="Burgerking")
 
     def test_account_has_statement_from_database(self):
@@ -21,8 +23,13 @@ class TestStatement(TestCase):
 
     def test_account_can_add_statement(self):
         self.account_bernd.add_statement("I <3 burgers")
-        self.assertEqual(len(self.account_bernd.get_statements()), 2)
-        self.assertEqual(self.account_bernd.get_statements()[1].content, "I <3 burgers")
+        self.assertEqual(len(self.account_bernd.get_statements()), 3)
+        self.assertEqual(self.account_bernd.get_statements()[2].content, "I <3 burgers")
+
+    def test_statement_resolves_hashtags(self):
+        hashtags = self.statement_with_hashtags.get_hashtags()
+        self.assertEqual(hashtags[0].tag, "eating")
+        self.assertEqual(hashtags[1].tag, "Burgerking")
 
     def test_statement_can_add_hashtag(self):
         created = self.statement.add_hashtag(self.hashtag)
