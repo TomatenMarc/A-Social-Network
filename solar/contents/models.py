@@ -17,7 +17,7 @@ class Statement(models.Model):
     # Add an hashtag between statements and hashtags  over the tagging model
     tagged = models.ManyToManyField('Hashtag',
                                     blank=True,
-                                    through='StatementTagging',
+                                    through='HashtagTagging',
                                     symmetrical=False,
                                     related_name='tags',
                                     default=None)
@@ -56,7 +56,7 @@ class Statement(models.Model):
         :param hashtag: The hashtag to be added.
         :return: True if the hashtag was created, false otherwise.
         """
-        tagging, created = StatementTagging.objects.get_or_create(statement=self, hashtag=hashtag)
+        tagging, created = HashtagTagging.objects.get_or_create(statement=self, hashtag=hashtag)
         return created
 
     def get_hashtags(self) -> List['Hashtag']:
@@ -74,7 +74,7 @@ class Statement(models.Model):
         :param hashtag: The hashtag to be deleted.
         :return: True if the hashtag was deleted, false else.
         """
-        deleted: bool = StatementTagging.objects.filter(
+        deleted: bool = HashtagTagging.objects.filter(
             statement=self,
             hashtag=hashtag
         ).delete()
@@ -96,8 +96,8 @@ class Tagging(models.Model):
     """
     This model represents the relation between any type of content and an hashtag
     """
-    # What is the corresponding hashtag?
-    hashtag = models.ForeignKey(Hashtag, related_name='hashtag', on_delete=models.CASCADE)
+    # What is the corresponding statement?
+    statement = models.ForeignKey(Statement, related_name='statement', on_delete=models.CASCADE)
     # When was this tagging created?
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     # The default manager
@@ -107,12 +107,12 @@ class Tagging(models.Model):
         abstract = True
 
 
-class StatementTagging(Tagging):
+class HashtagTagging(Tagging):
     """
     This model is to represent the tagging of an statement with an hashtag.
     """
-    # Which statements should be tagged?
-    statement = models.ForeignKey(Statement, related_name='statement', on_delete=models.CASCADE)
+    # Which hashtag should be tagged?
+    hashtag = models.ForeignKey(Hashtag, related_name='hashtag', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-created',)

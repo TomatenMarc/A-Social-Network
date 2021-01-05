@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from contents.models import Statement, StatementTagging, Hashtag
+from contents.models import Statement, HashtagTagging, Hashtag
 
 
 class StatementHashtagInline(admin.StackedInline):
     """
     This is the stackable representation of the tagging of an statement with an hashtag.
     """
-    model = StatementTagging
+    model = HashtagTagging
     fk_name = 'statement'
     extra = 0
 
@@ -21,5 +21,5 @@ class StatementAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Hashtag)
-admin.site.register(StatementTagging)
+admin.site.register(HashtagTagging)
 admin.site.register(Statement, StatementAdmin)
