@@ -11,10 +11,25 @@ class TestStatement(TestCase):
     def setUp(self):
         self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
         self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
+
+        self.user_beate = User.objects.create_user(username="Beate", email="Rote@Beate.de", password="Beate")
+        self.account_beate: Account = Account.objects.create(user=self.user_beate)
+
         self.statement: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
         self.statement_with_hashtags: Statement = Statement.objects.create(author=self.account_bernd,
                                                                            content="I like #eating the whopper #Burgerking")
         self.hashtag: Hashtag = Hashtag.objects.create(tag="Burgerking")
+
+    def test_statement_can_mention_account(self):
+        created = self.statement.add_mentioning(self.account_beate)
+        self.assertTrue(created)
+        mentions = self.statement.get_mentioning()
+        self.assertNotEqual(mentions, [])
+        self.assertEqual(mentions[0], self.account_beate)
+        deleted = self.statement.remove_mentioning(self.account_beate)
+        self.assertTrue(deleted)
+        mentions = self.statement.get_mentioning()
+        self.assertEqual(mentions, [])
 
     def test_account_has_statement_from_database(self):
         statements: List[Statement] = self.account_bernd.get_statements()

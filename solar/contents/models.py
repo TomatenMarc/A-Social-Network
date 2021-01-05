@@ -86,6 +86,36 @@ class Statement(models.Model):
         ).delete()
         return deleted
 
+    def add_mentioning(self, account: 'accounts.Account'):
+        """
+        This method is for adding an mention of an account to the corresponding statement.
+        :param account: The account to be mentioned.
+        :return: True if the mention was created, false otherwise.
+        """
+        mentioning, created = AccountTagging.objects.get_or_create(statement=self, account=account)
+        return created
+
+    def get_mentioning(self) -> List['accounts.Account']:
+        """
+        This method is to get all accounts mentioned by the calling statement.
+
+        :return: List of all accounts mentioned by the calling statement.
+        """
+        return list(self.mentioned.all())
+
+    def remove_mentioning(self, account: 'accounts.Account'):
+        """
+        This method is used to delete an specific mentioning of an account for the calling statement.
+
+        :param account: The account to be unmentioned.
+        :return: True if the hashtag was deleted, false else.
+        """
+        deleted: bool = AccountTagging.objects.filter(
+            statement=self,
+            account=account
+        ).delete()
+        return deleted
+
 
 class Hashtag(models.Model):
     """
