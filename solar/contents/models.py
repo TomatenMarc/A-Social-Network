@@ -2,6 +2,7 @@ import logging
 import re
 from typing import List, Tuple
 
+from django.apps import apps
 from django.db import models
 
 logger = logging.getLogger(__name__)
@@ -47,6 +48,12 @@ class Statement(models.Model):
             result: Tuple[Hashtag, bool] = Hashtag.objects.get_or_create(tag=used_hashtag)
             hashtag: Hashtag = result[0]
             self.add_hashtag(hashtag=hashtag)
+        used_mentions: List[str] = self.__extract_mentioning()
+        # resolve mentions after saving the statement
+        for used_mention in used_mentions:
+            account: 'accounts.Account' = apps.get_model("accounts", "Account").objects.filter(
+                user__username=used_mention).first()
+            self.add_mentioning(account=account)
 
     def __extract_hashtags(self) -> List[str]:
         """
@@ -85,6 +92,14 @@ class Statement(models.Model):
             hashtag=hashtag
         ).delete()
         return deleted
+
+    def __extract_mentioning(self) -> List['accounts.Account']:
+        """
+        This method extracts the mentions of accounts in the calling statement.
+
+        :return: List of all accounts mentioned in the calling statement.
+        """
+        return re.findall(r"@(\w+)", self.content)
 
     def add_mentioning(self, account: 'accounts.Account'):
         """
