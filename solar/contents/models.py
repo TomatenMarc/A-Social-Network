@@ -21,6 +21,12 @@ class Statement(models.Model):
                                     symmetrical=False,
                                     related_name='tags',
                                     default=None)
+    mentioned = models.ManyToManyField('accounts.Account',
+                                       blank=True,
+                                       through='AccountTagging',
+                                       symmetrical=False,
+                                       related_name='mentions',
+                                       default=None)
 
     def __str__(self):
         return "{author} says: {content}".format(author=self.author.user.username, content=self.content)
@@ -97,7 +103,7 @@ class Tagging(models.Model):
     This model represents the relation between any type of content and an hashtag
     """
     # What is the corresponding statement?
-    statement = models.ForeignKey(Statement, related_name='statement', on_delete=models.CASCADE)
+    statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     # When was this tagging created?
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     # The default manager
@@ -119,3 +125,17 @@ class HashtagTagging(Tagging):
 
     def __str__(self):
         return "{statement} tagged with {hashtag}".format(statement=self.statement, hashtag=self.hashtag)
+
+
+class AccountTagging(Tagging):
+    """
+    This model is to represent the mention of an account within an statement.
+    """
+    # Which account should be mentioned?
+    account = models.ForeignKey('accounts.Account', related_name='account', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "{statement} mentioned {account}".format(statement=self.statement, account=self.account)
