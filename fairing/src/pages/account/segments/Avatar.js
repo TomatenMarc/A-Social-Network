@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Grid, Header, Image, Segment} from "semantic-ui-react";
 import '../../../scss/Avatar.css'
+import FollowUnfollowButton from "../components/FollowUnfollowButton";
 
 class Avatar extends Component {
     render() {
@@ -29,6 +30,9 @@ class Avatar extends Component {
                     <Grid.Row>
                         {this.props.biography}
                     </Grid.Row>
+                    {!this.props.private ? <Grid.Row>
+                        <FollowUnfollowButton friend={this.props.friend}/>
+                    </Grid.Row> : null}
                 </Grid>
             </Segment>
         );

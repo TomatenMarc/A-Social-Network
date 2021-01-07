@@ -4,6 +4,7 @@ import MenuBar from "../../components/MenuBar";
 import Avatar from "./segments/Avatar";
 import Contents from "./segments/Contents";
 import Networking from "./segments/Networking";
+import {withCookies} from "react-cookie";
 
 class PublicAccountPage extends Component {
 
@@ -17,7 +18,13 @@ class PublicAccountPage extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://192.168.0.3:8000/accounts/show/".concat(this.state.uid).concat("/"), {}
+        const {cookies} = this.props
+        const utkn = cookies.get("utkn")
+        axios.get("http://192.168.0.3:8000/accounts/show/".concat(this.state.uid).concat("/"), {
+                headers: {
+                    'Authorization': 'Token '.concat(utkn)
+                }
+            }
         ).then(result => {
             if (result.status === 200) {
                 this.setState({
@@ -42,6 +49,8 @@ class PublicAccountPage extends Component {
             <div>
                 <MenuBar/>
                 <Avatar
+                    private={false}
+                    friend={this.state.account["is_friend"]}
                     image={"http://192.168.0.3:8000".concat(this.state.account.image)}
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
@@ -54,4 +63,4 @@ class PublicAccountPage extends Component {
     }
 }
 
-export default PublicAccountPage;
+export default withCookies(PublicAccountPage);
