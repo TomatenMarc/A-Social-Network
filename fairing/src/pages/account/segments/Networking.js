@@ -5,6 +5,17 @@ import Following from "../components/Following";
 
 class Networking extends Component {
     render() {
+        if (this.props.private)
+            return <Segment style={{padding: '0em'}} vertical>
+                <Grid celled='internally' columns='equal' stackable>
+                    <Grid.Row>
+                        <Grid.Column style={{paddingBottom: '5em', paddingTop: '5em'}}>
+                            <Following following={this.props.following}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
+
         return (
             <Segment style={{padding: '0em'}} vertical>
                 <Grid celled='internally' columns='equal' stackable>

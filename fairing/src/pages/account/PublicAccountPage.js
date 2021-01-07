@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import MenuBar from "../../components/MenuBar";
+import Avatar from "./segments/Avatar";
+import Contents from "./segments/Contents";
+import Networking from "./segments/Networking";
 
 class PublicAccountPage extends Component {
 
@@ -36,7 +40,15 @@ class PublicAccountPage extends Component {
             </div>
         return (
             <div>
-                Private Account of {this.state.account.user.username}!
+                <MenuBar/>
+                <Avatar
+                    image={"http://192.168.0.3:8000".concat(this.state.account.image)}
+                    username={this.state.account.user.username}
+                    biography={this.state.account.biography}
+                />
+                <Networking private={true}
+                            following={this.state.account["related_to"]}/>
+                <Contents statements={this.state.account["statements"]}/>
             </div>
         );
     }

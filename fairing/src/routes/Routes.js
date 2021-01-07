@@ -11,7 +11,7 @@ export function Routes() {
     return <Switch>
         <Route path="/login" exact component={LoginPage}/>
         <Route path="/signup" exact component={SignUpPage}/>
-        <Route path="/account/:uid" exact component={PublicAccountPage}/>
+        <Route path="/public/account/:uid" exact component={PublicAccountPage}/>
         <PrivateRoute path="/account" exact component={PrivateAccountPage}/>
         <PrivateRoute path="/" exact component={MainPage}/>
     </Switch>
