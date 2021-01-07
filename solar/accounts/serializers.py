@@ -28,10 +28,22 @@ class AccountPublicSerializer(serializers.ModelSerializer):
     related_to = serializers.ListField(source='get_related_to', child=AccountSerializer())
     # these are all statements of the account
     statements = serializers.ListField(source='get_statements', child=StatementSerializer())
+    # check if the calling account knows the account as friend.
+    is_friend = serializers.SerializerMethodField('_is_friend')
+
+    def _is_friend(self, obj: Account):
+        """
+        This intern method checks for the calling account if the requested account is a friend or not!
+
+        :param obj: The requested account.
+        :return: True if obj is a friend of the calling account.
+        """
+        account: Account = self.context["calling_account"]
+        return obj in account.get_related_to()
 
     class Meta:
         model = Account
-        fields = ('user', 'image', 'biography', 'related_to', 'statements')
+        fields = ('user', 'image', 'biography', 'related_to', 'statements', 'is_friend')
 
 
 class AccountOwnSerializer(AccountPublicSerializer):

@@ -143,6 +143,7 @@ class TestGetAccount(APITestCase):
         # But Bernd should not have an relationship to Beate
         self.assertFalse(self.account_bernd.related_to.all().exists())
 
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
         response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_beate.id))
 
         # public information about beate
@@ -152,8 +153,10 @@ class TestGetAccount(APITestCase):
         # public information about the account she is relates to
         self.assertEqual(response.data[0]["related_to"][0]["user"]["username"], self.user_bernd.username)
         self.assertEqual(response.data[0]["related_to"][0]["user"]["id"], self.user_bernd.id)
+        self.assertFalse(response.data[0]["is_friend"])
 
         # what do we know about bernd
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
         response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
 
         # public information about bernd
@@ -162,10 +165,12 @@ class TestGetAccount(APITestCase):
 
         # public information about the account Bernd relates to
         self.assertEqual(response.data[0]["related_to"], [])
+        self.assertTrue(response.data[0]["is_friend"])
 
         # Bernd adds an statement
         self.account_bernd.add_statement("I like Beate")
         # what do we know about Bernd
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
         response: Response = self.client.get(path="/accounts/show/{}/".format(self.user_bernd.id))
         self.assertEqual(response.data[0]["statements"][0]["content"], "I like Beate")
 
