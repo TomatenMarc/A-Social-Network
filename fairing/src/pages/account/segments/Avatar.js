@@ -31,7 +31,7 @@ class Avatar extends Component {
                         {this.props.biography}
                     </Grid.Row>
                     {!this.props.private ? <Grid.Row>
-                        <FollowUnfollowButton friend={this.props.friend}/>
+                        <FollowUnfollowButton friend={this.props.friend} uid={this.props.uid}/>
                     </Grid.Row> : null}
                 </Grid>
             </Segment>
