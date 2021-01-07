@@ -55,7 +55,7 @@ class PrivateAccountPage extends Component {
                 />
                 <Networking follower={this.state.account["related_by"]}
                             following={this.state.account["related_to"]}/>
-                 <Contents statements={this.state.account["statements"]}/>
+                <Contents statements={this.state.account["statements"]}/>
                 <Footer/>
             </div>
         );
