@@ -13,10 +13,10 @@ class LoadingScreen extends Component {
                 bottom: 0,
                 left: 0,
                 margin: 0,
-                "box-sizing": "border-box",
+                boxSizing: "border-box",
                 width: "100%",
                 height: "100%",
-                "object-fit": "contain",
+                objectFit: "contain",
                 background: "#1a1a1a"
             }}>
                 <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>

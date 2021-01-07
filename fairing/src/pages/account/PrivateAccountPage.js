@@ -7,7 +7,7 @@ import Networking from "./segments/Networking";
 import Footer from "../../components/Footer";
 import Contents from "./segments/Contents";
 
-class AccountPage extends Component {
+class PrivateAccountPage extends Component {
 
     constructor(props) {
         super(props);
@@ -62,4 +62,4 @@ class AccountPage extends Component {
     }
 }
 
-export default withCookies(AccountPage);
+export default withCookies(PrivateAccountPage);
