@@ -4,6 +4,11 @@ import '../../scss/Slider.css'
 import {Grid, Header} from "semantic-ui-react";
 
 class LoadingScreen extends Component {
+    /**
+     * This is the loading-screen used for transitions between validating the token in the backend and loading the
+     * requested component.
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div style={{
