@@ -68,10 +68,29 @@ class OwnAccountFollow(APIView):
 
     def post(self, request: Request, *args, **kwargs):
         own_account: Account = Account.objects.filter(user=request.user).first()
-        foreign_account: Account = Account.objects.filter(user=int(kwargs.get("id"))).first()
+        foreign_account: Account = Account.objects.filter(user=kwargs.get("id")).first()
         if not foreign_account:
             return Response(status=status.HTTP_409_CONFLICT)
         created: bool = own_account.add_relationship(foreign_account)
         if created:
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_409_CONFLICT)
+
+
+class OwnAccountUnfollow(APIView):
+    """
+    This view is for deleting a follow relation from the calling account to the targeted one.
+    To access this view the requesting account has to use its token.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request: Request, *args, **kwargs):
+        own_account: Account = Account.objects.filter(user=request.user).first()
+        foreign_account: Account = Account.objects.filter(user=kwargs.get("id")).first()
+        if not foreign_account:
+            return Response(status=status.HTTP_409_CONFLICT)
+        deleted: bool = own_account.remove_relationship(foreign_account)
+        if deleted:
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_409_CONFLICT)

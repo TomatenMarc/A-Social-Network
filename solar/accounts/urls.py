@@ -1,9 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
-from accounts.views import PublicAccounts, OwnAccount, OwnAccountFollow
+from accounts.views import PublicAccounts, OwnAccount, OwnAccountFollow, OwnAccountUnfollow
 
 urlpatterns = [
-    url(r'show/(?P<id>\d+)/$', PublicAccounts.as_view(), name='show'),
-    url(r'own/$', OwnAccount.as_view(), name='own'),
-    url(r'follow/(?P<id>\d+)/$', OwnAccountFollow.as_view(), name='follow'),
+    path('show/<int:id>/', PublicAccounts.as_view(), name='show'),
+    path('own/', OwnAccount.as_view(), name='own'),
+    path('follow/<int:id>/', OwnAccountFollow.as_view(), name='follow'),
+    path('unfollow/<int:id>/', OwnAccountUnfollow.as_view(), name='unfollow'),
 ]
