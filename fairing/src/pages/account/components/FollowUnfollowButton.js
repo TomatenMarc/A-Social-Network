@@ -20,7 +20,10 @@ class FollowUnfollowButton extends Component {
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
         console.log(utkn)
-        const url = 'http://192.168.0.3:8000/accounts/follow/'.concat(this.state.uid).concat("/")
+        let url = 'http://192.168.0.3:8000/accounts/follow/'.concat(this.state.uid).concat("/")
+        if (this.state.friend)
+            url = 'http://192.168.0.3:8000/accounts/unfollow/'.concat(this.state.uid).concat("/")
+
         axios.post(url, {}, {
             headers: {
                 'Authorization': 'Token '.concat(utkn)
@@ -29,7 +32,7 @@ class FollowUnfollowButton extends Component {
             if (res.status === 200) {
                 console.log("Success")
                 this.setState({
-                    friend: true
+                    friend: !this.state.friend
                 })
             }
         }).catch((err) => {
