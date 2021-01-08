@@ -8,6 +8,10 @@ import PrivateRoute from "./PrivateRoute";
 import PublicAccountPage from "../pages/account/PublicAccountPage";
 
 export function Routes() {
+    /**
+     * This function defines the routes to be switched by the router.
+     * In this terms this is the heart of the project, where the linkage of the pages takes place.
+     */
     return <Switch>
         <Route path="/login" exact component={LoginPage}/>
         <Route path="/signup" exact component={SignUpPage}/>
