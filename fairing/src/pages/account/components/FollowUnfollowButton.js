@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Icon} from "semantic-ui-react";
+import {withCookies} from "react-cookie";
+import axios from "axios";
 
 class FollowUnfollowButton extends Component {
 
@@ -14,9 +16,24 @@ class FollowUnfollowButton extends Component {
     }
 
     handleClick = (event) => {
-        alert("Friend")
-        this.setState({
-            friend: !this.state.friend
+        event.preventDefault();
+        const {cookies} = this.props
+        const utkn = cookies.get("utkn")
+        console.log(utkn)
+        const url = 'http://192.168.0.3:8000/accounts/follow/'.concat(this.state.uid).concat("/")
+        axios.post(url, {}, {
+            headers: {
+                'Authorization': 'Token '.concat(utkn)
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                console.log("Success")
+                this.setState({
+                    friend: true
+                })
+            }
+        }).catch((err) => {
+            console.log("Error")
         })
     }
 
@@ -32,4 +49,4 @@ class FollowUnfollowButton extends Component {
     }
 }
 
-export default FollowUnfollowButton;
+export default withCookies(FollowUnfollowButton);
