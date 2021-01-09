@@ -2,8 +2,29 @@ import React, {Component} from 'react';
 import {Grid, Header, Image, Segment} from "semantic-ui-react";
 import '../../../scss/Avatar.css'
 import FollowUnfollowButton from "../components/FollowUnfollowButton";
+import {PropTypes} from "prop-types";
 
 class Avatar extends Component {
+    /**
+     * This component shows the avatar of an account.
+     * If this component is used to show a public account a follow/unfollow button will be shown.
+     * @type {{image: *, uid: *, private: *, friend: *, biography: *, username: *}}
+     */
+    static propTypes = {
+        image: PropTypes.string.isRequired, // url appendix to the image
+        username: PropTypes.string.isRequired,
+        biography: PropTypes.string.isRequired,
+        uid: PropTypes.string.isRequired,
+        // Followings: Necessary for follow/unfollow option
+        private: PropTypes.bool.isRequired, // is component for private of public accounts?
+        friend: PropTypes.bool.isRequired // is the public account a friend?
+    };
+
+    /**
+     * This will show the avatar in a segment.
+     * Dependent on the use for a public or private account there will be a follow/unfollow button.
+     *@returns {JSX.Element}
+     */
     render() {
         return (
             <Segment inverted style={{padding: '8em 0em'}} vertical>
@@ -14,11 +35,7 @@ class Avatar extends Component {
                                 <Image src={this.props.image}
                                        circular
                                        size="small"
-                                       style={
-                                           {
-                                               marginBottom: "2em"
-                                           }
-                                       }/>
+                                       style={{marginBottom: "2em"}}/>
                             </div>
                         </div>
                     </Grid.Row>
