@@ -4,6 +4,10 @@ import StatementExplorer from "../components/StatementExplorer";
 import HashtagExplorer from "../components/HashtagExplorer";
 
 class SocialExplorer extends Component {
+    /**
+     * This component is for social discovery. It will be used s.t. the user will get to know other users.
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <Segment style={{padding: '0em'}} vertical>
