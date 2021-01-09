@@ -2,13 +2,27 @@ import React, {Component} from 'react';
 import MenuBar from "../../components/MenuBar";
 import Avatar from "./segments/Avatar";
 import axios from "axios";
-import {withCookies} from "react-cookie";
+import {Cookies, withCookies} from "react-cookie";
 import Networking from "./segments/Networking";
 import Footer from "../../components/Footer";
 import Contents from "./segments/Contents";
+import {instanceOf} from "prop-types";
 
 class PrivateAccountPage extends Component {
+    /**
+     * This component is for representing an private account.
+     * todo: This should add modification options for the calling user.
+     * @type {{cookies: Validator<NonNullable<Cookies>>}}
+     */
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired,
+    };
 
+    /**
+     * This component will provide an account as well an loading screen.
+     * It will also need to have cookies to work with the user token.
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -17,6 +31,10 @@ class PrivateAccountPage extends Component {
         }
     }
 
+    /**
+     * This method pulls the data of the calling user after the component did mount.
+     * The calling account is identified by the user-token.
+     */
     componentDidMount() {
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
@@ -30,7 +48,6 @@ class PrivateAccountPage extends Component {
                     account: result.data[0],
                     loading: false
                 })
-                console.log(this.state.account["related_to"])
             }
         }).catch(error => {
             this.setState({
@@ -39,7 +56,11 @@ class PrivateAccountPage extends Component {
         })
     }
 
-
+    /**
+     * While the data is loaded a loading screen will be shown.
+     * After loading the account will be displayed.
+     * @returns {JSX.Element}
+     */
     render() {
         if (this.state.loading)
             return <div>
