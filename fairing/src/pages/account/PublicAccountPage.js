@@ -4,10 +4,30 @@ import MenuBar from "../../components/MenuBar";
 import Avatar from "./segments/Avatar";
 import Contents from "./segments/Contents";
 import Networking from "./segments/Networking";
-import {withCookies} from "react-cookie";
+import {Cookies, withCookies} from "react-cookie";
+import {instanceOf, PropTypes} from "prop-types";
 
 class PublicAccountPage extends Component {
+    /**
+     * This component can be used to display a public account.
+     * Therefore an uid the requested user is required.
+     * This uid should be taken from the url.
+     * @type {{cookies: Validator<NonNullable<Cookies>>}}
+     */
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired,
+        match: PropTypes.shape({
+            params: PropTypes.shape({
+                uid: PropTypes.string.isRequired
+            })
+        }),
+    };
 
+    /**
+     * This component needs the match parameters from the url to get the uid of the requested user.
+     * It will provide the account as well as an loading state.
+     * @param props The match parameters of the url to get the uid of the requested user.
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +37,12 @@ class PublicAccountPage extends Component {
         }
     }
 
+    /**
+     * This method will get all public data according the requested user form the backend.
+     * Therefore the user token from the cookies is required.
+     */
     componentDidMount() {
+        //todo: show an error page if the requested user does not exist.
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
         axios.get("http://192.168.0.3:8000/accounts/show/".concat(this.state.uid).concat("/"), {
@@ -31,7 +56,6 @@ class PublicAccountPage extends Component {
                     account: result.data[0],
                     loading: false
                 })
-                console.log(this.state)
             }
         }).catch(error => {
             this.setState({
@@ -40,6 +64,11 @@ class PublicAccountPage extends Component {
         })
     }
 
+    /**
+     * While pulling the user data a loading screen is shown.
+     * Afterwards the public account of the requested user is shown.
+     * @returns {JSX.Element}
+     */
     render() {
         if (this.state.loading)
             return <div>
