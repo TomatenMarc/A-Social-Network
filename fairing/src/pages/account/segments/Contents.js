@@ -1,7 +1,22 @@
 import React, {Component} from 'react';
 import {Card, Icon, Label, Segment} from "semantic-ui-react";
+import {PropTypes} from "prop-types";
 
 class Contents extends Component {
+    /**
+     * This component is for the representation of the contents created by the user.
+     * Todo: Use a responsive design to show the content.
+     * Todo: The content itself must be an own component, they must handle mentions and hashtags.
+     * @type {{statements: *}}
+     */
+    static propTypes = {
+        statements: PropTypes.array.isRequired
+    };
+
+    /**
+     * This will show the content provided by the corresponding account.
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <Segment style={{padding: '0em'}} vertical>
