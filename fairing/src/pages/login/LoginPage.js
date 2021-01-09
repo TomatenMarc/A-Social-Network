@@ -4,6 +4,11 @@ import '../../scss/Slider.css'
 import {withCookies} from "react-cookie";
 
 class LoginPage extends Component {
+    /**
+     * This component is for the login of the user.
+     * It will show the login form as well as an animated background.
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div>
