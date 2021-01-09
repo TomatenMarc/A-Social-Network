@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
 import {NavLink, Redirect} from "react-router-dom";
-import {withCookies} from "react-cookie";
+import {withCookies, Cookies} from "react-cookie";
 import axios from "axios";
 import {instanceOf} from "prop-types";
-import {Cookies} from "react-cookie/index";
 
 class LoginForm extends Component {
     /**
