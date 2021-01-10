@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Grid, Header} from "semantic-ui-react";
 import '../scss/Error.css'
-import '../scss/Positioning.css'
 
 class ErrorScreen extends Component {
     /**
