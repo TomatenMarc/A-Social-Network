@@ -1,0 +1,299 @@
+.planet {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  background-color: #920ab7;
+  z-index: -1;
+}
+
+.r1 {
+  background-color: #289dfc;
+  height: 20px;
+  width: 110px;
+  border-radius: 10px;
+  position: relative;
+  top: 60px;
+  left: 85px;
+}
+
+.r2 {
+  background-color: #620bb1;
+  height: 15px;
+  width: 90px;
+  border-radius: 6.5px;
+  position: relative;
+  top: 60px;
+  left: 110px;
+}
+
+.r3 {
+  background-color: #7e3cee;
+  height: 30px;
+  width: 120px;
+  border-radius: 15px;
+  position: relative;
+  top: 78px;
+  left: 50px;
+}
+
+.r4 {
+  background-color: #592aa9;
+  height: 22px;
+  width: 90px;
+  border-radius: 11px;
+  position: relative;
+  top: 80px;
+  left: 20px;
+}
+
+.r5 {
+  background-color: #6619e7;
+  height: 15px;
+  width: 40px;
+  border-radius: 7.5px;
+  position: relative;
+  bottom: 50px;
+  left: 50px;
+}
+
+.shadow {
+  background-color: transparent;
+  box-shadow: 15px 15px rgba(204, 102, 0, 0.3);
+  position: relative;
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  bottom: 117px;
+  right: 15px;
+}
+
+.floatInSpaceAnimation {
+  animation-name: flow;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+}
+
+.astronaut {
+  transform-origin: center;
+  transform: scale(0.7);
+}
+
+.animatedArmRight {
+  animation-name: mover;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1;
+}
+
+.animatedLegLeft {
+  animation-name: movel;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1;
+}
+
+@keyframes movel {
+  50% {
+    transform-origin: top;
+    transform: rotate(5deg);
+  }
+}
+@keyframes mover {
+  50% {
+    transform-origin: right;
+    transform: rotate(10deg);
+  }
+}
+@keyframes flow {
+  50% {
+    transform-origin: center;
+    transform: translateY(-80px) rotate(20deg);
+  }
+}
+.helmet {
+  background-color: #FFFFFF;
+  height: 80px;
+  width: 80px;
+  border: 2px solid black;
+  border-radius: 60% 60% 0% 0%;
+  position: relative;
+}
+
+.glass {
+  background-color: #6ecada;
+  height: 60px;
+  width: 60px;
+  border: 2px solid black;
+  border-radius: 100%;
+  position: relative;
+  left: 8px;
+  top: 8px;
+}
+
+.shine {
+  background-color: #FFFFFF;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 2px solid black;
+  position: relative;
+  left: 5px;
+  top: 6px;
+}
+
+.dress {
+  background-color: #FFFFFF;
+  height: 100px;
+  width: 100px;
+  border-radius: 10px 10px 0 0;
+  border: 2px solid black;
+  position: relative;
+  left: -10px;
+  bottom: 2px;
+}
+
+.armRight {
+  height: 30px;
+  width: 100px;
+  background-color: #FFFFFF;
+  border-radius: 40px;
+  border: 2px solid black;
+  position: relative;
+  left: -10px;
+  z-index: -1;
+  transform-origin: right;
+  transform: rotate(-135deg);
+}
+
+.armLeft {
+  height: 30px;
+  width: 100px;
+  background-color: #FFFFFF;
+  border-radius: 40px;
+  border: 2px solid black;
+  position: relative;
+  bottom: 30px;
+  left: -93px;
+  z-index: -1;
+  transform-origin: right;
+  transform: rotate(-45deg);
+}
+
+.plate {
+  background-color: #FFFFFF;
+  height: 50px;
+  width: 60px;
+  border-radius: 10px;
+  border: 2px solid black;
+  position: relative;
+  left: 18px;
+  bottom: 40px;
+}
+
+.console {
+  background-color: #09911b;
+  height: 30px;
+  width: 30px;
+  border-radius: 0 10px 10px 0;
+  border: 2px solid black;
+  position: relative;
+  right: 2px;
+  top: 6px;
+}
+
+.b1 {
+  background-color: #FFFFFF;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  top: 6px;
+  left: 24px;
+}
+
+.b2 {
+  background-color: #FFFFFF;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  bottom: 30px;
+  left: 30px;
+}
+
+.b3 {
+  background-color: #FFFFFF;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  bottom: 43px;
+  left: 40px;
+}
+
+.belt {
+  background-color: #09911b;
+  height: 15px;
+  width: 100px;
+  border: 2px solid black;
+  position: relative;
+  right: 10px;
+  bottom: 5px;
+}
+
+.boxLeft {
+  background-color: #09911b;
+  height: 30px;
+  width: 20px;
+  border: 2px solid black;
+  position: relative;
+  left: 15px;
+  bottom: 10px;
+}
+
+.boxRight {
+  background-color: #09911b;
+  height: 30px;
+  width: 20px;
+  border: 2px solid black;
+  position: relative;
+  left: 60px;
+  bottom: 40px;
+}
+
+.legLeft {
+  background-color: #FFFFFF;
+  height: 100px;
+  width: 50px;
+  border: 2px solid black;
+  border-radius: 0 0 10px 10px;
+  position: relative;
+  left: -10px;
+  top: -7px;
+  z-index: -1;
+}
+
+.legRight {
+  background-color: #FFFFFF;
+  height: 100px;
+  width: 50px;
+  border: 2px solid black;
+  border-radius: 0 0 10px 10px;
+  position: relative;
+  left: 40px;
+  bottom: 108px;
+  z-index: -1;
+}
+
+/*# sourceMappingURL=Error.css.map */
