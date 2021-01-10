@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Header, Icon} from "semantic-ui-react";
-import {instanceOf, PropTypes} from "prop-types";
+import {PropTypes} from "prop-types";
 
 class Follower extends Component {
     /**

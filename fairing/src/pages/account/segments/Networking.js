@@ -17,7 +17,7 @@ class Networking extends Component {
     static propTypes = {
         private: PropTypes.bool.isRequired,
         following: PropTypes.array.isRequired,
-        follower: PropTypes.array.isRequired
+        follower: PropTypes.array
     };
 
     /**
