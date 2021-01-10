@@ -41,9 +41,21 @@ class ErrorScreen extends Component {
                     <Grid.Row style={{minHeight: "50%"}}>
                         <div className="floatInSpaceAnimation">
                             <div className="astronaut">
-                                <div className="helmet">
-                                    <div className="glass">
-                                        <div className="shine"/>
+
+                                <div className="face">
+                                    <div className="eyeLeft">
+                                        <div className="eyeInner"></div>
+                                    </div>
+                                    <div className="eyeRight">
+                                        <div className="eyeInner"></div>
+                                    </div>
+                                    <div className="mouth"></div>
+                                </div>
+                                <div className="animatedHelmet">
+                                    <div className="helmet">
+                                        <div className="glass">
+                                            <div className="shine"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="dress">

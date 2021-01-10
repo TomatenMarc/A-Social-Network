@@ -100,6 +100,17 @@
   z-index: -1;
 }
 
+.animatedHelmet {
+  animation-name: flowUp;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1;
+}
+
 @keyframes movel {
   50% {
     transform-origin: top;
@@ -108,8 +119,29 @@
 }
 @keyframes mover {
   50% {
-    transform-origin: right;
-    transform: rotate(10deg);
+    transform-origin: right center;
+    transform: rotate(-15deg);
+  }
+}
+@keyframes flowUp {
+  50% {
+    transform-origin: center;
+    transform: translateY(-180px);
+  }
+}
+@keyframes smile {
+  50% {
+    border-radius: 70px 0px 0px 70px;
+  }
+}
+@keyframes turnBlue {
+  50% {
+    background-color: #289dfc;
+  }
+}
+@keyframes lookUp {
+  50% {
+    transform: translateY(-8px);
   }
 }
 @keyframes flow {
@@ -124,6 +156,80 @@
   width: 80px;
   border: 2px solid black;
   border-radius: 60% 60% 0% 0%;
+  position: relative;
+  z-index: 1;
+}
+
+.face {
+  animation-name: turnBlue;
+  animation-duration: 26s;
+  animation-iteration-count: infinite;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #cd8e61;
+  height: 80px;
+  width: 80px;
+  border: 2px solid black;
+  border-radius: 60% 60% 0% 0%;
+  position: relative;
+  bottom: -80px;
+  left: -10px;
+  z-index: -1;
+}
+
+.eyeLeft {
+  background-color: #FFFFFF;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  top: 15px;
+  left: 10px;
+}
+
+.eyeRight {
+  background-color: #FFFFFF;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  top: -5px;
+  left: 45px;
+}
+
+.eyeInner {
+  animation-name: lookUp;
+  animation-duration: 26s;
+  animation-iteration-count: infinite;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #000000;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  border: 2px solid black;
+  position: relative;
+  top: 6px;
+  left: 0px;
+}
+
+.mouth {
+  animation-name: smile;
+  animation-duration: 25s;
+  animation-iteration-count: infinite;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #b554b5;
+  height: 20px;
+  width: 20px;
+  border: 2px solid black;
+  border-radius: 0px 70px 70px 0px;
+  transform: rotate(90deg);
   position: relative;
 }
 
