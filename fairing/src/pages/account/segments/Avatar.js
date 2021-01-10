@@ -14,10 +14,10 @@ class Avatar extends Component {
         image: PropTypes.string.isRequired, // url appendix to the image
         username: PropTypes.string.isRequired,
         biography: PropTypes.string.isRequired,
-        uid: PropTypes.string.isRequired,
+        uid: PropTypes.string,
         // Followings: Necessary for follow/unfollow option
         private: PropTypes.bool.isRequired, // is component for private of public accounts?
-        friend: PropTypes.bool.isRequired // is the public account a friend?
+        friend: PropTypes.bool // is the public account a friend?
     };
 
     /**
