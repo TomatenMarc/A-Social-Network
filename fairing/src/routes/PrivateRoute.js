@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {useCookies} from 'react-cookie';
 import axios from "axios";
 import '../scss/Loading.css'
-import LoadingScreen from "./components/LoadingScreen";
+import LoadingScreen from "../components/LoadingScreen";
 
 function PrivateRoute({component: Component, ...rest}) {
     /**

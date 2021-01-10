@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import '../../scss/Loading.css'
-import '../../scss/Slider.css'
+import '../scss/Loading.css'
+import '../scss/Slider.css'
 import {Grid, Header} from "semantic-ui-react";
 
 class LoadingScreen extends Component {
