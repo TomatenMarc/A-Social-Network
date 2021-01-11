@@ -3,6 +3,7 @@ import {Image, List, Modal} from "semantic-ui-react";
 import {instanceOf, PropTypes} from "prop-types";
 import axios from "axios";
 import {Cookies, withCookies} from "react-cookie";
+import {Link} from "react-router-dom";
 
 
 class AccountModal extends Component {
@@ -64,15 +65,14 @@ class AccountModal extends Component {
                     <List divided verticalAlign='middle' size='big'>
                         {
                             this.state.accounts.map((account, index) => {
-                                return <List.Item key={index} onClick={() => {
-                                    console.log(account.user.id)
-                                }}>
+                                return <List.Item as={Link} to={"/public/account/".concat(account.user.id.toString())}
+                                                  key={index}>
                                     <Image
                                         avatar
                                         src={'http://192.168.0.3:8000'.concat(account.image)}/>
                                     <List.Content>
-                                        <List.Header as='a'>{account.user.username}</List.Header>
-                                        Follows {account["related_to"].length}
+                                        <List.Header as="h1">{account.user.username}</List.Header>
+                                        <List.Description>Follows {account["related_to"].length}</List.Description>
                                         <List.Description>
                                             {account.biography}
                                         </List.Description>
