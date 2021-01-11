@@ -64,21 +64,30 @@ class AccountModal extends Component {
                 <Modal.Content scrolling>
                     <List divided verticalAlign='middle' size='big'>
                         {
-                            this.state.accounts.map((account, index) => {
-                                return <List.Item as={Link} to={"/public/account/".concat(account.user.id.toString())}
-                                                  key={index}>
-                                    <Image
-                                        avatar
-                                        src={'http://192.168.0.3:8000'.concat(account.image)}/>
+                            this.state.accounts.length !== 0 ?
+                                this.state.accounts.map((account, index) => {
+                                    return <List.Item as={Link}
+                                                      to={"/public/account/".concat(account.user.id.toString())}
+                                                      key={index}>
+                                        <Image
+                                            avatar
+                                            src={'http://192.168.0.3:8000'.concat(account.image)}/>
+                                        <List.Content>
+                                            <List.Header as="h1">{account.user.username}</List.Header>
+                                            <List.Description>Follows {account["related_to"].length}</List.Description>
+                                            <List.Description>
+                                                {account.biography}
+                                            </List.Description>
+                                        </List.Content>
+                                    </List.Item>
+                                })
+                                :
+                                <List.Item>
                                     <List.Content>
-                                        <List.Header as="h1">{account.user.username}</List.Header>
-                                        <List.Description>Follows {account["related_to"].length}</List.Description>
-                                        <List.Description>
-                                            {account.biography}
-                                        </List.Description>
+                                        <List.Header as="h1">Pretty empty!</List.Header>
                                     </List.Content>
                                 </List.Item>
-                            })
+
                         }
                     </List>
                 </Modal.Content>
