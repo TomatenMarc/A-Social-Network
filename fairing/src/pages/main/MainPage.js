@@ -3,6 +3,7 @@ import Heading from "./segments/Heading";
 import SocialExplorer from "./segments/SocialExplorer";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
+import AccountExplorer from "./segments/AccountExplorer";
 
 class MainPage extends Component {
     /**
@@ -15,6 +16,7 @@ class MainPage extends Component {
                 <MenuBar/>
                 <Heading/>
                 <SocialExplorer/>
+                <AccountExplorer/>
                 <Footer/>
             </div>
         );
