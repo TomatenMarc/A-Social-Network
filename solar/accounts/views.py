@@ -1,6 +1,7 @@
 # Create your views here.
 import logging
 
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -34,6 +35,30 @@ class PublicAccounts(APIView):
         calling_account: Account = Account.objects.filter(user=request.user).first()
         account: Account = Account.objects.filter(user=int(kwargs.get("id")))
         serializer: AccountPublicSerializer = AccountPublicSerializer(instance=account,
+                                                                      many=True,
+                                                                      context={"calling_account": calling_account})
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class AllPublicAccounts(APIView):
+    """
+    This view is for showing all public accounts.
+    It requires the user token to see which account is calling the overview.
+    The calling account is then removed from the result.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request: Request):
+        """
+        This method gets all available public accounts.
+        Furthermore the calling account is excluded from the result.
+        :param request: Used to get the calling account.
+        :return:
+        """
+        calling_account: Account = Account.objects.filter(user=request.user).first()
+        accounts: Account = Account.objects.filter(~Q(user=request.user))
+        serializer: AccountPublicSerializer = AccountPublicSerializer(instance=accounts,
                                                                       many=True,
                                                                       context={"calling_account": calling_account})
         return Response(data=serializer.data, status=status.HTTP_200_OK)
