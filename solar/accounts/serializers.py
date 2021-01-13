@@ -46,6 +46,19 @@ class AccountPublicSerializer(serializers.ModelSerializer):
         fields = ('user', 'image', 'biography', 'related_to', 'statements', 'is_friend')
 
 
+class AccountTinySerializer(AccountPublicSerializer):
+    """
+    This serializer serializes the public data of accounts but it is shorter.
+    It can be used to get all shortened public data of the accounts.
+    """
+    # this is the parent account
+    user = UserPublicSerializer()
+
+    class Meta:
+        model = Account
+        fields = ('user', 'image', 'related_to')
+
+
 class AccountOwnSerializer(AccountPublicSerializer):
     """
     This serializer is for the representation of an own account.

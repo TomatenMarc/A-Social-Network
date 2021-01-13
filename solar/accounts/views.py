@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
-from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer
+from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer, AccountTinySerializer
 
 logger = logging.getLogger(__name__)
 
@@ -82,9 +82,9 @@ class AllFollowerAccounts(APIView):
         """
         calling_account: Account = Account.objects.filter(user=request.user).first()
         accounts: List[Account] = calling_account.get_related_by()
-        serializer: AccountPublicSerializer = AccountPublicSerializer(instance=accounts,
-                                                                      many=True,
-                                                                      context={"calling_account": calling_account})
+        serializer: AccountTinySerializer = AccountTinySerializer(instance=accounts,
+                                                                  many=True,
+                                                                  context={"calling_account": calling_account})
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -105,9 +105,9 @@ class AllFollowingAccounts(APIView):
         """
         calling_account: Account = Account.objects.filter(user=request.user).first()
         accounts: List[Account] = calling_account.get_related_to()
-        serializer: AccountPublicSerializer = AccountPublicSerializer(instance=accounts,
-                                                                      many=True,
-                                                                      context={"calling_account": calling_account})
+        serializer: AccountTinySerializer = AccountTinySerializer(instance=accounts,
+                                                                  many=True,
+                                                                  context={"calling_account": calling_account})
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
