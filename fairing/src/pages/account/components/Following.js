@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Header, Icon} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
+import AccountModal from "../../../components/AccountModal";
 
 class Following extends Component {
     /**
@@ -13,17 +14,59 @@ class Following extends Component {
         following: PropTypes.array.isRequired
     };
 
+
     /**
-     * This will show the following accounts.
+     * This component is to show for accounts the account follows.
+     * While exploring the followings one can decide to visit them
+     * The followings will be shown in a scrollable modal.
+     * Therefore there are the handleOpen and handleClose methods.
+     * @param props
+     */
+    constructor(props) {
+        super(props);
+        this.state = {
+            modalOpen: false
+        };
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+
+    /**
+     * This method is for handling the opening of the modal.
+     * @param event of the click.
+     */
+    handleOpen = (event) => {
+        event.preventDefault();
+        this.setState({modalOpen: true});
+    }
+
+    /**
+     * This method is for handling the closing of the modal.
+     * It also includes esc, a click beside the modal or the cross-button at the top of the modal.
+     * @param event of the click beside the modal or on the leave cross or esc.
+     */
+    handleClose = (event) => {
+        event.preventDefault();
+        this.setState({modalOpen: false});
+    }
+
+    /**
+     * This will show the accounts the calling account follows.
+     * Those will be shown in a modal.
      * @returns {JSX.Element}
      */
     render() {
         return (
             <div>
-                <Header as='h2' icon textAlign='center'>
+                <Header as='h2' icon textAlign='center' onClick={this.handleOpen}>
                     <Icon name='street view' circular/>
                     <Header.Content>{this.props.following.length.toString().concat(" Follows")}</Header.Content>
                 </Header>
+                <AccountModal modalOpen={this.state.modalOpen}
+                              onClose={this.handleClose}
+                              url={"http://192.168.0.3:8000/accounts/show/following/"}
+                />
             </div>
         );
     }

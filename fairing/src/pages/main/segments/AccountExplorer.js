@@ -60,7 +60,10 @@ class AccountExplorer extends Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                <AccountModal modalOpen={this.state.modalOpen} onClose={this.handleClose}/>
+                <AccountModal modalOpen={this.state.modalOpen}
+                              onClose={this.handleClose}
+                              url={"http://192.168.0.3:8000/accounts/show/all/"}
+                />
             </Segment>
         )
     }

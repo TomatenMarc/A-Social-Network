@@ -11,13 +11,16 @@ class AccountModal extends Component {
     /**
      * This component is a modal to show the community.
      * Therefore it must be decided to open or to close the modal.
+     * Furthermore a url must be given to this component.
+     * This component must lead to a view where accounts are provided.
      * Those parameters must therefore be given in the props.
-     * @type {{onClose: *, modalOpen: *, cookies: Validator<NonNullable<Cookies>>}}
+     * @type {{onClose: *, url: *, modalOpen: *, cookies: Validator<NonNullable<Cookies>>}}
      */
     static propTypes = {
         cookies: instanceOf(Cookies),
         modalOpen: PropTypes.bool.isRequired,
-        onClose: PropTypes.func.isRequired
+        onClose: PropTypes.func.isRequired,
+        url: PropTypes.string.isRequired
     };
 
     constructor(props) {
@@ -34,7 +37,7 @@ class AccountModal extends Component {
     componentDidMount() {
         const {cookies} = this.props;
         const utkn = cookies.get("utkn")
-        axios.get("http://192.168.0.3:8000/accounts/show/all/", {
+        axios.get(this.props.url, {
             headers: {
                 'Authorization': 'Token '.concat(utkn)
             }
