@@ -10,8 +10,6 @@ class Networking extends Component {
      * This component is for the representation of the network embedding of the user.
      * It wil distinguish between public and private accounts.
      * A public account will show less information regarding the network embedding of the specific account.
-     * Todo: Add a modal for showing the friends.
-     * Todo: It should be possible to delete friendships.
      * @type {{forPublicUse: *, follower: *, following: *}}
      */
     static propTypes = {

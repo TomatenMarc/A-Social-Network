@@ -70,7 +70,7 @@ class PrivateAccountPage extends Component {
             <div>
                 <MenuBar/>
                 <Avatar
-                    private={true}
+                    forPublicUse={false}
                     image={"http://192.168.0.3:8000".concat(this.state.account.image)}
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}

@@ -6,7 +6,6 @@ import AccountModal from "../../../components/AccountModal";
 class Following extends Component {
     /**
      * This component shows the account followed by the calling account.
-     * Todo: Add a onClick event which then shows the follows in a model.
      * It requires the list of following in the props.
      * @type {{following: *}}
      */

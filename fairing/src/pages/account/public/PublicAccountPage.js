@@ -79,7 +79,7 @@ class PublicAccountPage extends Component {
             <div>
                 <MenuBar/>
                 <Avatar
-                    private={false}
+                    forPublicUse={true}
                     uid={this.state.uid}
                     friend={this.state.account["is_friend"]}
                     image={"http://192.168.0.3:8000".concat(this.state.account.image)}
