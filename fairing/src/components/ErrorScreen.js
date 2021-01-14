@@ -44,12 +44,12 @@ class ErrorScreen extends Component {
 
                                 <div className="face">
                                     <div className="eyeLeft">
-                                        <div className="eyeInner"></div>
+                                        <div className="eyeInner"/>
                                     </div>
                                     <div className="eyeRight">
-                                        <div className="eyeInner"></div>
+                                        <div className="eyeInner"/>
                                     </div>
-                                    <div className="mouth"></div>
+                                    <div className="mouth"/>
                                 </div>
                                 <div className="animatedHelmet">
                                     <div className="helmet">
