@@ -100,7 +100,7 @@ class TestGetAccount(APITestCase):
         self.assertFalse(self.account_bernd.related_to.all().exists())
 
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
-        response: Response = self.client.get(path="/accounts/own/")
+        response: Response = self.client.get(path="/accounts/show/own/")
 
         # public information about beate
         self.assertEqual(response.data[0]["user"]["username"], self.user_beate.username)
@@ -115,7 +115,7 @@ class TestGetAccount(APITestCase):
 
         # what do we know about bernd
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
-        response: Response = self.client.get(path="/accounts/own/")
+        response: Response = self.client.get(path="/accounts/show/own/")
 
         # public information about bernd
         self.assertEqual(response.data[0]["user"]["username"], self.user_bernd.username)
