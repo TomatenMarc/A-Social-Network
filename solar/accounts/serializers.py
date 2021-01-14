@@ -30,6 +30,11 @@ class AccountPublicSerializer(serializers.ModelSerializer):
     statements = serializers.ListField(source='get_statements', child=StatementSerializer())
     # check if the calling account knows the account as friend.
     is_friend = serializers.SerializerMethodField('_is_friend')
+    # this field is to check if the one calls his own public data.
+    self_request = serializers.SerializerMethodField('_self_request')
+
+    def _self_request(self, obj: Account):
+        return self.context["calling_account"].user.id == obj.user.id
 
     def _is_friend(self, obj: Account):
         """
@@ -43,7 +48,7 @@ class AccountPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('user', 'image', 'biography', 'related_to', 'statements', 'is_friend')
+        fields = ('user', 'image', 'biography', 'related_to', 'statements', 'is_friend', 'self_request',)
 
 
 class AccountTinySerializer(AccountPublicSerializer):
