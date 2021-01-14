@@ -6,6 +6,7 @@ import Contents from "../segments/Contents";
 import Networking from "../segments/Networking";
 import {Cookies, withCookies} from "react-cookie";
 import {instanceOf, PropTypes} from "prop-types";
+import Footer from "../../../components/Footer";
 
 class PublicAccountPage extends Component {
     /**
@@ -88,6 +89,7 @@ class PublicAccountPage extends Component {
                 <Networking private={true}
                             following={this.state.account["related_to"]}/>
                 <Contents statements={this.state.account["statements"]}/>
+                <Footer/>
             </div>
         );
     }
