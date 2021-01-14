@@ -3,6 +3,7 @@ import {Grid, Header, Image, Segment} from "semantic-ui-react";
 import '../../../scss/Avatar.css'
 import FollowUnfollowButton from "../components/FollowUnfollowButton";
 import {PropTypes} from "prop-types";
+import EditAccountButton from "../components/EditAccountButton";
 
 class Avatar extends Component {
     /**
@@ -47,10 +48,15 @@ class Avatar extends Component {
                     <Grid.Row>
                         {this.props.biography}
                     </Grid.Row>
-                    {this.props.forPublicUse ? <Grid.Row>
-                        <FollowUnfollowButton friend={this.props.friend}
-                                              uid={this.props.uid}/>
-                    </Grid.Row> : null}
+                    <Grid.Row>
+                        {this.props.forPublicUse ?
+                            <FollowUnfollowButton friend={this.props.friend}
+                                                  uid={this.props.uid}/>
+                            : <EditAccountButton uid={this.props.uid}
+                                                 image={this.props.image}
+                                                 biography={this.props.biography}
+                                                 handleOpen={this.handleOpen}/>}
+                    </Grid.Row>
                 </Grid>
             </Segment>
         );
