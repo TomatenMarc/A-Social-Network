@@ -63,9 +63,9 @@ class Following extends Component {
                     <Icon name='street view' circular/>
                     <Header.Content>{this.props.following.length.toString().concat(" Follows")}</Header.Content>
                 </Header>
-                <AccountModal modalOpen={this.state.modalOpen}
+                <AccountModal accounts={this.props.following}
+                              modalOpen={this.state.modalOpen}
                               onClose={this.handleClose}
-                              url={"http://192.168.0.3:8000/accounts/show/following/"}
                 />
             </div>
         );

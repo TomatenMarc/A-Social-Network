@@ -6,7 +6,6 @@ import AccountModal from "../../../components/AccountModal";
 class Follower extends Component {
     /**
      * This component shows the follower of the calling account.
-     * Todo: Add a onClick event which then shows the followers in a model.
      * It requires the followers in the props.
      * @type {{follower: *}}
      */
@@ -62,9 +61,9 @@ class Follower extends Component {
                     <Icon name='users' circular/>
                     <Header.Content>{this.props.follower.length.toString().concat(" Follower")}</Header.Content>
                 </Header>
-                <AccountModal modalOpen={this.state.modalOpen}
+                <AccountModal accounts={this.props.follower}
+                              modalOpen={this.state.modalOpen}
                               onClose={this.handleClose}
-                              url={"http://192.168.0.3:8000/accounts/show/follower/"}
                 />
             </div>
         );

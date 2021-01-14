@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
 import AccountModal from "../../../components/AccountModal";
 import {Button, Grid, Header, Icon, Segment} from "semantic-ui-react";
+import axios from "axios";
+import {Cookies, withCookies} from "react-cookie";
+import {instanceOf} from "prop-types";
 
 class AccountExplorer extends Component {
+
     /**
      * This component is to show for exploring the community.
      * While exploring the community one can decide to visit an account.
+     * For the exploration and validation the user token must be provided.
+     * @type {{cookies: Requireable<Cookies>}}
+     */
+    static propTypes = {
+        cookies: instanceOf(Cookies),
+    };
+
+    /**
      * The community will be shown in a scrollable modal.
      * Therefore there are the handleOpen and handleClose methods.
      * @param props
@@ -13,7 +25,8 @@ class AccountExplorer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalOpen: false
+            modalOpen: false,
+            accounts: []
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -39,6 +52,29 @@ class AccountExplorer extends Component {
     }
 
     /**
+     * This method pulls all available accounts after the component mounted.
+     * Therefore the user token is needed.
+     */
+    componentDidMount() {
+        const {cookies} = this.props;
+        const utkn = cookies.get("utkn")
+        axios.get("http://192.168.0.3:8000/accounts/show/all/", {
+            headers: {
+                'Authorization': 'Token '.concat(utkn)
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                this.setState({
+                    accounts: res.data
+                })
+            }
+        }).catch((err) => {
+            console.log("Error")
+        })
+    }
+
+
+    /**
      * This will return the segment for exploring the community.
      * @returns {JSX.Element}
      */
@@ -60,13 +96,13 @@ class AccountExplorer extends Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                <AccountModal modalOpen={this.state.modalOpen}
+                <AccountModal accounts={this.state.accounts}
+                              modalOpen={this.state.modalOpen}
                               onClose={this.handleClose}
-                              url={"http://192.168.0.3:8000/accounts/show/all/"}
                 />
             </Segment>
         )
     }
 }
 
-export default AccountExplorer;
+export default withCookies(AccountExplorer);

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Image, List, Modal} from "semantic-ui-react";
-import {instanceOf, PropTypes} from "prop-types";
-import axios from "axios";
-import {Cookies, withCookies} from "react-cookie";
+import {PropTypes} from "prop-types";
 import {Link} from "react-router-dom";
 
 
@@ -14,44 +12,13 @@ class AccountModal extends Component {
      * Furthermore a url must be given to this component.
      * This component must lead to a view where accounts are provided.
      * Those parameters must therefore be given in the props.
-     * @type {{onClose: *, url: *, modalOpen: *, cookies: Validator<NonNullable<Cookies>>}}
+     * @type {{onClose: *, url: *, modalOpen: *}}
      */
     static propTypes = {
-        cookies: instanceOf(Cookies),
         modalOpen: PropTypes.bool.isRequired,
         onClose: PropTypes.func.isRequired,
-        url: PropTypes.string.isRequired
+        accounts: PropTypes.array
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            accounts: []
-        }
-    }
-
-    /**
-     * This method pulls all available accounts after the component mounted.
-     * Therefore the user token is needed.
-     */
-    componentDidMount() {
-        const {cookies} = this.props;
-        const utkn = cookies.get("utkn")
-        axios.get(this.props.url, {
-            headers: {
-                'Authorization': 'Token '.concat(utkn)
-            }
-        }).then((res) => {
-            if (res.status === 200) {
-                this.setState({
-                    accounts: res.data
-                })
-                console.log(res.data)
-            }
-        }).catch((err) => {
-            console.log("Error")
-        })
-    }
 
     /**
      * This returns a basis modal with scrollable content.
@@ -67,8 +34,8 @@ class AccountModal extends Component {
                 <Modal.Content scrolling>
                     <List divided verticalAlign='middle' size='big'>
                         {
-                            this.state.accounts.length !== 0 ?
-                                this.state.accounts.map((account, index) => {
+                            this.props.accounts.length !== 0 ?
+                                this.props.accounts.map((account, index) => {
                                     return <List.Item as={Link}
                                                       to={"/public/account/".concat(account.user.id.toString())}
                                                       key={index}>
@@ -77,7 +44,6 @@ class AccountModal extends Component {
                                             src={'http://192.168.0.3:8000'.concat(account.image)}/>
                                         <List.Content>
                                             <List.Header as="h1">{account.user.username}</List.Header>
-                                            <List.Description>Follows {account["related_to"].length}</List.Description>
                                             <List.Description>
                                                 {account.biography}
                                             </List.Description>
@@ -99,4 +65,4 @@ class AccountModal extends Component {
     }
 }
 
-export default withCookies(AccountModal);
+export default AccountModal;
