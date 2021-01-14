@@ -1,6 +1,5 @@
 # Create your views here.
 import logging
-from typing import List
 
 from django.db.models import Q
 from rest_framework import status
@@ -11,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
-from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer, AccountTinySerializer
+from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -62,52 +61,6 @@ class AllPublicAccounts(APIView):
         serializer: AccountPublicSerializer = AccountPublicSerializer(instance=accounts,
                                                                       many=True,
                                                                       context={"calling_account": calling_account})
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
-class AllFollowerAccounts(APIView):
-    """
-    This view is for showing all public accounts who follow the calling account.
-    It requires the user token to see which account is calling the overview.
-    The calling account is then removed from the result.
-    """
-    authentication_classes = [TokenAuthentication]
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request: Request):
-        """
-        This method gets all available public accounts who follow the calling account.
-        :param request: Used to get the calling account.
-        :return:
-        """
-        calling_account: Account = Account.objects.filter(user=request.user).first()
-        accounts: List[Account] = calling_account.get_related_by()
-        serializer: AccountTinySerializer = AccountTinySerializer(instance=accounts,
-                                                                  many=True,
-                                                                  context={"calling_account": calling_account})
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
-class AllFollowingAccounts(APIView):
-    """
-    This view is for showing all public accounts of the accounts the calling user follows.
-    It requires the user token to see which account is calling the overview.
-    The calling account is then removed from the result.
-    """
-    authentication_classes = [TokenAuthentication]
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request: Request):
-        """
-        This method gets all available public accounts of the followed accounts by the calling user.
-        :param request: Used to get the calling account.
-        :return:
-        """
-        calling_account: Account = Account.objects.filter(user=request.user).first()
-        accounts: List[Account] = calling_account.get_related_to()
-        serializer: AccountTinySerializer = AccountTinySerializer(instance=accounts,
-                                                                  many=True,
-                                                                  context={"calling_account": calling_account})
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
