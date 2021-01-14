@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import MenuBar from "../../components/MenuBar";
-import Avatar from "./segments/Avatar";
+import MenuBar from "../../../components/MenuBar";
+import Avatar from "../segments/Avatar";
 import axios from "axios";
 import {Cookies, withCookies} from "react-cookie";
-import Networking from "./segments/Networking";
-import Footer from "../../components/Footer";
-import Contents from "./segments/Contents";
+import Networking from "../segments/Networking";
+import Footer from "../../../components/Footer";
+import Contents from "../segments/Contents";
 import {instanceOf} from "prop-types";
 
 class PrivateAccountPage extends Component {

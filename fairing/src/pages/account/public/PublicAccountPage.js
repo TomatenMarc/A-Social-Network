@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import MenuBar from "../../components/MenuBar";
-import Avatar from "./segments/Avatar";
-import Contents from "./segments/Contents";
-import Networking from "./segments/Networking";
+import MenuBar from "../../../components/MenuBar";
+import Avatar from "../segments/Avatar";
+import Contents from "../segments/Contents";
+import Networking from "../segments/Networking";
 import {Cookies, withCookies} from "react-cookie";
 import {instanceOf, PropTypes} from "prop-types";
 

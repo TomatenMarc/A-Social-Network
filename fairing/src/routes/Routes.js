@@ -1,11 +1,11 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import MainPage from "../pages/main/MainPage";
-import PrivateAccountPage from "../pages/account/PrivateAccountPage";
+import PrivateAccountPage from "../pages/account/private/PrivateAccountPage";
 import LoginPage from "../pages/login/LoginPage";
 import SignUpPage from "../pages/signup/SignUpPage";
 import PrivateRoute from "./PrivateRoute";
-import PublicAccountPage from "../pages/account/PublicAccountPage";
+import PublicAccountPage from "../pages/account/public/PublicAccountPage";
 import ErrorScreen from "../components/ErrorScreen";
 
 export function Routes() {
