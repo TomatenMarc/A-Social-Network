@@ -7,12 +7,14 @@ import Networking from "../segments/Networking";
 import {Cookies, withCookies} from "react-cookie";
 import {instanceOf, PropTypes} from "prop-types";
 import Footer from "../../../components/Footer";
+import {Redirect} from "react-router-dom";
 
 class PublicAccountPage extends Component {
     /**
      * This component can be used to display a public account.
      * Therefore an uid the requested user is required.
      * This uid should be taken from the url.
+     * If one calls his own public account one will be redirected to the private account.
      * @type {{cookies: Validator<NonNullable<Cookies>>}}
      */
     static propTypes = {
@@ -68,6 +70,7 @@ class PublicAccountPage extends Component {
     /**
      * While pulling the user data a loading screen is shown.
      * Afterwards the public account of the requested user is shown.
+     * If the current user calls his own public account he will be redirected to his private account.
      * @returns {JSX.Element}
      */
     render() {
@@ -75,6 +78,8 @@ class PublicAccountPage extends Component {
             return <div>
                 Fetching ...
             </div>
+        if (this.state.account["self_request"])
+            return <Redirect to={{pathname: '/account'}}/>
         return (
             <div>
                 <MenuBar/>
