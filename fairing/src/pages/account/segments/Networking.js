@@ -12,10 +12,10 @@ class Networking extends Component {
      * A public account will show less information regarding the network embedding of the specific account.
      * Todo: Add a modal for showing the friends.
      * Todo: It should be possible to delete friendships.
-     * @type {{private: *, follower: *, following: *}}
+     * @type {{forPublicUse: *, follower: *, following: *}}
      */
     static propTypes = {
-        private: PropTypes.bool.isRequired,
+        forPublicUse: PropTypes.bool.isRequired,
         following: PropTypes.array.isRequired,
         follower: PropTypes.array
     };
@@ -25,7 +25,7 @@ class Networking extends Component {
      * @returns {JSX.Element}
      */
     render() {
-        if (this.props.private)
+        if (this.props.forPublicUse)
             return <Segment style={{padding: '0em'}} vertical>
                 <Grid celled='internally' columns='equal' stackable>
                     <Grid.Row>

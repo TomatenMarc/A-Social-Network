@@ -75,7 +75,7 @@ class PrivateAccountPage extends Component {
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />
-                <Networking private={false}
+                <Networking forPublicUse={false}
                             follower={this.state.account["related_by"]}
                             following={this.state.account["related_to"]}/>
                 <Contents statements={this.state.account["statements"]}/>
