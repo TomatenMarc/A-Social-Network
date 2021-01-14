@@ -38,7 +38,7 @@ class PrivateAccountPage extends Component {
     componentDidMount() {
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
-        axios.get("http://192.168.0.3:8000/accounts/own/", {
+        axios.get("http://192.168.0.3:8000/accounts/show/own/", {
             headers: {
                 'Authorization': 'Token '.concat(utkn)
             }
