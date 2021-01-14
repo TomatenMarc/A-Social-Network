@@ -9,13 +9,16 @@ class App extends Component {
     /**
      * This component represents the complete app.
      * Therefore the complete life will take place in this component.
+     * If the forceRefresh should not be used use componentDidUpdate like mentioned at
+     * https://reactrouter.com/web/api/history/history-is-mutable. If the corresponding component did update use
+     * window.location.reload(false)
      * @returns {JSX.Element}
      */
     render() {
         return (
             <ErrorBoundary
                 FallbackComponent={ErrorScreen}>
-                <BrowserRouter>
+                <BrowserRouter forceRefresh={true}>
                     <Routes/>
                 </BrowserRouter>
             </ErrorBoundary>
