@@ -14,7 +14,7 @@ class Avatar extends Component {
         image: PropTypes.string.isRequired, // url appendix to the image
         username: PropTypes.string.isRequired,
         biography: PropTypes.string.isRequired,
-        uid: PropTypes.string,
+        uid: PropTypes.number,
         // Followings: Necessary for follow/unfollow option
         forPublicUse: PropTypes.bool.isRequired, // is component for private of public accounts?
         friend: PropTypes.bool // is the public account a friend?
@@ -48,7 +48,8 @@ class Avatar extends Component {
                         {this.props.biography}
                     </Grid.Row>
                     {this.props.forPublicUse ? <Grid.Row>
-                        <FollowUnfollowButton friend={this.props.friend} uid={this.props.uid}/>
+                        <FollowUnfollowButton friend={this.props.friend}
+                                              uid={this.props.uid}/>
                     </Grid.Row> : null}
                 </Grid>
             </Segment>

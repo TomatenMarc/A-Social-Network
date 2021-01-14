@@ -16,7 +16,7 @@ class FollowUnfollowButton extends Component {
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired,
         friend: PropTypes.bool.isRequired,
-        uid: PropTypes.string.isRequired
+        uid: PropTypes.number.isRequired
     };
 
     /**

@@ -32,7 +32,7 @@ class PublicAccountPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            uid: props.match.params.uid,
+            uid: parseInt(props.match.params.uid, 10),
             account: [],
             loading: true
         }
