@@ -14,7 +14,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('user',)
+        fields = ('user', 'image',)
 
 
 class AccountPublicSerializer(serializers.ModelSerializer):
