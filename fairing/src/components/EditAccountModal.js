@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Form, Image, Modal} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import axios from "axios";
+import {withCookies} from "react-cookie";
 
 class EditAccountModal extends Component {
 
@@ -56,8 +57,11 @@ class EditAccountModal extends Component {
         const url = "http://192.168.0.3:8000/accounts/update/";
         const formData = new FormData();
         formData.append("file", this.state.file);
+        const {cookies} = this.props
+        const utkn = cookies.get("utkn")
         axios.put(url, formData, {
             headers: {
+                'Authorization': 'Token '.concat(utkn),
                 "Content-type": "multipart/form-data"
             },
             onUploadProgress: (ev) => {
@@ -125,4 +129,4 @@ class EditAccountModal extends Component {
     }
 }
 
-export default EditAccountModal;
+export default withCookies(EditAccountModal);
