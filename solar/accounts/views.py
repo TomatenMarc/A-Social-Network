@@ -119,3 +119,14 @@ class OwnAccountUnfollow(APIView):
         if deleted:
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_409_CONFLICT)
+
+
+class OwnAccountUpdate(APIView):
+    """
+    This view is for updating the account data.
+    It will update an image.
+    """
+
+    def put(self, request: Request, *args, **kwargs):
+        logger.error(request.FILES)
+        return Response(status=status.HTTP_200_OK)

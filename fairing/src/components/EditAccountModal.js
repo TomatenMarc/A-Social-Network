@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Form, Image, Modal} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
+import axios from "axios";
 
 class EditAccountModal extends Component {
 
@@ -10,13 +11,77 @@ class EditAccountModal extends Component {
      * @type {{image: *, uid: *, onClose: *, modalOpen: *, biography: *}}
      */
     static propTypes = {
-        modalOpen: PropTypes.func.isRequired,
+        modalOpen: PropTypes.bool.isRequired,
         onClose: PropTypes.func.isRequired,
         image: PropTypes.string.isRequired, // url appendix to the image
         biography: PropTypes.string.isRequired,
         uid: PropTypes.number
     };
 
+    /**
+     * This component needs a file to be uploaded.
+     * Furthermore it needs an reference to an input since semantic ui has no own solution.
+     * @param props
+     */
+    constructor(props) {
+        super(props);
+        this.state = {
+            file: null
+        };
+        this.fileInputRef = React.createRef(); // to reference the input, since semantic ui provides no own solution
+        this.fileChange = this.fileChange.bind(this);
+        this.fileUpload = this.fileUpload.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+    }
+
+    /**
+     * This method handle the image change if the user chooses an image for the device.
+     * @param event
+     */
+    fileChange = (event) => {
+        this.setState({
+            file: event.target.files[0]
+        }, () => {
+            console.log("Choosen", this.state.file);
+        });
+    };
+
+    /**
+     * This method uploads the image to the backend.
+     * It also handles an upload progress.
+     * @param event of uploading the image.
+     */
+    fileUpload = (event) => {
+        event.preventDefault();
+        const url = "http://192.168.0.3:8000/accounts/update/";
+        const formData = new FormData();
+        formData.append("file", this.state.file);
+        axios.put(url, formData, {
+            headers: {
+                "Content-type": "multipart/form-data"
+            },
+            onUploadProgress: (ev) => {
+                const progress = ev.loaded / ev.total * 100;
+                console.log(Math.round(progress));
+            }
+        })
+            .then(response => {
+                console.log(response)
+            });
+    };
+
+    /**
+     * This method handles the saving of the new data.
+     * @param event
+     */
+    handleSave = (event) => {
+        this.fileUpload(event)
+    }
+
+    /**
+     * This will show the edit modal for the calling account.
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <Modal
@@ -29,16 +94,21 @@ class EditAccountModal extends Component {
 
                     <Image
                         centered
-                        bordered
-                        size='small'
-                        label={{corner: 'left', icon: 'save', color: 'blue'}}
+                        label={{corner: 'left', icon: 'edit outline', color: 'blue'}}
                         src={this.props.image}
-                        fluid
+                        onClick={() => this.fileInputRef.current.click()}
+                    />
+                    <input
+                        ref={this.fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={this.fileChange}
                     />
                 </Modal.Content>
                 <Modal.Content>
                     <Form widths='equal'>
-                        <Form.TextArea fluid label={"Biography"} placeholder={this.props.biography}/>
+                        <Form.TextArea label={"Biography"} placeholder={this.props.biography}/>
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
@@ -47,6 +117,7 @@ class EditAccountModal extends Component {
                         labelPosition='right'
                         icon='checkmark'
                         positive
+                        onClick={this.handleSave}
                     />
                 </Modal.Actions>
             </Modal>
