@@ -91,11 +91,11 @@ class EditAccountModal extends Component {
             >
                 <Modal.Header>Edit your account!</Modal.Header>
                 <Modal.Content image>
-
                     <Image
+                        size={"small"}
                         centered
                         label={{corner: 'left', icon: 'edit outline', color: 'blue'}}
-                        src={this.props.image}
+                        src={this.state.file ? URL.createObjectURL(this.state.file) : this.props.image}
                         onClick={() => this.fileInputRef.current.click()}
                     />
                     <input
