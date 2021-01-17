@@ -98,6 +98,18 @@ class Account(models.Model):
         """
         return self.statement_set.add(Statement(author=self, content=content), bulk=False)
 
+    def update_image(self, new_image):
+        """
+        This method overwrites the image of an account.
+        If the account uses the default image the image will not be deleted.
+        :param new_image: The new image to be added for the account.
+        :return: Nothing
+        """
+        if self.image != "/account/default/Argunaut.png":
+            self.image.delete(save=True)
+        self.image = new_image
+        self.save()
+
 
 class Relationship(models.Model):
     """

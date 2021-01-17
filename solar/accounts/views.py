@@ -1,6 +1,7 @@
 # Create your views here.
 import logging
 
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Q
 from rest_framework import status
@@ -130,8 +131,19 @@ class OwnAccountUpdate(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def put(self, request: Request, *args, **kwargs):
-        logger.error(request.user)
-        logger.error(request.FILES)
-        file: InMemoryUploadedFile = request.FILES["file"]
+    @staticmethod
+    def put(request: Request):
+        """
+        This method updates the image
+        :param request: The request send by the user.
+        :return: A response with an 200 status.
+        """
+        user: User = request.user
+        account: Account = Account.objects.filter(user=user).first()
+        if "file" in request.FILES.keys():
+            file: InMemoryUploadedFile = request.FILES["file"]
+            extension: str = file.name.split(".")[-1]
+            file.name = "{name}.{extension}".format(name="account{user}{secret}".format(user=user, secret=hash(user)),
+                                                    extension=extension)
+            account.update_image(file)
         return Response(status=status.HTTP_200_OK)
