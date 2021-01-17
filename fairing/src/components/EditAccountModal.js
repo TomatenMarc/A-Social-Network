@@ -40,6 +40,7 @@ class EditAccountModal extends Component {
      * @param event
      */
     fileChange = (event) => {
+        event.preventDefault();
         this.setState({
             file: event.target.files[0]
         }, () => {
