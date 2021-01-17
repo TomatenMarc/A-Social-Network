@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Dropdown, Grid, Image, Menu, Search} from "semantic-ui-react";
+import {Dropdown, Grid, Image, Menu} from "semantic-ui-react";
 import logo from '../resources/logo.jpg'
 import {Link, NavLink} from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 class MenuBar extends Component {
     /**
@@ -50,7 +51,7 @@ class MenuBar extends Component {
                     </Grid.Row>
                 </Grid>
                 <Menu.Item position='right'>
-                    <Search/>
+                    <SearchBar/>
                 </Menu.Item>
             </Menu>
         );
