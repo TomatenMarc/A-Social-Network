@@ -134,12 +134,16 @@ class OwnAccountUpdate(APIView):
     @staticmethod
     def put(request: Request):
         """
-        This method updates the image
+        This method updates the image as well as the biography.
         :param request: The request send by the user.
         :return: A response with an 200 status.
         """
         user: User = request.user
         account: Account = Account.objects.filter(user=user).first()
+
+        if "biography" in request.data.keys():
+            biography: str = request.data["biography"]
+            account.update_biography(biography)
         if "file" in request.FILES.keys():
             file: InMemoryUploadedFile = request.FILES["file"]
             extension: str = file.name.split(".")[-1]

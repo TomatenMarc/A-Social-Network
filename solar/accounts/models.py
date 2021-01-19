@@ -110,6 +110,16 @@ class Account(models.Model):
         self.image = new_image
         self.save()
 
+    def update_biography(self, new_biography: str):
+        """
+        This method overwrites the biography of an account if it is not none.
+        :param new_biography: The new biography to be added for the account.
+        :return: Nothing
+        """
+        if new_biography and self.biography != new_biography:
+            self.biography = new_biography
+            self.save()
+
 
 class Relationship(models.Model):
     """
