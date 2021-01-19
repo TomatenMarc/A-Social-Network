@@ -37,7 +37,7 @@ function PrivateRoute({component: Component, ...rest}) {
         }).then(() =>
             setTimeout(function () {
                 setIsTokenValidated(true)
-            }, 2000)
+            }, 500)
         );
     }, [cookies.utkn, removeCookie])
 
