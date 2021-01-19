@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Form, Image, Modal} from "semantic-ui-react";
+import {Button, Form, Image, Modal, Progress, TextArea} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import axios from "axios";
 import {withCookies} from "react-cookie";
@@ -30,12 +30,15 @@ class EditAccountModal extends Component {
             file: null,
             loading: false,
             error: false,
-            success: false
+            success: false,
+            biography: this.props.biography
         };
         this.fileInputRef = React.createRef(); // to reference the input, since semantic ui provides no own solution
         this.fileChange = this.fileChange.bind(this);
         this.fileUpload = this.fileUpload.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.biographyChange = this.biographyChange.bind(this);
+        this.newBiographyValidLength = this.newBiographyValidLength.bind(this);
     }
 
     /**
@@ -52,6 +55,11 @@ class EditAccountModal extends Component {
         });
     };
 
+    biographyChange = (event) => {
+        event.preventDefault();
+        this.setState({biography: event.target.value})
+    }
+
     /**
      * This method uploads the image to the backend.
      * It also handles an upload progress.
@@ -62,6 +70,7 @@ class EditAccountModal extends Component {
         const url = "http://192.168.0.3:8000/accounts/update/";
         const formData = new FormData();
         formData.append("file", this.state.file);
+        formData.append('biography', this.state.biography);
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
         axios.put(url, formData, {
@@ -98,6 +107,14 @@ class EditAccountModal extends Component {
     }
 
     /**
+     * This method checks if the new biography has a proper length between 10 and 100 chars.
+     * @returns {boolean} If the biography has an valid length.
+     */
+    newBiographyValidLength = () => {
+        return (this.state.biography.length >= 10 && this.state.biography.length <= 100)
+    }
+
+    /**
      * This will show the edit modal for the calling account.
      * @returns {JSX.Element}
      */
@@ -126,17 +143,34 @@ class EditAccountModal extends Component {
                     />
                 </Modal.Content>
                 <Modal.Content>
-                    <Form widths='equal'>
-                        <Form.TextArea label={"Biography"} placeholder={this.props.biography}/>
+                    <Form widths='equal' error>
+                        <Form.Input name="biographyInput"
+                                    control={TextArea}
+                                    label={"Biography"}
+                                    placeholder={this.props.biography}
+                                    defaultValue={this.props.biography}
+                                    onChange={this.biographyChange}
+                                    error={
+                                        (!this.newBiographyValidLength() && this.props.biography !== this.state.biography)
+                                        && "Hmm... "
+                                    }>
+                        </Form.Input>
+                        <Progress progress='value'
+                                  success={this.newBiographyValidLength()}
+                                  error={!this.newBiographyValidLength()}
+                                  active
+                                  value={this.state.biography.length < 100 ? this.state.biography.length : 100}
+                                  total={100}/>
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
                         primary
-                        content="Save"
+                        content={this.state.success ? "Done" : "Save"}
                         onClick={this.handleSave}
                         loading={this.state.loading}
                         icon={this.state.success ? "check" : "save"}
+                        disabled={!this.newBiographyValidLength()}
                     />
                 </Modal.Actions>
             </Modal>
