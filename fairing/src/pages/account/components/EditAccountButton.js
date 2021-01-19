@@ -48,6 +48,7 @@ class EditAccountButton extends Component {
     handleClose = (event) => {
         event.preventDefault();
         this.setState({modalOpen: false});
+        window.location.reload(false); // todo: remove and find a better solution e.g. trigger function of parent.
     }
 
 

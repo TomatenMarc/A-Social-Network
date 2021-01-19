@@ -27,7 +27,10 @@ class EditAccountModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            file: null
+            file: null,
+            loading: false,
+            error: false,
+            success: false
         };
         this.fileInputRef = React.createRef(); // to reference the input, since semantic ui provides no own solution
         this.fileChange = this.fileChange.bind(this);
@@ -42,6 +45,7 @@ class EditAccountModal extends Component {
     fileChange = (event) => {
         event.preventDefault();
         this.setState({
+            success: false,
             file: event.target.files[0]
         }, () => {
             console.log("Choosen", this.state.file);
@@ -68,11 +72,21 @@ class EditAccountModal extends Component {
             onUploadProgress: (ev) => {
                 const progress = ev.loaded / ev.total * 100;
                 console.log(Math.round(progress));
+                this.setState({
+                    success: false,
+                    loading: Math.round(progress) < 100
+                })
             }
         })
             .then(response => {
-                console.log(response)
-            });
+                this.setState({
+                    success: true
+                })
+            }).catch(error => {
+            this.setState({
+                success: false
+            })
+        })
     };
 
     /**
@@ -118,11 +132,11 @@ class EditAccountModal extends Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
+                        primary
                         content="Save"
-                        labelPosition='right'
-                        icon='checkmark'
-                        positive
                         onClick={this.handleSave}
+                        loading={this.state.loading}
+                        icon={this.state.success ? "check" : "save"}
                     />
                 </Modal.Actions>
             </Modal>
