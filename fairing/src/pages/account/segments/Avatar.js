@@ -32,12 +32,13 @@ class Avatar extends Component {
                 <Grid container stackable centered>
                     <Grid.Row>
                         <div className="avatar">
-                            <div className="shape">
-                                <Image src={this.props.image}
-                                       circular
-                                       size="small"
-                                       style={{marginBottom: "2em"}}/>
-                            </div>
+                            <Image src={this.props.image}
+                                   circular
+                                   size="small"
+                                   style={{
+                                       marginBottom: "2em",
+                                       animation: "wiggle 15s ease infinite alternate"
+                                   }}/>
                         </div>
                     </Grid.Row>
                     <Grid.Row>
