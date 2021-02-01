@@ -8,5 +8,5 @@ COPY Pipfile ./
 RUN pip install pipenv
 COPY Pipfile Pipfile.lock ./
 RUN pipenv install
-COPY ../solar ./
+COPY . ./
 RUN apk del build-deps
