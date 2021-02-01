@@ -67,7 +67,7 @@ class EditAccountModal extends Component {
      */
     fileUpload = (event) => {
         event.preventDefault();
-        const url = "http://192.168.0.3:8000/accounts/update/";
+        const url = process.env.REACT_APP_API_URL.concat("/accounts/update/");
         const formData = new FormData();
         formData.append("file", this.state.file);
         formData.append('biography', this.state.biography);

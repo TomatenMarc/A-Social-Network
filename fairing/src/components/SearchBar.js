@@ -34,7 +34,7 @@ class SearchBar extends Component {
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
         if (data.value !== '')
-            axios.get("http://192.168.0.3:8000/search/", {
+            axios.get(process.env.REACT_APP_API_URL.concat("/search/"), {
                 headers: {
                     'Authorization': 'Token '.concat(utkn),
                 },
@@ -49,7 +49,7 @@ class SearchBar extends Component {
                             as: Link,
                             to: "/public/account/".concat(result.user.id),
                             title: result.user.username,
-                            image: "http://192.168.0.3:8000".concat(result.image)
+                            image: process.env.REACT_APP_API_URL.concat(result.image)
                         }
                     })
                     if (accounts.length !== 0)

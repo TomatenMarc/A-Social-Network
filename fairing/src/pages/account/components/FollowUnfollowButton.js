@@ -43,9 +43,9 @@ class FollowUnfollowButton extends Component {
         event.preventDefault();
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
-        let url = 'http://192.168.0.3:8000/accounts/follow/'.concat(this.state.uid).concat("/")
+        let url = process.env.REACT_APP_API_URL.concat('/accounts/follow/').concat(this.state.uid).concat("/")
         if (this.state.friend)
-            url = 'http://192.168.0.3:8000/accounts/unfollow/'.concat(this.state.uid).concat("/")
+            url =  process.env.REACT_APP_API_URL.concat('/accounts/unfollow/').concat(this.state.uid).concat("/")
 
         axios.post(url, {}, {
             headers: {

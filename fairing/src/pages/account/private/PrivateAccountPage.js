@@ -38,7 +38,7 @@ class PrivateAccountPage extends Component {
     componentDidMount() {
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
-        axios.get("http://192.168.0.3:8000/accounts/show/own/", {
+        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/own/"), {
             headers: {
                 'Authorization': 'Token '.concat(utkn)
             }
@@ -71,7 +71,7 @@ class PrivateAccountPage extends Component {
                 <MenuBar/>
                 <Avatar
                     forPublicUse={false}
-                    image={"http://192.168.0.3:8000".concat(this.state.account.image)}
+                    image={process.env.REACT_APP_API_URL.concat(this.state.account.image)}
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />

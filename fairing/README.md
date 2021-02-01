@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment
+Before one can start this project a '.env' file must be defined.
+This file should include:
+
+| Variable           | Use                                                          |
+|:------------------:|:------------------------------------------------------------:|
+| REACT_APP_API_URL  | Base URL of the backend API (default: http://localhost:8000) |
+
 ## Available Scripts
 
 In the project directory, you can run:

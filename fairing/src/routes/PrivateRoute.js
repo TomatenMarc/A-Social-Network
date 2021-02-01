@@ -23,7 +23,7 @@ function PrivateRoute({component: Component, ...rest}) {
          * component.
          * In this function the effect is to validate the token in the backend.
          */
-        axios.get('http://192.168.0.3:8000/authentication/validate/', {
+        axios.get(process.env.REACT_APP_API_URL.concat('/authentication/validate/'), {
             headers: {
                 'Authorization': 'Token '.concat(cookies.utkn)
             }

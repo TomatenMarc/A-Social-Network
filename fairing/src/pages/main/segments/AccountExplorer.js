@@ -58,7 +58,7 @@ class AccountExplorer extends Component {
     componentDidMount() {
         const {cookies} = this.props;
         const utkn = cookies.get("utkn")
-        axios.get("http://192.168.0.3:8000/accounts/show/all/", {
+        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/all/"), {
             headers: {
                 'Authorization': 'Token '.concat(utkn)
             }

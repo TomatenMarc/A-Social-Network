@@ -41,7 +41,7 @@ class AccountModal extends Component {
                                                       key={index}>
                                         <Image
                                             avatar
-                                            src={'http://192.168.0.3:8000'.concat(account.image)}/>
+                                            src={process.env.REACT_APP_API_URL.concat(account.image)}/>
                                         <List.Content>
                                             <List.Header as="h1">{account.user.username}</List.Header>
                                             <List.Description>
