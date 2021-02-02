@@ -17,7 +17,7 @@ services:
       - django_wsgi
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - ./solar/static/:/code/static
+      - ./solar/django_static/:/code/django_static
       - ./solar/media/:/code/media
     networks:
       - webnet
