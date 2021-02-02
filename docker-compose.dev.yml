@@ -19,6 +19,7 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - ./solar/django_static/:/code/django_static
       - ./solar/media/:/code/media
+      - ./fairing/build:/var/www/fairing
     networks:
       - webnet
     ports:
