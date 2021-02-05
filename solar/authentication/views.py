@@ -111,19 +111,11 @@ class Logout(APIView):
     When a user logs out, his token will be destroyed.
     """
 
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
+
     @staticmethod
-    def validate(request: Request) -> Response:
-        """
-        This method validates the data provided for the requesting user.
-        It validates if the username and the password is set and they are not empty.
-
-        :param request: The request of the user containing all necessary information for an logout.
-        :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty.
-                 200_OK otherwise.
-        """
-        return validate_request_data_for(Operations.LOGIN, request)
-
-    def post(self, request):
+    def post(request):
         """
         This method handles the actual POST-request of the requesting user.
         First the data send is checked for mistakes, missing or empty values.
@@ -133,20 +125,12 @@ class Logout(APIView):
         :return: 400_BAD_REQUEST if the provided data is sparse or one of the values is empty or wrong or the user is not logged in.
                  200_OK if the user is authenticated (will destroy the users token).
         """
-        valid: Response = self.validate(request)
-        if valid.status_code != 200:
-            return valid
-
-        username: str = valid.data["username"]
-        user: User = User.objects.filter(username=username).first()
+        user: User = request.user
         token: Token = Token.objects.filter(user=user).first()
         if token:
             token.delete()
-        else:
-            raise ValidationError({"user": "User is not logged in"}, code='invalid')
         logout(request)
-
-        return Response(status=valid.status_code)
+        return Response(status=status.HTTP_200_OK)
 
 
 class TokenValidation(APIView):
