@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
 import logo from '../../resources/logo.jpg'
 import {NavLink, Redirect} from "react-router-dom";
-import {withCookies, Cookies} from "react-cookie";
+import {Cookies, withCookies} from "react-cookie";
 import axios from "axios";
 import {instanceOf} from "prop-types";
 
@@ -61,7 +61,8 @@ class LoginForm extends Component {
             "username": this.state.username,
             "password": this.state.password
         }).then(result => {
-            if (result.status === 200) {
+            if (result.status === 200 && result.data.token) {
+                cookies.remove("utkn")
                 cookies.set("utkn", result.data.token, {sameSite: 'Lax'})
                 this.setState({
                     success: true

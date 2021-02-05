@@ -32,15 +32,11 @@ class LogoutPage extends Component {
             }
         }).then(result => {
             if (result.status === 200) {
-                console.log("Hey")
                 cookies.remove("utkn")
-            }
-        }).then(() => {
-            setTimeout(function () {
                 this.setState({
                     loading: false
                 })
-            })
+            }
         })
     }
 
@@ -52,7 +48,7 @@ class LogoutPage extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <div>Goodbying</div>
+                <div>Bye...</div>
             )
         }
         return <Redirect to={"/login"}/>;
