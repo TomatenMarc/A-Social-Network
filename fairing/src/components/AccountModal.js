@@ -32,7 +32,7 @@ class AccountModal extends Component {
                 closeIcon
             >
                 <Modal.Content scrolling>
-                    <List divided verticalAlign='middle' size='big'>
+                    <List selection animated divided verticalAlign='middle' size='big'>
                         {
                             this.props.accounts.length !== 0 ?
                                 this.props.accounts.map((account, index) => {
