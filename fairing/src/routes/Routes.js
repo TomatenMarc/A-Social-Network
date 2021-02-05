@@ -7,6 +7,7 @@ import SignUpPage from "../pages/signup/SignUpPage";
 import PrivateRoute from "./PrivateRoute";
 import PublicAccountPage from "../pages/account/public/PublicAccountPage";
 import ErrorScreen from "../components/ErrorScreen";
+import LogoutPage from "../pages/logout/LogoutPage";
 
 export function Routes() {
     /**
@@ -16,6 +17,7 @@ export function Routes() {
     return <Switch>
         <Route path="/login" exact component={LoginPage}/>
         <Route path="/signup" exact component={SignUpPage}/>
+        <PrivateRoute path="/logout" exact component={LogoutPage}/>
         <PrivateRoute path="/public/account/:uid" exact component={PublicAccountPage}/>
         <PrivateRoute path="/account" exact component={PrivateAccountPage}/>
         <PrivateRoute path="/" exact component={MainPage}/>
