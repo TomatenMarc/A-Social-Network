@@ -29,7 +29,6 @@ class AccountModal extends Component {
             <Modal
                 open={this.props.modalOpen}
                 onClose={this.props.onClose}
-                closeIcon
             >
                 <Modal.Content scrolling>
                     <List selection animated divided verticalAlign='middle' size='big'>

@@ -39,6 +39,7 @@ class EditAccountModal extends Component {
         this.handleSave = this.handleSave.bind(this);
         this.biographyChange = this.biographyChange.bind(this);
         this.newBiographyValidLength = this.newBiographyValidLength.bind(this);
+        this.contentDidChange = this.contentDidChange.bind(this);
     }
 
     /**
@@ -55,9 +56,13 @@ class EditAccountModal extends Component {
         });
     };
 
+    /**
+     * This method updates changes in the biography.
+     * @param event
+     */
     biographyChange = (event) => {
         event.preventDefault();
-        this.setState({biography: event.target.value})
+        this.setState({biography: event.target.value, success: false})
     }
 
     /**
@@ -100,10 +105,15 @@ class EditAccountModal extends Component {
 
     /**
      * This method handles the saving of the new data.
+     * If the data was successful uploaded one has to change the data again to save.
+     * If the upload was successful and no further addition is made one can close the modal.
      * @param event
      */
     handleSave = (event) => {
-        this.fileUpload(event)
+        if (!this.state.success)
+            this.fileUpload(event)
+        else
+            this.props.onClose(event)
     }
 
     /**
@@ -113,6 +123,16 @@ class EditAccountModal extends Component {
     newBiographyValidLength = () => {
         return (this.state.biography.length >= 10 && this.state.biography.length <= 100)
     }
+
+    /**
+     * This method checks if one of the contents has changed.
+     * It can be used to activate or deactive the save button.
+     * @returns {boolean|*}
+     */
+    contentDidChange = () => {
+        return this.props.biography !== this.state.biography || this.state.file
+    }
+
 
     /**
      * This will show the edit modal for the calling account.
@@ -172,7 +192,7 @@ class EditAccountModal extends Component {
                         onClick={this.handleSave}
                         loading={this.state.loading}
                         icon={this.state.success ? "check" : "save"}
-                        disabled={!this.newBiographyValidLength()}
+                        disabled={!this.newBiographyValidLength() || !this.contentDidChange()}
                     />
                 </Modal.Actions>
             </Modal>
