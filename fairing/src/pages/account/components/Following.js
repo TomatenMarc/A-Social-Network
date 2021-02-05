@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Header, Icon} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import AccountModal from "../../../components/AccountModal";
+import "../../../scss/Clickable.css"
 
 class Following extends Component {
     /**
@@ -57,10 +58,10 @@ class Following extends Component {
      */
     render() {
         return (
-            <div>
-                <Header as='h2' icon textAlign='center' onClick={this.handleOpen}>
-                    <Icon name='street view' circular/>
-                    <Header.Content>{this.props.following.length.toString().concat(" Follows")}</Header.Content>
+            <div className="clickable" onClick={this.handleOpen}>
+                <Header as='h2' icon textAlign='center'>
+                    <Icon name='eye' circular/>
+                    <Header.Content>{this.props.following.length.toString().concat(" Following")}</Header.Content>
                 </Header>
                 <AccountModal accounts={this.props.following}
                               modalOpen={this.state.modalOpen}

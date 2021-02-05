@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Icon} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import EditAccountModal from "../../../components/EditAccountModal";
+import "../../../scss/Clickable.css"
 
 class EditAccountButton extends Component {
     /**
@@ -54,7 +55,7 @@ class EditAccountButton extends Component {
 
     render() {
         return (
-            <div>
+            <div className="clickable">
                 <Icon size="large" name='edit outline' onClick={this.handleOpen}/>
                 <EditAccountModal
                     image={this.props.image}
