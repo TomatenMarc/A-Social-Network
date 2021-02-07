@@ -1,6 +1,8 @@
 # Create your views here.
 import logging
+from io import BytesIO
 
+from PIL import Image
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Q
@@ -146,8 +148,19 @@ class OwnAccountUpdate(APIView):
             account.update_biography(biography)
         if "file" in request.FILES.keys():
             file: InMemoryUploadedFile = request.FILES["file"]
-            extension: str = file.name.split(".")[-1]
             file.name = "{name}.{extension}".format(name="account{user}{secret}".format(user=user, secret=hash(user)),
-                                                    extension=extension)
-            account.update_image(file)
+                                                    extension="jpeg")
+            # compress image
+            image: Image = Image.open(file)
+            image = image.convert('RGB')
+            io_stream = BytesIO()
+            image.save(io_stream, format="JPEG", quality=50, optimize=True)
+            compressed_image: InMemoryUploadedFile = InMemoryUploadedFile(file=io_stream,
+                                                                          field_name=None,
+                                                                          name=file.name,
+                                                                          content_type="image/jpeg",
+                                                                          size=io_stream.tell(),
+                                                                          charset=None)
+            # update with compressed image
+            account.update_image(compressed_image)
         return Response(status=status.HTTP_200_OK)

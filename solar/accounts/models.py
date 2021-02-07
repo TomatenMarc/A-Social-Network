@@ -2,6 +2,7 @@ import logging
 from typing import List
 
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 
 from contents.models import Statement
@@ -98,7 +99,7 @@ class Account(models.Model):
         """
         return self.statement_set.add(Statement(author=self, content=content), bulk=False)
 
-    def update_image(self, new_image):
+    def update_image(self, new_image: InMemoryUploadedFile):
         """
         This method overwrites the image of an account.
         If the account uses the default image the image will not be deleted.
