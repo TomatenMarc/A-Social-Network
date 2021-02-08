@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Input, Segment} from "semantic-ui-react";
-import StickyOverlay from "../../../components/StickyOverlay";
+import {Input, Segment, Sticky} from "semantic-ui-react";
 
 
 class StatementInput extends Component {
@@ -12,11 +11,11 @@ class StatementInput extends Component {
     render() {
         return (
             <Segment basic style={{padding: 0}}>
-                <StickyOverlay offset={65}>
+                <Sticky offset={this.props.offset} context={this.props.context}>
                     <Segment>
                         <Input fluid placeholder={"Whats up ..."}/>
                     </Segment>
-                </StickyOverlay>
+                </Sticky>
             </Segment>
         );
     }
