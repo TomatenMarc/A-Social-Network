@@ -80,7 +80,7 @@ class AccountExplorer extends Component {
      */
     render() {
         return (
-            <Segment basic>
+            <Segment vertical>
                 <Grid celled='internally' columns='equal' stackable>
                     <Grid.Row textAlign='center'>
                         <Grid.Column style={{paddingBottom: '5em', paddingTop: '5em'}}>
