@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react';
-import {Grid, Header, Image, Segment, Sticky} from "semantic-ui-react";
+import {Grid, Image, Segment, Sticky} from "semantic-ui-react";
 import StatementInput from "../components/StatementInput";
 import _ from "lodash";
 
@@ -26,8 +26,9 @@ class ContentView extends Component {
 
                         <Grid.Column only={"computer tablet"}>
                             <Sticky context={this.contextRef} offset={this.props.menuOffset}>
-                                <Header as='h3'>Stuck Content</Header>
-                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
+                                <Segment basic>
+                                    <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
+                                </Segment>
                             </Sticky>
                         </Grid.Column>
 
@@ -40,8 +41,9 @@ class ContentView extends Component {
 
                         <Grid.Column only={"computer tablet"}>
                             <Sticky context={this.contextRef} offset={this.props.menuOffset}>
-                                <Header as='h3'>Stuck Content</Header>
-                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
+                                <Segment basic>
+                                    <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
+                                </Segment>
                             </Sticky>
                         </Grid.Column>
                     </Grid>
