@@ -34,9 +34,11 @@ class ContentView extends Component {
 
                         <Grid.Column>
                             <StatementInput context={this.contextRef} offset={this.props.menuOffset}/>
-                            {_.times(10, (i) => (
-                                <Placeholder key={i}/>
-                            ))}
+                            <Segment>
+                                {_.times(10, (i) => (
+                                    <Placeholder key={i}/>
+                                ))}
+                            </Segment>
                         </Grid.Column>
 
                         <Grid.Column only={"computer tablet"}>
