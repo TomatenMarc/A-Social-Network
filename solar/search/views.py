@@ -36,18 +36,43 @@ class Search(APIView):
         :param kwargs: Additional arguments which provides the search parameter q.
         :return: Composed dict of results in the Response with status code 200, otherwise if no query q is given it will
         return an empty Response with status code 400.
+        The results can also be filtered for single categories. Those categories are: account and hashtag.
         """
         query: str = request.query_params.get('q', None)
+        limit: int = 5
         if not query:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        accounts: Account = Account.objects.filter(user__username__contains=query)[:5]
-        account_serializer: AccountSerializer = AccountSerializer(instance=accounts, many=True)
+        result_filter: str = request.query_params.get('filter', None)
 
-        hashtags: Hashtag = Hashtag.objects.filter(tag__contains=query)[:5]
-        hashtag_serializer: HashtagSerializer = HashtagSerializer(instance=hashtags, many=True)
+        if not result_filter:
+            accounts: Account = Account.objects.filter(user__username__contains=query)[:limit]
+            account_serializer: AccountSerializer = AccountSerializer(instance=accounts, many=True)
 
-        result: dict = {
-            "accounts": account_serializer.data,
-            "hashtags": hashtag_serializer.data
-        }
-        return Response(data=result, status=status.HTTP_200_OK)
+            hashtags: Hashtag = Hashtag.objects.filter(tag__contains=query)[:limit]
+            hashtag_serializer: HashtagSerializer = HashtagSerializer(instance=hashtags, many=True)
+
+            result: dict = {
+                "accounts": account_serializer.data,
+                "hashtags": hashtag_serializer.data
+            }
+            return Response(data=result, status=status.HTTP_200_OK)
+
+        if result_filter == "account":
+            accounts: Account = Account.objects.filter(user__username__contains=query)[:limit]
+            account_serializer: AccountSerializer = AccountSerializer(instance=accounts, many=True)
+
+            result: dict = {
+                "accounts": account_serializer.data,
+            }
+            return Response(data=result, status=status.HTTP_200_OK)
+
+        if result_filter == "hashtag":
+            hashtags: Hashtag = Hashtag.objects.filter(tag__contains=query)[:limit]
+            hashtag_serializer: HashtagSerializer = HashtagSerializer(instance=hashtags, many=True)
+
+            result: dict = {
+                "hashtags": hashtag_serializer.data
+            }
+            return Response(data=result, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
