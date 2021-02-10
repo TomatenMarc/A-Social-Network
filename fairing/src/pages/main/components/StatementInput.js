@@ -96,48 +96,48 @@ class StatementInput extends Component {
         return (
             <Segment basic style={{padding: 0}}>
                 <Sticky offset={this.props.offset} context={this.props.context}>
-                    <Segment>
-                        <ReactTextareaAutocomplete
-                            loadingComponent={Loading}
-                            textAreaComponent={
-                                TextareaAutosize
-                            }
-                            placeholder={"What's up out there?"}
-                            style={{resize: "none"}}
-                            minChar={0}
-                            trigger={{
-                                ":": {
-                                    dataProvider: token => {
-                                        return emoji(token)
-                                            .slice(0, 5)
-                                            .map(({name, char}) => ({name, char}));
-                                    },
-                                    component: Emoji,
-                                    output: (item, trigger) => item.char
+
+                    <ReactTextareaAutocomplete
+                        movePopupAsYouType
+                        loadingComponent={Loading}
+                        textAreaComponent={
+                            TextareaAutosize
+                        }
+                        placeholder={"What's up out there?"}
+                        style={{resize: "none"}}
+                        minChar={0}
+                        trigger={{
+                            ":": {
+                                dataProvider: token => {
+                                    return emoji(token)
+                                        .slice(0, 5)
+                                        .map(({name, char}) => ({name, char}));
                                 },
-                                "@": {
-                                    dataProvider: token => {
-                                        this.handleSearch(token, "account")
-                                        return this.filterByValue(this.state.accounts, token)
-                                    },
-                                    component: Item,
-                                    output: (item, trigger) => {
-                                        return "@" + item.name
-                                    }
+                                component: Emoji,
+                                output: (item, trigger) => item.char
+                            },
+                            "@": {
+                                dataProvider: token => {
+                                    this.handleSearch(token, "account")
+                                    return this.filterByValue(this.state.accounts, token)
                                 },
-                                "#": {
-                                    dataProvider: token => {
-                                        this.handleSearch(token, "hashtag")
-                                        return this.filterByValue(this.state.hashtags, token)
-                                    },
-                                    component: Item,
-                                    output: (item, trigger) => {
-                                        return "#" + item.name
-                                    }
+                                component: Item,
+                                output: (item, trigger) => {
+                                    return "@" + item.name
                                 }
-                            }}
-                        />
-                    </Segment>
+                            },
+                            "#": {
+                                dataProvider: token => {
+                                    this.handleSearch(token, "hashtag")
+                                    return this.filterByValue(this.state.hashtags, token)
+                                },
+                                component: Item,
+                                output: (item, trigger) => {
+                                    return "#" + item.name
+                                }
+                            }
+                        }}
+                    />
                 </Sticky>
             </Segment>
         );
