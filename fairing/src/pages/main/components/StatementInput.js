@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Button, Segment, Sticky, Card, Image} from "semantic-ui-react";
+import {Button, Card, Segment, Sticky} from "semantic-ui-react";
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import TextareaAutosize from "react-textarea-autosize";
 import emoji from "@jukben/emoji-search";
-//import "@webscopeio/react-textarea-autocomplete/style.css";
 import "../../../scss/Autocomplete.css"
 import {withCookies} from "react-cookie";
 import axios from "axios";
@@ -13,7 +12,7 @@ const Emoji = ({entity: {name, char}}) => <div>{`${name}: ${char}`}</div>; // Pl
 const Item = ({entity: {name}}) => <div>{`${name}`}</div>; // Placeholder for the recommended items.
 const Loading = () => <div>Wait</div>; // Placeholder for the waiting of data to be recommended.
 
-
+//Todo:Make this global an customizable
 class StatementInput extends Component {
 
     /**
@@ -141,7 +140,7 @@ class StatementInput extends Component {
                             />
                         </Card.Content>
                         <Card.Content extra>
-                            <Button primary icon='paper plane' floated='right'>Place</Button>
+                            <Button primary floated='right'>Place</Button>
                         </Card.Content>
                     </Card>
                 </Sticky>

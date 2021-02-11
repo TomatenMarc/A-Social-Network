@@ -59,6 +59,8 @@ class SearchBar extends Component {
                         }
                     const hashtags = result.data.hashtags.map(function (result) {
                         return {
+                            as: Link,
+                            to: "/topic/".concat(result.tag),
                             title: result.tag
                         }
                     })
