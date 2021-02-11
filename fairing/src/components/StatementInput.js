@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Segment, Sticky} from "semantic-ui-react";
+import {Button, Card, Message, Segment, Sticky} from "semantic-ui-react";
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import TextareaAutosize from "react-textarea-autosize";
 import emoji from "@jukben/emoji-search";
@@ -32,8 +32,15 @@ class StatementInput extends Component {
         super(props);
         this.state = {
             accounts: [],
-            hashtags: []
+            hashtags: [],
+            input: "",
+            loading: false,
+            error: false,
+            maxLength: 100
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     /**
@@ -69,7 +76,50 @@ class StatementInput extends Component {
                         })
                 }
             }).catch(error => {
-                console.log(error)
+                this.setState({error: true})
+            })
+    }
+
+    /**
+     * This handle change of the textarea.
+     * It will update the input done by the user.
+     * @param event
+     */
+    handleChange = (event) => {
+        event.preventDefault()
+        this.setState({
+            input: event.target.value
+        })
+    }
+
+    /**
+     * This method handles the input of the user.
+     * @param event
+     */
+    handleSubmit = (event) => {
+        event.preventDefault()
+        if (this.state.input !== "")
+            axios.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
+                input: this.state.input
+            }, {
+                onUploadProgress: (ev) => {
+                    const progress = ev.loaded / ev.total * 100;
+                    console.log(Math.round(progress));
+                    this.setState({
+                        loading: Math.round(progress) < 100
+                    })
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    this.setState({
+                        input: "",
+                        error: false
+                    })
+                }
+            }).catch((error) => {
+                this.setState({
+                    error: true
+                })
             })
     }
 
@@ -93,9 +143,26 @@ class StatementInput extends Component {
      */
     render() {
         return (
-            <Segment basic style={{padding: 0}}>
+            <Segment basic style={{padding: 0}} loading={this.state.loading}>
                 <Sticky offset={this.props.offset} context={this.props.context}>
                     <Card fluid>
+                        {
+                            this.state.error ?
+                                <Card.Content>
+                                    <Message
+                                        negative
+                                        visible={false}
+                                        onDismiss={(event) => {
+                                            event.preventDefault()
+                                            this.setState({
+                                                error: false
+                                            })
+                                        }}>
+                                        <Message.Header>Something went wrong!</Message.Header>
+                                        <p>Please try again.</p>
+                                    </Message>
+                                </Card.Content> : null
+                        }
                         <Card.Content>
                             <ReactTextareaAutocomplete
                                 movePopupAsYouType
@@ -103,6 +170,8 @@ class StatementInput extends Component {
                                 textAreaComponent={
                                     TextareaAutosize
                                 }
+                                onChange={this.handleChange}
+                                value={this.state.input}
                                 placeholder={"What's up out there?"}
                                 style={{resize: "none"}}
                                 minChar={0}
@@ -140,7 +209,13 @@ class StatementInput extends Component {
                             />
                         </Card.Content>
                         <Card.Content extra>
-                            <Button primary floated='right'>Place</Button>
+                            {this.state.maxLength - this.state.input.length} left
+                            <Button primary
+                                    floated='right'
+                                    disabled={!(this.state.input.length > 0 && this.state.input.length <= this.state.maxLength)}
+                                    onClick={this.handleSubmit}>
+                                Place
+                            </Button>
                         </Card.Content>
                     </Card>
                 </Sticky>

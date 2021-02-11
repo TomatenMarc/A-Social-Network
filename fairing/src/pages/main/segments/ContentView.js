@@ -42,7 +42,7 @@ class ContentView extends Component {
      */
     render() {
         return (
-            <Segment vertical>
+            <Segment vertical style={{zIndex: 0}}>
                 <div ref={this.contextRef}>
                     <StickyContentGrid
                         contextRef={this.contextRef}
