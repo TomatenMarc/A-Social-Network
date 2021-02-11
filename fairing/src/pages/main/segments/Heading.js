@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Grid, Image, Segment} from "semantic-ui-react";
+import {Image} from "semantic-ui-react";
 import logo from '../../../resources/logo.jpg'
+import HeadingTemplate from "../../../components/HeadingTemplate";
 
 class Heading extends Component {
     /**
@@ -9,15 +10,11 @@ class Heading extends Component {
      */
     render() {
         return (
-            <Segment inverted style={{padding: '8em 0em'}} vertical>
-                <Grid container stackable centered>
-                    <Grid.Row>
-                        <div className="centered">
-                            <Image src={logo} circular size="small"/>
-                        </div>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
+            <HeadingTemplate>
+                <div className="centered">
+                    <Image src={logo} circular size="small"/>
+                </div>
+            </HeadingTemplate>
         );
     }
 }
