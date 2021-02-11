@@ -18,6 +18,8 @@ class Contents extends Component {
      * @returns {JSX.Element}
      */
     render() {
+        if (this.props.statements.length === 0)
+            return null
         return (
             <Segment basic>
                 <Card.Group centered>
