@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Segment, Sticky} from "semantic-ui-react";
+import {Button, Segment, Sticky, Card, Image} from "semantic-ui-react";
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import TextareaAutosize from "react-textarea-autosize";
 import emoji from "@jukben/emoji-search";
@@ -96,48 +96,54 @@ class StatementInput extends Component {
         return (
             <Segment basic style={{padding: 0}}>
                 <Sticky offset={this.props.offset} context={this.props.context}>
-
-                    <ReactTextareaAutocomplete
-                        movePopupAsYouType
-                        loadingComponent={Loading}
-                        textAreaComponent={
-                            TextareaAutosize
-                        }
-                        placeholder={"What's up out there?"}
-                        style={{resize: "none"}}
-                        minChar={0}
-                        trigger={{
-                            ":": {
-                                dataProvider: token => {
-                                    return emoji(token)
-                                        .slice(0, 5)
-                                        .map(({name, char}) => ({name, char}));
-                                },
-                                component: Emoji,
-                                output: (item, trigger) => item.char
-                            },
-                            "@": {
-                                dataProvider: token => {
-                                    this.handleSearch(token, "account")
-                                    return this.filterByValue(this.state.accounts, token)
-                                },
-                                component: Item,
-                                output: (item, trigger) => {
-                                    return "@" + item.name
+                    <Card fluid>
+                        <Card.Content>
+                            <ReactTextareaAutocomplete
+                                movePopupAsYouType
+                                loadingComponent={Loading}
+                                textAreaComponent={
+                                    TextareaAutosize
                                 }
-                            },
-                            "#": {
-                                dataProvider: token => {
-                                    this.handleSearch(token, "hashtag")
-                                    return this.filterByValue(this.state.hashtags, token)
-                                },
-                                component: Item,
-                                output: (item, trigger) => {
-                                    return "#" + item.name
-                                }
-                            }
-                        }}
-                    />
+                                placeholder={"What's up out there?"}
+                                style={{resize: "none"}}
+                                minChar={0}
+                                trigger={{
+                                    ":": {
+                                        dataProvider: token => {
+                                            return emoji(token)
+                                                .slice(0, 5)
+                                                .map(({name, char}) => ({name, char}));
+                                        },
+                                        component: Emoji,
+                                        output: (item, trigger) => item.char
+                                    },
+                                    "@": {
+                                        dataProvider: token => {
+                                            this.handleSearch(token, "account")
+                                            return this.filterByValue(this.state.accounts, token)
+                                        },
+                                        component: Item,
+                                        output: (item, trigger) => {
+                                            return "@" + item.name
+                                        }
+                                    },
+                                    "#": {
+                                        dataProvider: token => {
+                                            this.handleSearch(token, "hashtag")
+                                            return this.filterByValue(this.state.hashtags, token)
+                                        },
+                                        component: Item,
+                                        output: (item, trigger) => {
+                                            return "#" + item.name
+                                        }
+                                    }
+                                }}
+                            />
+                        </Card.Content>
+                        <Card.Content extra>
+                            <Button primary icon='paper plane' floated='right'>Place</Button>
+                        </Card.Content>
+                    </Card>
                 </Sticky>
             </Segment>
         );
