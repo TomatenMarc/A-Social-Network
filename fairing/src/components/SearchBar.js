@@ -89,6 +89,7 @@ class SearchBar extends Component {
                     category
                     onSearchChange={this.handleChange}
                     results={this.state.results}
+                    style={{zIndex:1}}
                 />
             </div>
         );
