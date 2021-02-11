@@ -1,6 +1,6 @@
 import React, {Component, createRef} from 'react';
 import {Image, Segment} from "semantic-ui-react";
-import StatementInput from "../components/StatementInput";
+import StatementInput from "../../../components/StatementInput";
 import _ from "lodash";
 import StickyContentGrid from "../../../components/StickyContentGrid";
 import {PropTypes} from "prop-types";

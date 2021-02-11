@@ -3,7 +3,7 @@ import {Button, Card, Segment, Sticky} from "semantic-ui-react";
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import TextareaAutosize from "react-textarea-autosize";
 import emoji from "@jukben/emoji-search";
-import "../../../scss/Autocomplete.css"
+import "../scss/Autocomplete.css"
 import {withCookies} from "react-cookie";
 import axios from "axios";
 import {PropTypes} from "prop-types";
@@ -12,7 +12,7 @@ const Emoji = ({entity: {name, char}}) => <div>{`${name}: ${char}`}</div>; // Pl
 const Item = ({entity: {name}}) => <div>{`${name}`}</div>; // Placeholder for the recommended items.
 const Loading = () => <div>Wait</div>; // Placeholder for the waiting of data to be recommended.
 
-//Todo:Make this global an customizable
+//Todo: Make this customizable
 class StatementInput extends Component {
 
     /**
