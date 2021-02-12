@@ -36,7 +36,7 @@ class StatementInput extends Component {
             input: "",
             loading: false,
             error: false,
-            maxLength: 100
+            maxLength: 120
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -98,10 +98,15 @@ class StatementInput extends Component {
      */
     handleSubmit = (event) => {
         event.preventDefault()
+        const {cookies} = this.props
+        const utkn = cookies.get("utkn")
         if (this.state.input !== "")
             axios.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
                 input: this.state.input
             }, {
+                headers: {
+                    'Authorization': 'Token '.concat(utkn),
+                },
                 onUploadProgress: (ev) => {
                     const progress = ev.loaded / ev.total * 100;
                     console.log(Math.round(progress));
