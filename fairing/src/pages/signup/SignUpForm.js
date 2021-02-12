@@ -30,6 +30,7 @@ class SignUpForm extends Component {
             password: "",
             email: "",
             errorUserField: false,
+            errorMsgUserField: "",
             errorPasswordField: false,
             errorEmailField: false
         }
@@ -75,9 +76,14 @@ class SignUpForm extends Component {
             const response = error.response.data;
             const keys = Object.keys(response)
             this.setState({
-                errorUserField: keys.includes("user") || keys.includes("username"),
+                errorUserField: keys.includes("username"),
                 errorPasswordField: keys.includes("password"),
                 errorEmailField: keys.includes("email")
+            })
+            this.setState({
+                errorMsgUserField: this.state.errorUserField ? response["username"] : "",
+                errorMsgPasswordField: this.state.errorPasswordField ? response["password"] : "",
+                errorMsgEmailField: this.state.errorEmailField ? response["email"] : ""
             })
         })
     }
@@ -151,8 +157,23 @@ class SignUpForm extends Component {
                                 </Form.Button>
                                 <Message error>
                                     <Message.Header>
-                                        Oh no! Please check your data.
+                                        Oh no!
                                     </Message.Header>
+                                    {
+                                        this.state.errorUserField ? <Message.Content>
+                                            Username: {this.state.errorMsgUserField}
+                                        </Message.Content> : null
+                                    }
+                                    {
+                                        this.state.errorPasswordField ? <Message.Content>
+                                            Password: {this.state.errorMsgPasswordField}
+                                        </Message.Content> : null
+                                    }
+                                    {
+                                        this.state.errorEmailField ? <Message.Content>
+                                            E-Mail: {this.state.errorMsgEmailField}
+                                        </Message.Content> : null
+                                    }
                                 </Message>
                             </Segment>
                         </Form>

@@ -24,8 +24,12 @@ class LoginForm extends Component {
         super(props);
         this.state = {
             success: false,
-            errorUserField: false,
+            errorUserNotFound: false,
+            errorMsgUserNotFound: "",
+            errorUsernameField: false,
+            errorMsgUsernameField: "",
             errorPasswordField: false,
+            errorMsgPasswordField: "",
             username: "",
             password: ""
         }
@@ -71,9 +75,16 @@ class LoginForm extends Component {
         }).catch(error => {
             const response = error.response.data;
             const keys = Object.keys(response)
+            console.log(response)
             this.setState({
-                errorUserField: keys.includes("user") || keys.includes("username"),
+                errorUserNotFound: keys.includes("user"),
+                errorUsernameField: keys.includes("username"),
                 errorPasswordField: keys.includes("password")
+            })
+            this.setState({
+                errorMsgUserNotFound: this.state.errorUserNotFound ? response["user"] : "",
+                errorMsgUsernameField: this.state.errorUsernameField ? response["username"] : "",
+                errorMsgPasswordField: this.state.errorPasswordField ? response["password"] : ""
             })
         })
 
@@ -97,13 +108,13 @@ class LoginForm extends Component {
                                size="small"
                                centered/>
                         <Form size='large'
-                              error={this.state.errorUserField || this.state.errorPasswordField}
+                              error={this.state.errorUsernameField || this.state.errorUserNotFound || this.state.errorPasswordField}
                               onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     name="usernameInput"
                                     fluid
-                                    error={this.state.errorUserField}
+                                    error={this.state.errorUsernameField || this.state.errorUserNotFound}
                                     icon='user'
                                     iconPosition='left'
                                     placeholder='Username'
@@ -133,8 +144,23 @@ class LoginForm extends Component {
 
                                 <Message error>
                                     <Message.Header>
-                                        Oh no! Please check your data.
+                                        Oh no!
                                     </Message.Header>
+                                    {
+                                        this.state.errorUserNotFound ? <Message.Content>
+                                            User: {this.state.errorMsgUserNotFound}. (password correct?)
+                                        </Message.Content> : null
+                                    }
+                                    {
+                                        this.state.errorUsernameField ? <Message.Content>
+                                            Username: {this.state.errorMsgUsernameField}
+                                        </Message.Content> : null
+                                    }
+                                    {
+                                        this.state.errorPasswordField ? <Message.Content>
+                                            Password: {this.state.errorMsgPasswordField}
+                                        </Message.Content> : null
+                                    }
                                 </Message>
                             </Segment>
                         </Form>
