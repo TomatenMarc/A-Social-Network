@@ -1,7 +1,7 @@
 from django.urls import path
 
 from accounts.views import PublicAccounts, OwnAccount, OwnAccountFollow, OwnAccountUnfollow, AllPublicAccounts, \
-    OwnAccountUpdate
+    OwnAccountUpdate, AddStatement
 
 urlpatterns = [
     path('show/<int:id>/', PublicAccounts.as_view(), name='show'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('update/', OwnAccountUpdate.as_view(), name='update'),
     path('follow/<int:id>/', OwnAccountFollow.as_view(), name='follow'),
     path('unfollow/<int:id>/', OwnAccountUnfollow.as_view(), name='unfollow'),
+    path('operation/add/statement/', AddStatement.as_view(), name='addStatement'),
 ]

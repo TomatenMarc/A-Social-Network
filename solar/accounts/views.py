@@ -164,3 +164,24 @@ class OwnAccountUpdate(APIView):
             # update with compressed image
             account.update_image(compressed_image)
         return Response(status=status.HTTP_200_OK)
+
+
+class AddStatement(APIView):
+    """
+    This view serves to add statements for an specific user.
+    The user must be authenticated.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
+
+    @staticmethod
+    def post(request: Request):
+        """
+        This method handles the post of an new statement.
+        :param request: The request to be handled, containing the input.
+        :return: Response with an 200 OK.
+        """
+        account: Account = Account.objects.filter(user=request.user).first()
+        statement: str = request.data["input"]
+        account.add_statement(statement)
+        return Response(status=status.HTTP_200_OK)

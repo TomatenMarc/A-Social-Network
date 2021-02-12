@@ -53,11 +53,13 @@ class Statement(models.Model):
         for used_mention in used_mentions:
             account: 'accounts.Account' = apps.get_model("accounts", "Account").objects.filter(
                 user__username=used_mention).first()
-            self.add_mentioning(account=account)
+            if account:
+                self.add_mentioning(account=account)
 
     def __extract_hashtags(self) -> List[str]:
         """
         This method extracts the hashtag of the content.
+        Hashtags are alpha numeric words.
 
         :return: List of all hashtags used in the content of the statement.
         """
@@ -96,6 +98,7 @@ class Statement(models.Model):
     def __extract_mentioning(self) -> List['accounts.Account']:
         """
         This method extracts the mentions of accounts in the calling statement.
+        Accounts names are alpha numeric words.
 
         :return: List of all accounts mentioned in the calling statement.
         """
