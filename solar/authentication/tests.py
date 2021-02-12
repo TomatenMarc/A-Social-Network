@@ -99,15 +99,23 @@ class TestRegistration(APITestCase):
         self.assertEqual(response.data["username"][0].code, "unique")
         self.assertEqual(response.data["email"][0].code, "unique")
 
+    def test_username_is_not_alphanumeric(self):
+        response: Response = self.client.post(path="/authentication/register/", data={
+            "username": "NoWay%&/\/8)(?=!"'``´',
+            "password": "password",
+            "email": "e@mail.de"
+        })
+        self.assertEqual(response.data["username"][0].code, "invalid")
+
     def test_register_valid_user(self):
         response: Response = self.client.post(path="/authentication/register/", data={
-            "username": "another_user",
+            "username": "another_user100",
             "password": "another_password",
             "email": "another_e@mail.de"
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         token_user: User = Token.objects.get(key=response.data["token"]).user
-        user: User = User.objects.get(username="another_user")
+        user: User = User.objects.get(username="another_user100")
         account: Account = Account.objects.get(user=user)
         self.assertIsNotNone(account)
         self.assertEqual(account.user, user)

@@ -3,6 +3,7 @@ from typing import OrderedDict
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -48,6 +49,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     This serializer is used for user registration and their validation.
     A user should have a unique valid and non-empty username, email and password.
     """
+
+    username = serializers.CharField(
+        required=True,
+        validators=[
+            UniqueValidator(queryset=User.objects.all()),
+            RegexValidator(r'^[0-9a-zA-Z_]*$', 'Only aA-zZ, 0-9, _ are allowed.')
+        ]
+    )
     email = serializers.EmailField(
         required=True,
         validators=[
