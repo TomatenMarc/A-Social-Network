@@ -17,7 +17,7 @@ class TestStatement(TestCase):
 
         self.statement: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
         self.statement_with_hashtags_and_mentioning: Statement = Statement.objects.create(author=self.account_bernd,
-                                                                                          content="I like #eating the whopper #Burger_King2020 with @Beate")
+                                                                                          content="I like #eating the #/&%! whopper #Burger_King2020 with @Beate @NoOne")
         self.hashtag: Hashtag = Hashtag.objects.create(tag="Burger_King2020")
 
     def test_statement_can_mention_account(self):
@@ -43,12 +43,14 @@ class TestStatement(TestCase):
 
     def test_statement_resolves_hashtags(self):
         hashtags = self.statement_with_hashtags_and_mentioning.get_hashtags()
+        self.assertEqual(len(hashtags), 2)
         self.assertEqual(hashtags[0].tag, "eating")
         self.assertEqual(hashtags[1].tag, "Burger_King2020")
 
     def test_statement_resolves_mentions(self):
         mentions = self.statement_with_hashtags_and_mentioning.get_mentioning()
         self.assertNotEqual(mentions, [])
+        self.assertEqual(len(mentions), 1)
         self.assertEqual(mentions[0], self.account_beate)
 
     def test_statement_can_add_hashtag(self):
