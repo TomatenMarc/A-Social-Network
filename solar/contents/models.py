@@ -28,6 +28,13 @@ class Statement(models.Model):
                                        symmetrical=False,
                                        related_name='mentions',
                                        default=None)
+    # Todo: Add tests and add class methods
+    reactions = models.ManyToManyField('self',
+                                       blank=True,
+                                       through='Reaction',
+                                       symmetrical=False,
+                                       related_name='reaction_of',
+                                       default=None)
 
     def __str__(self):
         return "{author} says: {content}".format(author=self.author.user.username, content=self.content)
@@ -187,3 +194,34 @@ class AccountTagging(Tagging):
 
     def __str__(self):
         return "{statement} mentioned {account}".format(statement=self.statement, account=self.account)
+
+
+class Reaction(models.Model):
+    # Who is the parent element of the reaction
+    parent = models.ForeignKey(Statement, related_name='parent', on_delete=models.CASCADE)
+    # Who is the reaction to the parent
+    child = models.ForeignKey(Statement, related_name='child', on_delete=models.CASCADE)
+    # When was this reaction created?
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    # The relation must have an clear vote
+    vote = models.PositiveSmallIntegerField(
+        choices=[
+            (1, "like"),
+            (2, "dislike")
+        ],
+        default=1
+    )
+    # The default manager
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "{child_author} {reaction}s >>{parent_content}<< of {parent_author} because >>{child_content}<<".format(
+            child_author=self.child.author.user.username,
+            child_content=self.child.content,
+            reaction=self.get_vote_display(),
+            parent_content=self.parent.content,
+            parent_author=self.parent.author.user.username,
+        )
