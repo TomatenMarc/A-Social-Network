@@ -63,6 +63,35 @@ class Statement(models.Model):
             if account:
                 self.add_mentioning(account=account)
 
+    def add_reaction(self, reaction_statement: 'Statement', vote: int) -> bool:
+        """
+        This method adds an reaction to the calling statement.
+        :param reaction_statement:  The statement to be added as an reaction.
+        :param vote: The vote of the reaction regarding the parent element. (Like 1, Dislike 0)
+        :return: The reaction as well as the status if the reaction was already existing.
+        """
+        _, created = Reaction.objects.get_or_create(
+            parent=self,
+            child=reaction_statement,
+            vote=vote
+        )
+        return created
+
+    def remove_as_reaction(self) -> bool:
+        """
+        This method removes the calling statement as an reaction for the parent.
+        :return: Status if the reaction was deleted or not.
+        """
+        deleted, _ = Reaction.objects.filter(child=self).delete()
+        return deleted
+
+    def get_reactions(self) -> List['Reaction']:
+        """
+        This method returns all reaction of the calling statement.
+        :return: List of all reactions to the calling statement
+        """
+        return list(Reaction.objects.filter(parent=self))
+
     def __extract_hashtags(self) -> List[str]:
         """
         This method extracts the hashtag of the content.

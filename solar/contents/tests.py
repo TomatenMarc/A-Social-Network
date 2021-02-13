@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from accounts.models import Account
-from contents.models import Statement, Hashtag
+from contents.models import Statement, Hashtag, Reaction
 
 
 class TestStatement(TestCase):
@@ -66,6 +66,17 @@ class TestStatement(TestCase):
 
         hashtags = self.statement.get_hashtags()
         self.assertEqual(hashtags, [])
+
+    def test_statement_can_add_reaction(self):
+        created = self.statement.add_reaction(self.statement_with_hashtags_and_mentioning, 1)
+        self.assertTrue(created)
+        reactions: List[Reaction] = self.statement.get_reactions()
+        self.assertEqual(len(reactions), 1)
+        reaction: Reaction = reactions[0]
+        self.assertEqual(reaction.get_vote_display(), "like")
+        self.assertEqual(reaction.child, self.statement_with_hashtags_and_mentioning)
+        deleted = self.statement_with_hashtags_and_mentioning.remove_as_reaction()
+        self.assertTrue(deleted)
 
     def tearDown(self):
         self.user_bernd.delete()
