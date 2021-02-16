@@ -3,7 +3,7 @@ import {Comment, Segment} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import {Link} from "react-router-dom";
 
-const StatementTemplate = ({image, item}) => {
+const StatementTemplate = ({name, image, item}) => {
     /**
      * This component is a template for an statement.
      * The template must have an image of the author and the statement itself.
@@ -87,7 +87,7 @@ const StatementTemplate = ({image, item}) => {
     return <Comment>
         <Comment.Avatar as='a' src={image}/>
         <Comment.Content>
-            <Comment.Author>Tom Lukic</Comment.Author>
+            <Comment.Author>{name}</Comment.Author>
             <Comment.Text>
                 {
                     linkHashtagAndMentions()
@@ -113,11 +113,6 @@ class Contents extends Component {
         account: PropTypes.object.isRequired
     };
 
-    constructor(props) {
-        super(props);
-        console.log(props.account)
-    }
-
     /**
      * This will show the content provided by the corresponding account.
      * @returns {JSX.Element}
@@ -132,6 +127,7 @@ class Contents extends Component {
                         this.props.account["statements"].map((item, index) => {
                             return <StatementTemplate
                                 key={index}
+                                name={this.props.account.user.username}
                                 image={process.env.REACT_APP_API_URL.concat(this.props.account.image)}
                                 item={item}/>
                         })
