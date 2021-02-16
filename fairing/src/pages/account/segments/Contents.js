@@ -1,6 +1,86 @@
 import React, {Component} from 'react';
-import {Card, Icon, Label, Segment} from "semantic-ui-react";
+import {Comment, Icon, Segment} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
+import {Link} from "react-router-dom";
+
+function foo() {
+    var parts = "I am a cow; cows say moo. MOOOOO.".split(/(\bmoo+\b)/gi);
+    for (var i = 1; i < parts.length; i += 2) {
+        parts[i] = <Link to={"/"} key={i}>{parts[i]}</Link>;
+    }
+    return <div>{parts}</div>;
+}
+
+const CommentTemplate = ({image, item}) => {
+
+
+    function filterByValue(list, match) {
+        return list.filter(obj =>
+            Object.keys(obj).some(x => match.includes(obj[x]))
+        )[0]
+    }
+
+    function linkHashtagAndMentions() {
+        function link(word) {
+            if (word.includes("#") && word.includes("@")) {
+                word = word.replaceAll("#", " #")
+                word = word.replaceAll("@", " @")
+                return word.split(" ").map((part, index) => {
+                    let cleaned = part.replaceAll(" ", "")
+                    if (cleaned.startsWith("@") || cleaned.startsWith("#"))
+                        return <Link to="/" key={index}>{cleaned}</Link>
+                    return cleaned
+                })
+            } else if (word.includes("#")) {
+                word = word.replaceAll("#", " #")
+                return word.split(" ").map((part, index) => {
+                    let cleaned = part.replaceAll(" ", "")
+                    if (cleaned.startsWith("#"))
+                        return <Link to="/" key={index}>{cleaned}</Link>
+                    return cleaned
+                })
+            } else if (word.includes("@")) {
+                word = word.replaceAll("@", " @")
+                return word.split(" ").map((part, index) => {
+                    let cleaned = part.replaceAll(" ", "")
+                    if (cleaned.startsWith("@"))
+                        return <Link to="/" key={index}>{cleaned}</Link>
+                    return cleaned
+                })
+            }
+            return word
+        }
+
+        let parts = "hey hey #dasdasd@Marc#dasdasda #dasdas".split(" ").map((word, index) => {
+            return link(word)
+        })
+        return (parts.map((part, index) => {
+            return [part, " "]
+        }).flat())
+    }
+
+
+    return <Comment>
+        <Comment.Avatar as='a' src={image}/>
+        <Comment.Content>
+            <Comment.Author>Tom Lukic</Comment.Author>
+            <Comment.Text>
+                {
+                    linkHashtagAndMentions()
+                }
+            </Comment.Text>
+            <Comment.Actions>
+                <Comment.Action>Reply</Comment.Action>
+                <Comment.Action>Save</Comment.Action>
+                <Comment.Action>Hide</Comment.Action>
+                <Comment.Action>
+                    <Icon name='expand'/>
+                    Full-screen
+                </Comment.Action>
+            </Comment.Actions>
+        </Comment.Content>
+    </Comment>
+}
 
 class Contents extends Component {
     /**
@@ -10,52 +90,33 @@ class Contents extends Component {
      * @type {{statements: *}}
      */
     static propTypes = {
-        statements: PropTypes.array.isRequired
+        account: PropTypes.object.isRequired
     };
+
+    constructor(props) {
+        super(props);
+        console.log(props.account)
+    }
 
     /**
      * This will show the content provided by the corresponding account.
      * @returns {JSX.Element}
      */
     render() {
-        if (this.props.statements.length === 0)
+        if (this.props.account.statements.length === 0)
             return null
         return (
             <Segment basic>
-                <Card.Group centered>
+                <Comment.Group>
                     {
-                        this.props.statements.map((item, index) => {
-                            return <Card key={index}>
-                                <Card.Content>
-                                    <Card.Meta>Written: A long time ago</Card.Meta>
-                                    <Card.Description>
-                                        {item.content}
-                                        <Label.Group>
-                                            <Label size="tiny">
-                                                #Add
-                                            </Label>
-                                            <Label size="tiny">
-                                                #Hashtags
-                                            </Label>
-                                        </Label.Group>
-                                    </Card.Description>
-                                </Card.Content>
-                                <Card.Content extra>
-                                    <Label color={"green"}>
-                                        <Icon name='smile outline'/> 21
-                                    </Label>
-                                    <Label color={"red"}>
-                                        <Icon name='frown outline'/> 23
-                                    </Label>
-                                    <Label color={"yellow"}>
-                                        <Icon name='eye'/> 22
-                                    </Label>
-                                </Card.Content>
-                            </Card>
-
+                        this.props.account["statements"].map((item, index) => {
+                            return <CommentTemplate
+                                key={index}
+                                image={process.env.REACT_APP_API_URL.concat(this.props.account.image)}
+                                item={item}/>
                         })
                     }
-                </Card.Group>
+                </Comment.Group>
             </Segment>
         );
     }

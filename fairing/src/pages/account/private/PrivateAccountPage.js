@@ -5,8 +5,8 @@ import axios from "axios";
 import {Cookies, withCookies} from "react-cookie";
 import Networking from "../segments/Networking";
 import Footer from "../../../components/Footer";
-import Contents from "../segments/Contents";
 import {instanceOf} from "prop-types";
+import Contents from "../segments/Contents";
 
 class PrivateAccountPage extends Component {
     /**
@@ -78,7 +78,7 @@ class PrivateAccountPage extends Component {
                 <Networking forPublicUse={false}
                             follower={this.state.account["related_by"]}
                             following={this.state.account["related_to"]}/>
-                <Contents statements={this.state.account["statements"]}/>
+                <Contents account={this.state.account}/>
                 <Footer/>
             </div>
         );

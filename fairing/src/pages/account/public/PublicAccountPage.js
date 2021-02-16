@@ -93,7 +93,7 @@ class PublicAccountPage extends Component {
                 />
                 <Networking forPublicUse={true}
                             following={this.state.account["related_to"]}/>
-                <Contents statements={this.state.account["statements"]}/>
+                <Contents account={this.state.account}/>
                 <Footer/>
             </div>
         );
