@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Comment, Segment} from "semantic-ui-react";
+import {Comment, Grid, Header, Image, Segment} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import {StatementTemplate} from "../../../components/StatementTemplate";
 
@@ -16,11 +16,26 @@ class Contents extends Component {
 
     /**
      * This will show the content provided by the corresponding account.
+     * If no statements are available then the argunaut will tell the user a joke.
      * @returns {JSX.Element}
      */
     render() {
         if (this.props.account.statements.length === 0)
-            return null
+            return <Segment basic textAlign={"center"}>
+                <Grid centered>
+                    <Grid.Row>
+                        <Header as={"h1"}>Seems like deep space!</Header>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Image
+                            src={process.env.REACT_APP_API_URL.concat("/media/account/default/Argunaut.png")}
+                            size={"small"}/>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Header as={"h2"}>Pretty empty here ...</Header>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
         return (
             <Segment basic>
                 <Comment.Group>
