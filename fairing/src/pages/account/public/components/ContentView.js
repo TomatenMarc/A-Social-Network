@@ -1,16 +1,14 @@
 import React, {Component, createRef} from 'react';
 import {Segment} from "semantic-ui-react";
 import StickyContentGrid from "../../../../components/StickyContentGrid";
-import Contents from "../../segments/Contents";
 import Following from "../../components/Following";
-import Follower from "../../components/Follower";
-
+import Contents from "../../segments/Contents";
 
 class ContentView extends Component {
+
     /**
-     * This component is the content view for the private account page.
-     * This view has more options then the public account.
-     * Todo: Add proptypes.
+     * This component is the content view of the public accounts.
+     * Todo: Add comments and proptypes.
      * @param props
      */
     constructor(props) {
@@ -18,11 +16,6 @@ class ContentView extends Component {
         this.contextRef = createRef()
     }
 
-    /**
-     * This component shows the statements of the calling private account.
-     * Todo: Add side information like follower and follows.
-     * @returns {JSX.Element}
-     */
     render() {
         return (
             <Segment vertical style={{zIndex: 0}}>
@@ -33,7 +26,6 @@ class ContentView extends Component {
                         left={
                             <Segment vertical>
                                 <Following following={this.props.account["related_to"]}/>
-                                <Follower follower={this.props.account["related_by"]}/>
                             </Segment>
                         }
                         center={

@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import axios from "axios";
 import MenuBar from "../../../components/MenuBar";
 import Avatar from "../segments/Avatar";
-import Contents from "../segments/Contents";
-import Networking from "../segments/Networking";
 import {Cookies, withCookies} from "react-cookie";
 import {instanceOf, PropTypes} from "prop-types";
 import Footer from "../../../components/Footer";
 import {Redirect} from "react-router-dom";
+import ContentView from "./components/ContentView";
 
 class PublicAccountPage extends Component {
     /**
@@ -36,7 +35,8 @@ class PublicAccountPage extends Component {
         this.state = {
             uid: parseInt(props.match.params.uid, 10),
             account: [],
-            loading: true
+            loading: true,
+            menuHeight: 65
         }
     }
 
@@ -91,9 +91,9 @@ class PublicAccountPage extends Component {
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />
-                <Networking forPublicUse={true}
-                            following={this.state.account["related_to"]}/>
-                <Contents account={this.state.account}/>
+                <ContentView
+                    menuOffset={this.state.menuHeight}
+                    account={this.state.account}/>
                 <Footer/>
             </div>
         );
