@@ -6,21 +6,9 @@ import {Link} from "react-router-dom";
 const CommentTemplate = ({image, item}) => {
 
 
-    function filterByValue(word) {
-        if (!(word.startsWith("@") || word.startsWith("#")))
-            return null
-        let list = word.startsWith("@") ? item["mentioned"] : item["tagged"]
-        if (word.startsWith("@"))
-            list = list.map((item, index) => {
-                return {
-                    username: item.user.username,
-                    id: item.user.id
-                }
-            })
-        let cleaned_word = word.replaceAll("#", "").replaceAll("@", "")
-        console.log(cleaned_word)
+    function filterByValue(list, word) {
         return list.filter(obj =>
-            Object.keys(obj).some(x => obj[x] === cleaned_word)
+            Object.keys(obj).some(x => obj[x] === word)
         )
     }
 
@@ -76,8 +64,25 @@ const CommentTemplate = ({image, item}) => {
             return word
         }
 
+        function linkAll(word) {
+            let separated = word.replaceAll(/#(\w+)/g, " #$1 ")
+            return separated.split(" ").filter(function (element) {
+                return element !== ""
+            }).map((element, index) => {
+                if (element.startsWith("#")) {
+                    let cleaned_element = element.replace("#", "")
+                    let reference = filterByValue(item["tagged"], cleaned_element)
+                    if (reference) {
+                        return <Link key={index} to={"/topic/".concat(reference[0].tag)}>{element}</Link>
+                    }
+                }
+                return element
+            })
+        }
+
         let parts = item["content"].split(" ").map((word, index) => {
-            return link(word)
+
+            return linkAll(word)
         })
         return (parts.map((part, index) => {
             return [part, " "]
