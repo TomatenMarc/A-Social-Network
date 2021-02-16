@@ -3,21 +3,25 @@ import {Comment, Icon, Segment} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import {Link} from "react-router-dom";
 
-function foo() {
-    var parts = "I am a cow; cows say moo. MOOOOO.".split(/(\bmoo+\b)/gi);
-    for (var i = 1; i < parts.length; i += 2) {
-        parts[i] = <Link to={"/"} key={i}>{parts[i]}</Link>;
-    }
-    return <div>{parts}</div>;
-}
-
 const CommentTemplate = ({image, item}) => {
 
 
-    function filterByValue(list, match) {
+    function filterByValue(word) {
+        if (!(word.startsWith("@") || word.startsWith("#")))
+            return null
+        let list = word.startsWith("@") ? item["mentioned"] : item["tagged"]
+        if (word.startsWith("@"))
+            list = list.map((item, index) => {
+                return {
+                    username: item.user.username,
+                    id: item.user.id
+                }
+            })
+        let cleaned_word = word.replaceAll("#", "").replaceAll("@", "")
+        console.log(cleaned_word)
         return list.filter(obj =>
-            Object.keys(obj).some(x => match.includes(obj[x]))
-        )[0]
+            Object.keys(obj).some(x => obj[x] === cleaned_word)
+        )
     }
 
     function linkHashtagAndMentions() {
@@ -27,31 +31,52 @@ const CommentTemplate = ({image, item}) => {
                 word = word.replaceAll("@", " @")
                 return word.split(" ").map((part, index) => {
                     let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("@") || cleaned.startsWith("#"))
-                        return <Link to="/" key={index}>{cleaned}</Link>
+                    if (cleaned.startsWith("@") || cleaned.startsWith("#")) {
+                        let reference = filterByValue(cleaned)
+                        if (reference !== null) {
+                            reference = reference[0]
+                            if (cleaned.startsWith("@"))
+                                return <Link to={"/public/account/".concat(reference.id)} key={index}>{cleaned}</Link>
+                            else if (cleaned.startsWith("#"))
+                                return <Link to={"/topic/".concat(reference.tag)} key={index}>{cleaned}</Link>
+                        }
+                        return cleaned
+                    }
                     return cleaned
                 })
             } else if (word.includes("#")) {
                 word = word.replaceAll("#", " #")
                 return word.split(" ").map((part, index) => {
                     let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("#"))
-                        return <Link to="/" key={index}>{cleaned}</Link>
+                    if (cleaned.startsWith("#")) {
+                        let reference = filterByValue(cleaned)
+                        if (reference !== null) {
+                            reference = reference[0]
+                            return <Link to={"/topic/".concat(reference.tag)} key={index}>{cleaned}</Link>
+                        }
+                        return cleaned
+                    }
                     return cleaned
                 })
             } else if (word.includes("@")) {
                 word = word.replaceAll("@", " @")
                 return word.split(" ").map((part, index) => {
                     let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("@"))
-                        return <Link to="/" key={index}>{cleaned}</Link>
+                    if (cleaned.startsWith("@")) {
+                        let reference = filterByValue(cleaned)
+                        if (reference !== null) {
+                            reference = reference[0]
+                            return <Link to={"/public/account/".concat(reference.id)} key={index}>{cleaned}</Link>
+                        }
+                        return cleaned
+                    }
                     return cleaned
                 })
             }
             return word
         }
 
-        let parts = "hey hey #dasdasd@Marc#dasdasda #dasdas".split(" ").map((word, index) => {
+        let parts = item["content"].split(" ").map((word, index) => {
             return link(word)
         })
         return (parts.map((part, index) => {
