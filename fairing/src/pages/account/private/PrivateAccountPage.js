@@ -3,7 +3,6 @@ import MenuBar from "../../../components/MenuBar";
 import Avatar from "../segments/Avatar";
 import axios from "axios";
 import {Cookies, withCookies} from "react-cookie";
-import Networking from "../segments/Networking";
 import Footer from "../../../components/Footer";
 import {instanceOf} from "prop-types";
 import ContentView from "./components/ContentView";
@@ -76,9 +75,6 @@ class PrivateAccountPage extends Component {
                     username={this.state.account.user.username}
                     biography={this.state.account.biography}
                 />
-                <Networking forPublicUse={false}
-                            follower={this.state.account["related_by"]}
-                            following={this.state.account["related_to"]}/>
                 <ContentView
                     menuOffset={this.state.menuHeight}
                     account={this.state.account}/>

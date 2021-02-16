@@ -2,6 +2,8 @@ import React, {Component, createRef} from 'react';
 import {Segment} from "semantic-ui-react";
 import StickyContentGrid from "../../../../components/StickyContentGrid";
 import Contents from "../../segments/Contents";
+import Following from "../../components/Following";
+import Follower from "../../components/Follower";
 
 
 class ContentView extends Component {
@@ -28,13 +30,16 @@ class ContentView extends Component {
                         contextRef={this.contextRef}
                         menuOffset={this.props.menuOffset}
                         left={
-                            <div/>
+                            <Segment vertical>
+                                <Following following={this.props.account["related_to"]}/>
+                                <Follower follower={this.props.account["related_by"]}/>
+                            </Segment>
                         }
                         center={
                             <Contents account={this.props.account}/>
                         }
                         right={
-                            <div/>
+                            <div>Coming soon!</div>
                         }
                     >
                     </StickyContentGrid>
