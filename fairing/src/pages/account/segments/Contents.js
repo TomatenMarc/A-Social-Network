@@ -13,60 +13,10 @@ const CommentTemplate = ({image, item}) => {
     }
 
     function linkHashtagAndMentions() {
-        function link(word) {
-            if (word.includes("#") && word.includes("@")) {
-                word = word.replaceAll("#", " #")
-                word = word.replaceAll("@", " @")
-                return word.split(" ").map((part, index) => {
-                    let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("@") || cleaned.startsWith("#")) {
-                        let reference = filterByValue(cleaned)
-                        if (reference !== null) {
-                            reference = reference[0]
-                            if (cleaned.startsWith("@"))
-                                return <Link to={"/public/account/".concat(reference.id)} key={index}>{cleaned}</Link>
-                            else if (cleaned.startsWith("#"))
-                                return <Link to={"/topic/".concat(reference.tag)} key={index}>{cleaned}</Link>
-                        }
-                        return cleaned
-                    }
-                    return cleaned
-                })
-            } else if (word.includes("#")) {
-                word = word.replaceAll("#", " #")
-                return word.split(" ").map((part, index) => {
-                    let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("#")) {
-                        let reference = filterByValue(cleaned)
-                        if (reference !== null) {
-                            reference = reference[0]
-                            return <Link to={"/topic/".concat(reference.tag)} key={index}>{cleaned}</Link>
-                        }
-                        return cleaned
-                    }
-                    return cleaned
-                })
-            } else if (word.includes("@")) {
-                word = word.replaceAll("@", " @")
-                return word.split(" ").map((part, index) => {
-                    let cleaned = part.replaceAll(" ", "")
-                    if (cleaned.startsWith("@")) {
-                        let reference = filterByValue(cleaned)
-                        if (reference !== null) {
-                            reference = reference[0]
-                            return <Link to={"/public/account/".concat(reference.id)} key={index}>{cleaned}</Link>
-                        }
-                        return cleaned
-                    }
-                    return cleaned
-                })
-            }
-            return word
-        }
-
         function linkAll(word) {
-            let separated = word.replaceAll(/#(\w+)/g, " #$1 ")
-            return separated.split(" ").filter(function (element) {
+            word = word.replaceAll(/#(\w+)/g, " #$1 ")
+            word = word.replaceAll(/@(\w+)/g, " @$1 ")
+            return word.split(" ").filter(function (element) {
                 return element !== ""
             }).map((element, index) => {
                 if (element.startsWith("#")) {
@@ -76,12 +26,23 @@ const CommentTemplate = ({image, item}) => {
                         return <Link key={index} to={"/topic/".concat(reference[0].tag)}>{element}</Link>
                     }
                 }
+                if (element.startsWith("@")) {
+                    let cleaned_element = element.replace("@", "")
+                    let reference = filterByValue(item["mentioned"].map((item, index) => {
+                        return {
+                            username: item.user.username,
+                            id: item.user.id
+                        }
+                    }), cleaned_element)
+                    if (reference) {
+                        return <Link key={index} to={"/public/account/".concat(reference[0].id)}>{element}</Link>
+                    }
+                }
                 return element
             })
         }
 
         let parts = item["content"].split(" ").map((word, index) => {
-
             return linkAll(word)
         })
         return (parts.map((part, index) => {
