@@ -22,12 +22,22 @@ class StickyContentGrid extends Component {
     /**
      * This is the gird used for the content.
      * The left and right columns are not shown on mobile.
-     * Todo: Make non-sticky stacked columns for mobile-view.
      * @returns {JSX.Element}
      */
     render() {
         return (
             <Grid centered columns={3} stackable divided>
+                {/*
+                    The following two elements are shown above the center part on mobile view.
+                    On mobile the left and right elements are not sticky.
+                */}
+                <Grid.Column only={"mobile"}>
+                    {this.props.left}
+                </Grid.Column>
+
+                <Grid.Column only={"mobile"}>
+                    {this.props.right}
+                </Grid.Column>
 
                 <Grid.Column only={"computer tablet"}>
                     <Sticky context={this.props.contextRef} offset={this.props.menuOffset}>
