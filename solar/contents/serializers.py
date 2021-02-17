@@ -25,7 +25,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model("accounts", "Account")
-        fields = ('user',)
+        fields = ('user', 'image', )
 
 
 class StatementSerializer(serializers.ModelSerializer):
@@ -33,10 +33,10 @@ class StatementSerializer(serializers.ModelSerializer):
     This serializer serializes the statements and their content.
     It can be used to serialize content of a statement.
     """
-
+    author = AccountSerializer()
     tagged = serializers.ListField(source='get_hashtags', child=HashtagSerializer())
     mentioned = serializers.ListField(source='get_mentioning', child=AccountSerializer())
 
     class Meta:
         model = Statement
-        fields = ('id', 'content', 'tagged', 'mentioned',)
+        fields = ('id', 'author', 'content', 'tagged', 'mentioned',)
