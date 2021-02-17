@@ -68,6 +68,7 @@ class AccountOwnSerializer(AccountPublicSerializer):
     """
     This serializer is for the representation of an own account.
     It shows more information to the user then the public serializer.
+    Todo: Make statements use the StatementSerializer.
     """
     # this is the parent account, it overwrites the field of AccountPublicSerializer
     user = UserOwnSerializer()

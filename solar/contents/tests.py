@@ -2,6 +2,9 @@ from typing import List
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.test import APITestCase, APIClient
 
 from accounts.models import Account
 from contents.models import Statement, Hashtag, Reaction
@@ -102,3 +105,21 @@ class TestStatement(TestCase):
         except Exception as exception:
             hashtag_exists = None
         self.assertIsNone(hashtag_exists)
+
+
+class TestGetStatement(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
+        self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
+        self.token_bernd = Token.objects.create(user=self.user_bernd)
+        self.statement_with_hashtags_and_mentioning: Statement = Statement.objects.create(author=self.account_bernd,
+                                                                                          content="I like @Bernd #Foo")
+
+    def test_statement_provides_data(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
+        response: Response = self.client.get(
+            path="/contents/statements/get/{id}/".format(id=self.statement_with_hashtags_and_mentioning.id))
+        self.assertEqual(response.data[0]["id"], self.statement_with_hashtags_and_mentioning.id)
+        self.assertEqual(len(response.data[0]["mentioned"]), 1)
+        self.assertEqual(len(response.data[0]["tagged"]), 1)
