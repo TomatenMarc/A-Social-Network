@@ -48,7 +48,8 @@ class PublicAccountPage extends Component {
         //todo: show an error page if the requested user does not exist.
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/").concat(this.state.uid).concat("/"), {
+        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/").concat(this.state.uid).concat("/"),
+            {
                 headers: {
                     'Authorization': 'Token '.concat(utkn)
                 }

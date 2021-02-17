@@ -23,7 +23,7 @@ export function Routes() {
         <PrivateRoute path="/public/account/:uid" exact component={PublicAccountPage}/>
         <PrivateRoute path="/account" exact component={PrivateAccountPage}/>
         <PrivateRoute path={"/topic/:tag"} exact component={TopicPage}/>
-        <Route path="/statement" exact component={StatementPage}/>
+        <PrivateRoute path="/statement/:sid" exact component={StatementPage}/>
         <PrivateRoute path="/" exact component={MainPage}/>
         <Route path="*" component={ErrorScreen}/>
     </Switch>
