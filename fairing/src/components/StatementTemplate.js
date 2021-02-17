@@ -1,13 +1,16 @@
 import {Link} from "react-router-dom";
 import {Comment} from "semantic-ui-react";
 import React from "react";
+import {useHistory} from "react-router";
 
 export function StatementTemplate({name, image, item}) {
     /**
      * This component is a template for an statement.
      * The template must have an image of the author and the statement itself.
      * The statement must provide tagged hashtags and mentioned users.
+     * Since this is a function component using the react-router the history must be used.
      */
+    const history = useHistory();
 
     /**
      * This method needs an list of objects and a word to be looked up.
@@ -84,18 +87,20 @@ export function StatementTemplate({name, image, item}) {
      * This returns the statement in the form of an comment.
      */
     return <Comment>
-        <Comment.Avatar as='a' src={image}/>
+        <Comment.Avatar as={Link} to={"/public/account/".concat(item.author.user.id)} src={image}/>
         <Comment.Content>
-            <Comment.Author>{name}</Comment.Author>
+            <Comment.Author as={Link} to={"/public/account/".concat(item.author.user.id)}>{name}</Comment.Author>
             <Comment.Text>
                 {
                     linkHashtagAndMentions()
                 }
             </Comment.Text>
             <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
-                <Comment.Action>Save</Comment.Action>
-                <Comment.Action>Hide</Comment.Action>
+                <Comment.Action onClick={() => {
+                    history.push({
+                        pathname: "/statement/".concat(item["id"])
+                    })
+                }}>Visit</Comment.Action>
             </Comment.Actions>
         </Comment.Content>
     </Comment>
