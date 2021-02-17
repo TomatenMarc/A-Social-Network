@@ -9,6 +9,7 @@ import PublicAccountPage from "../pages/account/public/PublicAccountPage";
 import ErrorScreen from "../components/ErrorScreen";
 import LogoutPage from "../pages/logout/LogoutPage";
 import TopicPage from "../pages/topic/TopicPage";
+import StatementPage from "../pages/statement/StatementPage";
 
 export function Routes() {
     /**
@@ -22,6 +23,7 @@ export function Routes() {
         <PrivateRoute path="/public/account/:uid" exact component={PublicAccountPage}/>
         <PrivateRoute path="/account" exact component={PrivateAccountPage}/>
         <PrivateRoute path={"/topic/:tag"} exact component={TopicPage}/>
+        <Route path="/statement" exact component={StatementPage}/>
         <PrivateRoute path="/" exact component={MainPage}/>
         <Route path="*" component={ErrorScreen}/>
     </Switch>

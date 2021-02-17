@@ -9,7 +9,7 @@ class HeadingTemplate extends Component {
     render() {
         return (
             <Segment inverted style={{padding: '8em 0em'}} vertical>
-                <Grid container stackable centered>
+                <Grid textAlign='center' verticalAlign='middle' stackable>
                     <Grid.Row>
                         {this.props.children}
                     </Grid.Row>
