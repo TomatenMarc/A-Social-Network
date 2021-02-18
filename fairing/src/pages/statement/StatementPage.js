@@ -4,6 +4,8 @@ import Heading from "./segments/Heading";
 import {Cookies, withCookies} from "react-cookie";
 import axios from "axios";
 import {instanceOf, PropTypes} from "prop-types";
+import ContentView from "./segments/ContentView";
+import Footer from "../../components/Footer";
 
 class StatementPage extends Component {
     /**
@@ -22,7 +24,6 @@ class StatementPage extends Component {
 
     /**
      * This component shows an specific statement at the top.
-     * Todo: Add children of this statement below.
      * @param props
      */
     constructor(props) {
@@ -74,6 +75,9 @@ class StatementPage extends Component {
             <div>
                 <MenuBar/>
                 <Heading parent={this.state.parent}/>
+                <ContentView menuOffset={65}
+                             parent={this.state.parent}/>
+                <Footer/>
             </div>
         );
     }

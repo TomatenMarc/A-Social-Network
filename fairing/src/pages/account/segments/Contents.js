@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Comment, Grid, Header, Image, Segment} from "semantic-ui-react";
+import {Comment, Segment} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import {StatementTemplate} from "../../../components/StatementTemplate";
+import EmptyContentInformation from "../../../components/EmptyContentInformation";
 
 class Contents extends Component {
     /**
      * This component is for the representation of the contents created by the user.
-     * Todo: Use a responsive design to show the content.
-     * Todo: The content itself must be an own component, they must handle mentions and hashtags.
      * @type {{statements: *}}
      */
     static propTypes = {
@@ -21,21 +20,7 @@ class Contents extends Component {
      */
     render() {
         if (this.props.account.statements.length === 0)
-            return <Segment basic textAlign={"center"}>
-                <Grid centered>
-                    <Grid.Row>
-                        <Header as={"h1"}>Seems like deep space!</Header>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Image
-                            src={process.env.REACT_APP_API_URL.concat("/media/account/default/Argunaut.png")}
-                            size={"small"}/>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Header as={"h2"}>Pretty empty here ...</Header>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
+            return <EmptyContentInformation/>
         return (
             <Segment basic>
                 <Comment.Group>
