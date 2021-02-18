@@ -28,7 +28,6 @@ class Statement(models.Model):
                                        symmetrical=False,
                                        related_name='mentions',
                                        default=None)
-    # Todo: Add tests and add class methods
     reactions = models.ManyToManyField('self',
                                        blank=True,
                                        through='Reaction',

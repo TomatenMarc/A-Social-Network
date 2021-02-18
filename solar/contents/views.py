@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from contents.models import Statement
-from contents.serializers import StatementSerializer
+from contents.serializers import StatementSerializer, StatementObservationSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -32,5 +32,5 @@ class ShowStatement(APIView):
         :return:
         """
         statement: Statement = Statement.objects.filter(id=int(kwargs.get("id")))
-        serializer: StatementSerializer = StatementSerializer(instance=statement, many=True)
+        serializer: StatementObservationSerializer = StatementObservationSerializer(instance=statement, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)

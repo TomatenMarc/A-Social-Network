@@ -113,13 +113,17 @@ class TestGetStatement(APITestCase):
         self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
         self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
         self.token_bernd = Token.objects.create(user=self.user_bernd)
-        self.statement_with_hashtags_and_mentioning: Statement = Statement.objects.create(author=self.account_bernd,
-                                                                                          content="I like @Bernd #Foo")
+        self.statement_1: Statement = Statement.objects.create(author=self.account_bernd, content="I like @Bernd #Foo")
+        self.statement_2: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
 
     def test_statement_provides_data(self):
+        self.statement_1.add_reaction(self.statement_2, 2)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
-        response: Response = self.client.get(
-            path="/contents/statements/get/{id}/".format(id=self.statement_with_hashtags_and_mentioning.id))
-        self.assertEqual(response.data[0]["id"], self.statement_with_hashtags_and_mentioning.id)
+        response: Response = self.client.get(path="/contents/statements/get/{id}/".format(id=self.statement_1.id))
+        self.assertEqual(response.data[0]["id"], self.statement_1.id)
         self.assertEqual(len(response.data[0]["mentioned"]), 1)
         self.assertEqual(len(response.data[0]["tagged"]), 1)
+        self.assertEqual(len(response.data[0]["reactions"]), 1)
+        reaction = response.data[0]["reactions"][0]
+        self.assertEqual(reaction["vote"], 2)
+        self.assertEqual(reaction["child"]["id"], self.statement_2.id)
