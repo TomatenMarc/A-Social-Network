@@ -35,6 +35,7 @@ export function StatementTemplate({name, image, item}) {
      */
     function linkAll(word) {
         // detect and surround hashtags and mentions with whitespace for word extraction
+        // Notice: There are no öäüß enabled
         word = word.replaceAll(/#(\w+)/g, " #$1 ")
         word = word.replaceAll(/@(\w+)/g, " @$1 ")
         // each word and possible hashtags or mentions are separated by whitespace

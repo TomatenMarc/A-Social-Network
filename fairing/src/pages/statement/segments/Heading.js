@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StatementTemplate} from "../../../components/StatementTemplate";
-import {Comment, Segment} from "semantic-ui-react";
+import {Comment, Grid, Segment} from "semantic-ui-react";
 import HeadingTemplate from "../../../components/HeadingTemplate";
 import {PropTypes} from "prop-types";
 
@@ -33,13 +33,26 @@ class Heading extends Component {
     render() {
         return (
             <HeadingTemplate>
-                <Segment style={{maxWidth: "80%"}}>
-                    <Comment.Group>
-                        <StatementTemplate
-                            name={this.props.parent.author.user.username}
-                            image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
-                            item={this.state.parent}/>
-                    </Comment.Group>
+                <Segment
+                    style={{
+                        border: "#6eb1db solid 2px",
+                        minWidth: "33%",
+                        borderRadius: "10px",
+                        margin: "10px"
+                    }}>
+                    <Grid textAlign='center' verticalAlign='middle'>
+                        <Grid.Row>
+                            <Comment.Group
+                                style={{
+                                    margin: "20px"
+                                }}>
+                                <StatementTemplate
+                                    name={this.props.parent.author.user.username}
+                                    image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
+                                    item={this.state.parent}/>
+                            </Comment.Group>
+                        </Grid.Row>
+                    </Grid>
                 </Segment>
             </HeadingTemplate>
         );

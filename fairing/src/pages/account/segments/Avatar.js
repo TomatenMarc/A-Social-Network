@@ -46,7 +46,7 @@ class Avatar extends Component {
                             {this.props.username}
                         </Header>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{margin:"10%"}}>
                         {this.props.biography}
                     </Grid.Row>
                     <Grid.Row>
