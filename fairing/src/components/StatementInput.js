@@ -22,7 +22,8 @@ class StatementInput extends Component {
      */
     static propTypes = {
         offset: PropTypes.number.isRequired,
-        context: PropTypes.object.isRequired
+        context: PropTypes.object.isRequired,
+        sticky: PropTypes.bool.isRequired
     };
 
     /**
@@ -149,7 +150,7 @@ class StatementInput extends Component {
     render() {
         return (
             <Segment basic style={{padding: 0}} loading={this.state.loading}>
-                <Sticky offset={this.props.offset} context={this.props.context}>
+                <Sticky offset={this.props.offset} context={this.props.context} active={this.props.sticky}>
                     <Card fluid>
                         {
                             this.state.error ?

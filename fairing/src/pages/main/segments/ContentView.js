@@ -54,7 +54,10 @@ class ContentView extends Component {
                         }
                         center={
                             <div>
-                                <StatementInput context={this.contextRef} offset={this.props.menuOffset}/>
+                                <StatementInput
+                                    sticky={true}
+                                    context={this.contextRef}
+                                    offset={this.props.menuOffset}/>
                                 <Segment>
                                     {_.times(10, (i) => (
                                         <Placeholder key={i}/>
