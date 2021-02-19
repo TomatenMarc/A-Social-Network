@@ -1,7 +1,8 @@
 import {Link} from "react-router-dom";
 import {Comment, Icon} from "semantic-ui-react";
-import React from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router";
+import StatementInput from "./StatementInput";
 
 export function StatementTemplate({isParent, name, image, item}) {
     /**
@@ -9,8 +10,11 @@ export function StatementTemplate({isParent, name, image, item}) {
      * The template must have an image of the author and the statement itself.
      * The statement must provide tagged hashtags and mentioned users.
      * Since this is a function component using the react-router the history must be used.
+     *
      */
     const history = useHistory();
+    let [openReactionInput, setOpenReactionInput] = useState(false)
+    let [reaction, setReaction] = useState("")
 
     /**
      * This method needs an list of objects and a word to be looked up.
@@ -104,11 +108,21 @@ export function StatementTemplate({isParent, name, image, item}) {
                             })
                         }}>Visit</Comment.Action> :
                         <div>
-                            <Comment.Action>
+                            <Comment.Action
+                                active={reaction === "support"}
+                                onClick={() => {
+                                    setReaction("support")
+                                    setOpenReactionInput(true)
+                                }}>
                                 <Icon name='thumbs up'/>
                                 Support
                             </Comment.Action>
-                            <Comment.Action>
+                            <Comment.Action
+                                active={reaction === "attack"}
+                                onClick={() => {
+                                    setReaction("attack")
+                                    setOpenReactionInput(true)
+                                }}>
                                 <Icon name='thumbs down'/>
                                 Support
                             </Comment.Action>
@@ -117,5 +131,31 @@ export function StatementTemplate({isParent, name, image, item}) {
                 }
             </Comment.Actions>
         </Comment.Content>
+
+        {
+            // If the StatementTemplate is used for reacting then there must be the option to close the input.
+            // Todo: Close this element as well if the statement is send.
+            openReactionInput ? <StatementInput
+                closeElement={<div>
+                    <button
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            padding: 0,
+                            color: "#4183c4",
+                            cursor: "pointer"
+                        }}
+                        onClick={(event) => {
+                            event.preventDefault()
+                            setReaction("")
+                            setOpenReactionInput(false)
+                        }}>Close
+                    </button>
+                </div>}
+                offset={0}
+                context={{}}
+                sticky={false}
+            /> : null
+        }
     </Comment>
 }

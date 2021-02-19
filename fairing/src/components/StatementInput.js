@@ -23,7 +23,8 @@ class StatementInput extends Component {
     static propTypes = {
         offset: PropTypes.number.isRequired,
         context: PropTypes.object.isRequired,
-        sticky: PropTypes.bool.isRequired
+        sticky: PropTypes.bool.isRequired,
+        closeElement: PropTypes.node // this optional if there is an closing element required. (e.g. in StatementTemplate)
     };
 
     /**
@@ -170,6 +171,11 @@ class StatementInput extends Component {
                                 </Card.Content> : null
                         }
                         <Card.Content>
+                            {
+                                // this adds an optional element for closing the statement if it is used for reactions.
+                                // Todo: Add function to manipulate the state of the parent if reaction is placed.
+                                this.props.closeElement
+                            }
                             <ReactTextareaAutocomplete
                                 movePopupAsYouType
                                 loadingComponent={Loading}
@@ -178,8 +184,8 @@ class StatementInput extends Component {
                                 }
                                 onChange={this.handleChange}
                                 value={this.state.input}
-                                placeholder={"What's up out there?"}
-                                style={{resize: "none"}}
+                                placeholder={"Place your statement!"}
+                                style={{resize: "none", margin: "5px 0"}}
                                 minChar={0}
                                 trigger={{
                                     ":": {
