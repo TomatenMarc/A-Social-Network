@@ -1,9 +1,9 @@
 import {Link} from "react-router-dom";
-import {Comment} from "semantic-ui-react";
+import {Comment, Icon} from "semantic-ui-react";
 import React from "react";
 import {useHistory} from "react-router";
 
-export function StatementTemplate({name, image, item}) {
+export function StatementTemplate({isParent, name, image, item}) {
     /**
      * This component is a template for an statement.
      * The template must have an image of the author and the statement itself.
@@ -97,11 +97,24 @@ export function StatementTemplate({name, image, item}) {
                 }
             </Comment.Text>
             <Comment.Actions>
-                <Comment.Action onClick={() => {
-                    history.push({
-                        pathname: "/statement/".concat(item["id"])
-                    })
-                }}>Visit</Comment.Action>
+                {
+                    !isParent ? <Comment.Action onClick={() => {
+                            history.push({
+                                pathname: "/statement/".concat(item["id"])
+                            })
+                        }}>Visit</Comment.Action> :
+                        <div>
+                            <Comment.Action>
+                                <Icon name='thumbs up'/>
+                                Support
+                            </Comment.Action>
+                            <Comment.Action>
+                                <Icon name='thumbs down'/>
+                                Support
+                            </Comment.Action>
+                        </div>
+
+                }
             </Comment.Actions>
         </Comment.Content>
     </Comment>

@@ -27,6 +27,7 @@ class Contents extends Component {
                     {
                         this.props.account["statements"].map((item, index) => {
                             return <StatementTemplate
+                                isParent={false}
                                 key={index}
                                 name={this.props.account.user.username}
                                 image={process.env.REACT_APP_API_URL.concat(this.props.account.image)}

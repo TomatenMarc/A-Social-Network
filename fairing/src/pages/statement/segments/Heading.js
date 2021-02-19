@@ -47,6 +47,7 @@ class Heading extends Component {
                                     margin: "20px"
                                 }}>
                                 <StatementTemplate
+                                    isParent={true}
                                     name={this.props.parent.author.user.username}
                                     image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
                                     item={this.state.parent}/>

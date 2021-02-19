@@ -29,6 +29,7 @@ class Contents extends Component {
                         this.props.parent["reactions"].map((item, index) => {
                             return <StatementTemplate
                                 key={index}
+                                isParent={false}
                                 name={item.child.author.user.username}
                                 image={process.env.REACT_APP_API_URL.concat(item.child.author.image)}
                                 item={item.child}/>
