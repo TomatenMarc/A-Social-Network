@@ -89,6 +89,14 @@ export function StatementTemplate({isParent, name, image, item}) {
     }
 
     /**
+     * This function clears the reaction and closes the statement input for reacting.
+     */
+    function handleClose() {
+        setReaction("")
+        setOpenReactionInput(false)
+    }
+
+    /**
      * This returns the statement in the form of an comment.
      */
     return <Comment>
@@ -134,24 +142,8 @@ export function StatementTemplate({isParent, name, image, item}) {
 
         {
             // If the StatementTemplate is used for reacting then there must be the option to close the input.
-            // Todo: Close this element as well if the statement is send.
             openReactionInput ? <StatementInput
-                closeElement={<div>
-                    <button
-                        style={{
-                            background: "transparent",
-                            border: "none",
-                            padding: 0,
-                            color: "#4183c4",
-                            cursor: "pointer"
-                        }}
-                        onClick={(event) => {
-                            event.preventDefault()
-                            setReaction("")
-                            setOpenReactionInput(false)
-                        }}>Close
-                    </button>
-                </div>}
+                handleClose={handleClose}
                 offset={0}
                 context={{}}
                 sticky={false}

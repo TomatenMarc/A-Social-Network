@@ -6,19 +6,20 @@ import axios from "axios";
 import {PropTypes} from "prop-types";
 import AutocompleteInput from "./AutocompleteInput";
 
-//Todo: Make this customizable
 class StatementInput extends Component {
 
     /**
      * This component needs an offset to stick under the menubar.
      * It also needs a context to reference to the calling element.
+     * Furthermore the parent component can provide an closing function
+     * if this component can be closed in this context.
      * @type {{offset: *, context: *}}
      */
     static propTypes = {
         offset: PropTypes.number.isRequired,
         context: PropTypes.object.isRequired,
         sticky: PropTypes.bool.isRequired,
-        closeElement: PropTypes.node // this optional if there is an closing element required. (e.g. in StatementTemplate)
+        handleClose: PropTypes.func
     };
 
     /**
@@ -78,6 +79,10 @@ class StatementInput extends Component {
                         input: "",
                         error: false
                     })
+                    // if the parent component implements an provides an closing function then
+                    // this should be called after sending the input.
+                    if (this.props.handleClose)
+                        this.props.handleClose()
                 }
             }).catch((error) => {
                 this.setState({
@@ -116,9 +121,22 @@ class StatementInput extends Component {
                         }
                         <Card.Content>
                             {
-                                // this adds an optional element for closing the statement if it is used for reactions.
-                                // Todo: Add function to manipulate the state of the parent if reaction is placed.
-                                this.props.closeElement
+                                // if there is a closing function provided by the parent
+                                // then there must be an element to close the input.
+                                this.props.handleClose ? <Button
+                                    style={{
+                                        background: "transparent",
+                                        border: "none",
+                                        padding: 0,
+                                        color: "#4183c4",
+                                        cursor: "pointer"
+                                    }}
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        this.props.handleClose()
+                                    }}>
+                                    Close
+                                </Button> : null
                             }
                             <AutocompleteInput
                                 input={this.state.input}
