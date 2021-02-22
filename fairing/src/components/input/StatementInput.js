@@ -13,13 +13,16 @@ class StatementInput extends Component {
      * It also needs a context to reference to the calling element.
      * Furthermore the parent component can provide an closing function
      * if this component can be closed in this context.
+     * If this component is used in the context in which an reaction can be added,
+     * then must give the reaction relation to the parent as an string to this component.
      * @type {{offset: *, context: *}}
      */
     static propTypes = {
         offset: PropTypes.number.isRequired,
         context: PropTypes.object.isRequired,
         sticky: PropTypes.bool.isRequired,
-        handleClose: PropTypes.func
+        handleClose: PropTypes.func,
+        reaction: PropTypes.string
     };
 
     /**
@@ -61,7 +64,8 @@ class StatementInput extends Component {
         const utkn = cookies.get("utkn")
         if (this.state.input !== "")
             axios.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
-                input: this.state.input
+                input: this.state.input,
+                reaction: this.props.reaction
             }, {
                 headers: {
                     'Authorization': 'Token '.concat(utkn),
