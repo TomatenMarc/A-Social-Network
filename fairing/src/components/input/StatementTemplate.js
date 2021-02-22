@@ -144,7 +144,10 @@ export function StatementTemplate({isParent, name, image, item}) {
             // If the StatementTemplate is used for reacting then there must be the option to close the input.
             openReactionInput ? <StatementInput
                 handleClose={handleClose}
-                reaction={reaction}
+                reaction={{
+                    relation: reaction,
+                    to: item.id
+                }}
                 offset={0}
                 context={{}}
                 sticky={false}

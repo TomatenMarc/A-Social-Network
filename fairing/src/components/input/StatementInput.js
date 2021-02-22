@@ -15,14 +15,15 @@ class StatementInput extends Component {
      * if this component can be closed in this context.
      * If this component is used in the context in which an reaction can be added,
      * then must give the reaction relation to the parent as an string to this component.
-     * @type {{offset: *, context: *}}
+     * The reaction is an object containing the relation and the parent id.
+     * @type {{offset: *, context: *, sticky: *, handleClose: *, reaction: *}}
      */
     static propTypes = {
         offset: PropTypes.number.isRequired,
         context: PropTypes.object.isRequired,
         sticky: PropTypes.bool.isRequired,
         handleClose: PropTypes.func,
-        reaction: PropTypes.string
+        reaction: PropTypes.object
     };
 
     /**

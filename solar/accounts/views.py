@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 
 from accounts.models import Account
 from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer
+from contents.models import Statement
 
 logger = logging.getLogger(__name__)
 
@@ -179,9 +180,17 @@ class AddStatement(APIView):
         """
         This method handles the post of an new statement.
         :param request: The request to be handled, containing the input.
-        :return: Response with an 200 OK.
+        :return: Response with an 200 OK if everything is okay. 400 if there is no statement input.
         """
         account: Account = Account.objects.filter(user=request.user).first()
-        statement: str = request.data["input"]
-        account.add_statement(statement)
+        statement: str = request.data.get("input", None)
+        if not statement:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        statement: Statement = account.add_statement(statement)
+        # if there is an reaction given then is must be added to the parent element.
+        reaction: dict = request.data.get("reaction", None)
+        if reaction:
+            parent: Statement = Statement.objects.get(id=reaction.get("to"))
+            vote: int = 1 if reaction.get("relation") == "support" else 2
+            parent.add_reaction(reaction_statement=statement, vote=vote)
         return Response(status=status.HTTP_200_OK)

@@ -90,14 +90,16 @@ class Account(models.Model):
         """
         return list(self.statement_set.all())
 
-    def add_statement(self, content: str) -> None:
+    def add_statement(self, content: str) -> Statement:
         """
         This methods add a statement for the calling account.
 
         :param content: The content of the statement.
-        :return: None
+        :return: The added statement.
         """
-        return self.statement_set.add(Statement(author=self, content=content), bulk=False)
+        statement: Statement = Statement(author=self, content=content)
+        self.statement_set.add(statement, bulk=False)
+        return statement
 
     def update_image(self, new_image: InMemoryUploadedFile):
         """
