@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatementTemplate} from "../../../components/StatementTemplate";
+import {StatementTemplate} from "../../../components/input/StatementTemplate";
 import {Comment, Grid, Segment} from "semantic-ui-react";
 import HeadingTemplate from "../../../components/HeadingTemplate";
 import {PropTypes} from "prop-types";

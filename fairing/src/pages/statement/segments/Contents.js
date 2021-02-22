@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Comment, Segment} from "semantic-ui-react";
-import {StatementTemplate} from "../../../components/StatementTemplate";
+import {StatementTemplate} from "../../../components/input/StatementTemplate";
 import {PropTypes} from "prop-types";
 import EmptyContentInformation from "../../../components/EmptyContentInformation";
 
