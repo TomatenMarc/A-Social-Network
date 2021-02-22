@@ -3,8 +3,9 @@ import {Comment, Icon} from "semantic-ui-react";
 import React, {useState} from "react";
 import {useHistory} from "react-router";
 import StatementInput from "./StatementInput";
+import {PropTypes} from "prop-types";
 
-export function StatementTemplate({isParent, name, image, item}) {
+export const StatementTemplate = (props) => {
     /**
      * This component is a template for an statement.
      * The template must have an image of the author and the statement itself.
@@ -50,7 +51,7 @@ export function StatementTemplate({isParent, name, image, item}) {
             // link hashtags
             if (element.startsWith("#")) {
                 let cleaned_element = element.replace("#", "")
-                let reference = filterByValue(item["tagged"], cleaned_element)
+                let reference = filterByValue(props.item["tagged"], cleaned_element)
                 if (reference.length !== 0) {
                     return <Link key={index} to={"/topic/".concat(reference[0].tag)}>{element}</Link>
                 }
@@ -59,7 +60,7 @@ export function StatementTemplate({isParent, name, image, item}) {
             if (element.startsWith("@")) {
                 let cleaned_element = element.replace("@", "")
                 // the mentions have another structure and must therefore be remapped for filtering.
-                let reference = filterByValue(item["mentioned"].map((item, index) => {
+                let reference = filterByValue(props.item["mentioned"].map((item, index) => {
                     return {
                         username: item.user.username,
                         id: item.user.id
@@ -79,7 +80,7 @@ export function StatementTemplate({isParent, name, image, item}) {
      * @returns {*|FlatArray<*, 1>[]|any[]}
      */
     function linkHashtagAndMentions() {
-        let parts = item["content"].split(" ").map((word, index) => {
+        let parts = props.item.content.split(" ").map((word, index) => {
             return linkAll(word)
         })
         return (parts.map((part, index) => {
@@ -100,9 +101,10 @@ export function StatementTemplate({isParent, name, image, item}) {
      * This returns the statement in the form of an comment.
      */
     return <Comment>
-        <Comment.Avatar as={Link} to={"/public/account/".concat(item.author.user.id)} src={image}/>
+        <Comment.Avatar as={Link} to={"/public/account/".concat(props.item.author.user.id)} src={props.image}/>
         <Comment.Content>
-            <Comment.Author as={Link} to={"/public/account/".concat(item.author.user.id)}>{name}</Comment.Author>
+            <Comment.Author as={Link}
+                            to={"/public/account/".concat(props.item.author.user.id)}>{props.name}</Comment.Author>
             <Comment.Text>
                 {
                     linkHashtagAndMentions()
@@ -110,9 +112,9 @@ export function StatementTemplate({isParent, name, image, item}) {
             </Comment.Text>
             <Comment.Actions>
                 {
-                    !isParent ? <Comment.Action onClick={() => {
+                    !props.isParent ? <Comment.Action onClick={() => {
                             history.push({
-                                pathname: "/statement/".concat(item["id"])
+                                pathname: "/statement/".concat(props.item.id)
                             })
                         }}>Visit</Comment.Action> :
                         <div>
@@ -146,7 +148,7 @@ export function StatementTemplate({isParent, name, image, item}) {
                 handleClose={handleClose}
                 reaction={{
                     relation: reaction,
-                    to: item.id
+                    to: props.item.id
                 }}
                 offset={0}
                 context={{}}
@@ -154,4 +156,12 @@ export function StatementTemplate({isParent, name, image, item}) {
             /> : null
         }
     </Comment>
+}
+
+StatementTemplate.propTypes = {
+    item: PropTypes.object.isRequired,
+    // todo: nest name and image to an object (account)
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    isParent: PropTypes.bool.isRequired
 }
