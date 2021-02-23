@@ -41,7 +41,9 @@ class Contents extends Component {
                                         isParent={false}
                                         name={item.child.author.user.username}
                                         image={process.env.REACT_APP_API_URL.concat(item.child.author.image)}
-                                        item={item.child}/>
+                                        item={item.child}
+                                        reaction={item.vote}
+                                    />
                                 </List.Item>
                             }).reverse()//to reverse the animation.
                         }

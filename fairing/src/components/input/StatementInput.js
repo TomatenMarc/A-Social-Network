@@ -62,6 +62,10 @@ class StatementInput extends Component {
      */
     handleSubmit = (event) => {
         event.preventDefault()
+        // to prevent double sending
+        this.setState({
+            input:""
+        })
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
         if (this.state.input !== "")

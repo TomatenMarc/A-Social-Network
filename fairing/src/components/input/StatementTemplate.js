@@ -107,6 +107,10 @@ export const StatementTemplate = (props) => {
             <Comment.Author as={Link}
                             to={"/public/account/".concat(props.item.author.user.id)}>{props.name}</Comment.Author>
             <Comment.Metadata>
+                {
+                    props.reaction === 1 ? <Icon name='thumbs up' color={"green"}/> : props.reaction === 2 ?
+                        <Icon name='thumbs down' color={"red"}/> : null
+                }
                 <TimeAgo date={props.item["created"]}/>
             </Comment.Metadata>
             <Comment.Text>
@@ -169,5 +173,6 @@ StatementTemplate.propTypes = {
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     isParent: PropTypes.bool.isRequired,
-    updateReactions: PropTypes.func // not necessary if this component is used for simply showing the statement.
+    updateReactions: PropTypes.func, // not necessary if this component is used for simply showing the statement.
+    reaction: PropTypes.number
 }
