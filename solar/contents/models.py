@@ -38,6 +38,9 @@ class Statement(models.Model):
     def __str__(self):
         return "{author} says: {content}".format(author=self.author.user.username, content=self.content)
 
+    class Meta:
+        ordering = ('-created',)
+
     def save(self, *args, **kwargs) -> None:
         """
         This method adds hashtags relations after the statement is saved.

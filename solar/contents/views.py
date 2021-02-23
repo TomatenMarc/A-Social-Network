@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from contents.models import Statement
-from contents.serializers import StatementSerializer, StatementObservationSerializer
+from contents.serializers import StatementObservationSerializer
 
 logger = logging.getLogger(__name__)
 
