@@ -94,6 +94,16 @@ class Statement(models.Model):
         """
         return list(Reaction.objects.filter(parent=self))
 
+    def get_reaction_to_parent(self) -> Optional['Reaction']:
+        """
+        This method returns the reaction relation to the parent if this statement is used as an reaction.
+        :return: Reaction to the parent if there is one. Else none.
+        """
+        reaction: List[Reaction] = Reaction.objects.filter(child=self)
+        if len(reaction) == 0:
+            return None
+        return reaction[0]
+
     def get_parent(self) -> Optional['Statement']:
         """
         This method is for getting the parent if of an statement if this statement is an reaction.
