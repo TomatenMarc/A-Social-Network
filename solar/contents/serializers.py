@@ -28,7 +28,7 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = ('user', 'image',)
 
 
-class StatementSerializer(serializers.ModelSerializer):
+class SimpleStatementSerializer(serializers.ModelSerializer):
     """
     This serializer serializes the statements and their content.
     It can be used to serialize content of a statement.
@@ -47,11 +47,25 @@ class ReactionSerializer(serializers.ModelSerializer):
     This serializer is for reactions.
     It will return the serialized reaction and shows the id, vote and the child statement.
     """
-    child = StatementSerializer()
+    child = SimpleStatementSerializer()
+    parent = SimpleStatementSerializer()
 
     class Meta:
         model = Reaction
-        fields = ('id', 'vote', 'child')
+        fields = ('id', 'vote', 'child', 'parent')
+
+
+class StatementSerializer(SimpleStatementSerializer):
+    """
+    This is more then the simple statement serializer.
+    With this serializer one can also get information regarding the connection to the parent.
+    Todo: Is there a way to combine each statement with parent and child information and shorten the frontend?
+    """
+    relation_to_parent = serializers.ListField(source='get_reaction_to_parent', child=ReactionSerializer())
+
+    class Meta:
+        model = Statement
+        fields = SimpleStatementSerializer.Meta.fields + ('relation_to_parent',)
 
 
 class StatementObservationSerializer(StatementSerializer):
@@ -63,4 +77,4 @@ class StatementObservationSerializer(StatementSerializer):
 
     class Meta:
         model = Statement
-        fields = StatementSerializer.Meta.fields + ('reactions', 'created')
+        fields = StatementSerializer.Meta.fields + ('reactions',)

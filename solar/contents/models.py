@@ -94,7 +94,7 @@ class Statement(models.Model):
         """
         return list(Reaction.objects.filter(parent=self))
 
-    def get_reaction_to_parent(self) -> Optional['Reaction']:
+    def get_reaction_to_parent(self) -> Optional[List['Reaction']]:
         """
         This method returns the reaction relation to the parent if this statement is used as an reaction.
         :return: Reaction to the parent if there is one. Else none.
@@ -102,7 +102,8 @@ class Statement(models.Model):
         reaction: List[Reaction] = Reaction.objects.filter(child=self)
         if len(reaction) == 0:
             return None
-        return reaction[0]
+        # todo: is there a way to use the instance and not a list in the reaction serialize, if so, also change frontend
+        return reaction
 
     def get_parent(self) -> Optional['Statement']:
         """

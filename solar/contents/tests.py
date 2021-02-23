@@ -129,4 +129,4 @@ class TestGetStatement(APITestCase):
         self.assertEqual(reaction["child"]["id"], self.statement_2.id)
         self.assertEqual(self.statement_2.get_parent(), self.statement_1)
         self.assertIsNone(self.statement_1.get_parent())
-        self.assertEqual(self.statement_2.get_reaction_to_parent().vote, 2)
+        self.assertEqual(self.statement_2.get_reaction_to_parent()[0].vote, 2)
