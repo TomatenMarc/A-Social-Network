@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from accounts.models import Account
 from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer
 from contents.models import Statement
+from contents.serializers import ReactionSerializer, StatementSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -181,6 +182,11 @@ class AddStatement(APIView):
         This method handles the post of an new statement.
         :param request: The request to be handled, containing the input.
         :return: Response with an 200 OK if everything is okay. 400 if there is no statement input.
+        If there is an reaction then this will return 200 and the serialized reaction.
+        This is necessary, because the frontend must only add this element to the overview of reaction and needs the
+        analysis regarding the mentions and tags by the backend.
+        todo: Make it possible for single statement
+
         """
         account: Account = Account.objects.filter(user=request.user).first()
         statement: str = request.data.get("input", None)
@@ -192,5 +198,8 @@ class AddStatement(APIView):
         if reaction:
             parent: Statement = Statement.objects.get(id=reaction.get("to"))
             vote: int = 1 if reaction.get("relation") == "support" else 2
-            parent.add_reaction(reaction_statement=statement, vote=vote)
-        return Response(status=status.HTTP_200_OK)
+            reaction, _ = parent.add_reaction(reaction_statement=statement, vote=vote)
+            serializer: ReactionSerializer = ReactionSerializer(instance=reaction, many=False)
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        serializer: StatementSerializer = StatementSerializer(instance=statement, many=False)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
