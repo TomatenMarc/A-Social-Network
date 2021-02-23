@@ -37,12 +37,12 @@ class TestStatement(TestCase):
     def test_account_has_statement_from_database(self):
         statements: List[Statement] = self.account_bernd.get_statements()
         self.assertNotEqual(statements, [])
-        self.assertEqual(statements[0], self.statement)
+        self.assertEqual(statements[1], self.statement)
 
     def test_account_can_add_statement(self):
         self.account_bernd.add_statement("I <3 burgers")
         self.assertEqual(len(self.account_bernd.get_statements()), 3)
-        self.assertEqual(self.account_bernd.get_statements()[2].content, "I <3 burgers")
+        self.assertEqual(self.account_bernd.get_statements()[0].content, "I <3 burgers")
 
     def test_statement_resolves_hashtags(self):
         hashtags = self.statement_with_hashtags_and_mentioning.get_hashtags()
