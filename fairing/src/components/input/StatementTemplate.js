@@ -101,7 +101,11 @@ export const StatementTemplate = (props) => {
     /**
      * This returns the statement in the form of an comment.
      */
-    return <Comment>
+    return <Comment style={{
+        border: "#6eb1db solid 1px",
+        borderRadius: 10,
+        padding: 10
+    }}>
         <Comment.Avatar as={Link} to={"/public/account/".concat(props.item.author.user.id)} src={props.image}/>
         <Comment.Content>
             <Comment.Author as={Link}
@@ -113,6 +117,41 @@ export const StatementTemplate = (props) => {
                 }
                 <TimeAgo date={props.item["created"]}/>
             </Comment.Metadata>
+            {
+                /**
+                 * This is for showing if an statement is an reaction to another statement.
+                 * Notice, that this is not used if the statement is used in the header for statement observation.
+                 * This is because of the isParent flag.
+                 * Therefore, if there is parent of this statement and if this statement is not used in observation mode
+                 * then the parent will be shown as well.
+                 * Todo: Is isParent a good name ?
+                 */
+                props.item["relation_to_parent"] && !props.isParent ? <div>
+                    <div style={{
+                        fontStyle: "italic"
+                    }}>
+                        {"voted with "}
+                        {
+                            props.item["relation_to_parent"][0]["vote"] === 1 ?
+                                <Icon name='thumbs up'
+                                      color={"green"}/> : props.item["relation_to_parent"][0]["vote"] === 2
+                                ? <Icon name='thumbs down' color={"red"}/> : null
+                        }
+                        {"for "}
+                    </div>
+                    <StatementTemplate
+                        item={props.item["relation_to_parent"][0].parent}
+                        name={props.item["relation_to_parent"][0].parent.author.user.username}
+                        image={process.env.REACT_APP_API_URL.concat(props.item["relation_to_parent"][0].parent.author.image)}
+                        isParent={false}
+                    />
+                    <div style={{
+                        fontStyle: "italic"
+                    }}>
+                        {" because: "}
+                    </div>
+                </div> : null
+            }
             <Comment.Text>
                 {
                     linkHashtagAndMentions()
