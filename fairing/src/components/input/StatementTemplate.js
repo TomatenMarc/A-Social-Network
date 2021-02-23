@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {useHistory} from "react-router";
 import StatementInput from "./StatementInput";
 import {PropTypes} from "prop-types";
+import TimeAgo from "react-timeago";
 
 export const StatementTemplate = (props) => {
     /**
@@ -105,6 +106,9 @@ export const StatementTemplate = (props) => {
         <Comment.Content>
             <Comment.Author as={Link}
                             to={"/public/account/".concat(props.item.author.user.id)}>{props.name}</Comment.Author>
+            <Comment.Metadata>
+                <TimeAgo date={props.item["created"]}/>
+            </Comment.Metadata>
             <Comment.Text>
                 {
                     linkHashtagAndMentions()

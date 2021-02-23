@@ -39,7 +39,7 @@ class StatementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Statement
-        fields = ('id', 'author', 'content', 'tagged', 'mentioned',)
+        fields = ('id', 'author', 'content', 'tagged', 'mentioned', 'created')
 
 
 class ReactionSerializer(serializers.ModelSerializer):
@@ -63,4 +63,4 @@ class StatementObservationSerializer(StatementSerializer):
 
     class Meta:
         model = Statement
-        fields = StatementSerializer.Meta.fields + ('reactions',)
+        fields = StatementSerializer.Meta.fields + ('reactions', 'created')
