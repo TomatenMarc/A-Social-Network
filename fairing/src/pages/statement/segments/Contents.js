@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Comment, Segment} from "semantic-ui-react";
-import {StatementTemplate} from "../../../components/input/StatementTemplate";
+import {Comment, List, Segment, Transition} from "semantic-ui-react";
 import {PropTypes} from "prop-types";
 import EmptyContentInformation from "../../../components/EmptyContentInformation";
+import {StatementTemplate} from "../../../components/input/StatementTemplate";
 
 class Contents extends Component {
     /**
@@ -25,16 +25,27 @@ class Contents extends Component {
         return (
             <Segment basic>
                 <Comment.Group>
-                    {
-                        this.props.parent["reactions"].map((item, index) => {
-                            return <StatementTemplate
-                                key={index}
-                                isParent={false}
-                                name={item.child.author.user.username}
-                                image={process.env.REACT_APP_API_URL.concat(item.child.author.image)}
-                                item={item.child}/>
-                        })
-                    }
+                    <Transition.Group
+                        as={List}
+                        animation={"drop"}
+                        duration={500}
+                        divided
+                    >
+                        { // todo: find other ways to animate the first element without sorting and reversing
+                            this.props.parent["reactions"].sort(function (a, b) {
+                                return a.id > b.id // ids are representative for timestamps
+                            }).map((item, index) => {
+                                return <List.Item key={index}>
+                                    <StatementTemplate
+                                        key={index}
+                                        isParent={false}
+                                        name={item.child.author.user.username}
+                                        image={process.env.REACT_APP_API_URL.concat(item.child.author.image)}
+                                        item={item.child}/>
+                                </List.Item>
+                            }).reverse()//to reverse the animation.
+                        }
+                    </Transition.Group>
                 </Comment.Group>
             </Segment>
         );
