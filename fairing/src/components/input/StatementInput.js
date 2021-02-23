@@ -23,7 +23,8 @@ class StatementInput extends Component {
         context: PropTypes.object.isRequired,
         sticky: PropTypes.bool.isRequired,
         handleClose: PropTypes.func,
-        reaction: PropTypes.object
+        reaction: PropTypes.object,
+        updateReactions: PropTypes.func
     };
 
     /**
@@ -88,6 +89,11 @@ class StatementInput extends Component {
                     // this should be called after sending the input.
                     if (this.props.handleClose)
                         this.props.handleClose()
+                    // if there is an function provided to update the reactions of an parent and the validated input
+                    // of the backend contains the information vote (indicating) and reaction, then this must be added
+                    // to the parent statement to update the content view.
+                    if (this.props.updateReactions && res.data.vote)
+                        this.props.updateReactions(res.data)
                 }
             }).catch((error) => {
                 this.setState({

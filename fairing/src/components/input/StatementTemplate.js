@@ -145,6 +145,7 @@ export const StatementTemplate = (props) => {
         {
             // If the StatementTemplate is used for reacting then there must be the option to close the input.
             openReactionInput ? <StatementInput
+                updateReactions={props.updateReactions}
                 handleClose={handleClose}
                 reaction={{
                     relation: reaction,
@@ -163,5 +164,6 @@ StatementTemplate.propTypes = {
     // todo: nest name and image to an object (account)
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    isParent: PropTypes.bool.isRequired
+    isParent: PropTypes.bool.isRequired,
+    updateReactions: PropTypes.func // not necessary if this component is used for simply showing the statement.
 }

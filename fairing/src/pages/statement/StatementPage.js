@@ -33,6 +33,7 @@ class StatementPage extends Component {
             parent: {},
             loading: true
         }
+        this.updateReactions = this.updateReactions.bind(this);
     }
 
     /**
@@ -64,6 +65,18 @@ class StatementPage extends Component {
     }
 
     /**
+     * This methods updates the reactions regarding an statement.
+     * Therefore not each reaction must be reload if one adds an reaction.
+     * For update all reaction one can refresh the window.
+     * @param reaction (object) to be added to the reactions of the parent.
+     */
+    updateReactions = (reaction) => {
+        let parent = {...this.state.parent}
+        parent["reactions"] = [reaction].concat(parent["reactions"])
+        this.setState({parent})
+    }
+
+    /**
      * This component shows an statement as an parent of reactions.
      * If the data is loading then an loading screen is shown.
      * @returns {JSX.Element}
@@ -74,7 +87,9 @@ class StatementPage extends Component {
         return (
             <div>
                 <MenuBar/>
-                <Heading parent={this.state.parent}/>
+                <Heading
+                    updateReactions={this.updateReactions}
+                    parent={this.state.parent}/>
                 <ContentView menuOffset={65}
                              parent={this.state.parent}/>
                 <Footer/>

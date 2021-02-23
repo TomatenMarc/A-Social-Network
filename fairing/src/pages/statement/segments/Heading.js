@@ -7,10 +7,13 @@ import {PropTypes} from "prop-types";
 class Heading extends Component {
     /**
      * This component requires an parent element (statement) to be shown.
+     * Since the reactions can be added in the headed statement one must provide
+     * an function to add an element to the parents reactions.
      * @type {{parent: *}}
      */
     static propTypes = {
-        parent: PropTypes.object.isRequired
+        parent: PropTypes.object.isRequired,
+        updateReactions: PropTypes.func.isRequired
     };
 
     /**
@@ -50,7 +53,9 @@ class Heading extends Component {
                                     isParent={true}
                                     name={this.props.parent.author.user.username}
                                     image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
-                                    item={this.state.parent}/>
+                                    item={this.state.parent}
+                                    updateReactions={this.props.updateReactions}
+                                />
                             </Comment.Group>
                         </Grid.Row>
                     </Grid>
