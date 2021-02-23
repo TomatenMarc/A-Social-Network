@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from django.apps import apps
 from django.db import models
@@ -93,6 +93,16 @@ class Statement(models.Model):
         :return: List of all reactions to the calling statement
         """
         return list(Reaction.objects.filter(parent=self))
+
+    def get_parent(self) -> Optional['Statement']:
+        """
+        This method is for getting the parent if of an statement if this statement is an reaction.
+        :return: The parent statement of the reaction. If there is no parent then None is returned.
+        """
+        parents: List['Statement'] = self.reaction_of.all()
+        if len(parents) == 0:
+            return None
+        return parents[0]
 
     def __extract_hashtags(self) -> List[str]:
         """
