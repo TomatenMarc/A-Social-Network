@@ -62,19 +62,19 @@ class Statement(models.Model):
             if account:
                 self.add_mentioning(account=account)
 
-    def add_reaction(self, reaction_statement: 'Statement', vote: int) -> bool:
+    def add_reaction(self, reaction_statement: 'Statement', vote: int) -> Tuple['Reaction', bool]:
         """
         This method adds an reaction to the calling statement.
         :param reaction_statement:  The statement to be added as an reaction.
         :param vote: The vote of the reaction regarding the parent element. (Like 1, Dislike 0)
         :return: The reaction as well as the status if the reaction was already existing.
         """
-        _, created = Reaction.objects.get_or_create(
+        reaction, created = Reaction.objects.get_or_create(
             parent=self,
             child=reaction_statement,
             vote=vote
         )
-        return created
+        return reaction, created
 
     def remove_as_reaction(self) -> bool:
         """
