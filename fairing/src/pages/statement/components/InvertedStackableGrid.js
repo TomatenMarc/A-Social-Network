@@ -23,9 +23,9 @@ class InvertedStackableGrid extends Component {
             <Grid columns='equal' padded relaxed>
                 <Grid.Row centered only={"computer tablet"}>
                     <div>
-                        {this.props.left}
-                        {this.props.center}
-                        {this.props.right}
+                        <div style={{margin: 10}}>{this.props.left}</div>
+                        <div style={{margin: 10}}>{this.props.center}</div>
+                        <div style={{margin: 10}}>{this.props.right}</div>
                     </div>
                 </Grid.Row>
                 <Grid.Row centered only={"mobile"}>
