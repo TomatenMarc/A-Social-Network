@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StatementTemplate} from "../../../components/input/StatementTemplate";
-import {Comment, Grid, Segment} from "semantic-ui-react";
+import {Comment, Segment} from "semantic-ui-react";
 import HeadingTemplate from "../../../components/HeadingTemplate";
 import {PropTypes} from "prop-types";
 
@@ -40,25 +40,20 @@ class Heading extends Component {
                     style={{
                         border: "#6eb1db solid 2px",
                         minWidth: "33%",
-                        borderRadius: "10px",
-                        margin: "10px"
+                        borderRadius: "10px"
                     }}>
-                    <Grid textAlign='center' verticalAlign='middle'>
-                        <Grid.Row>
-                            <Comment.Group
-                                style={{
-                                    margin: "20px"
-                                }}>
-                                <StatementTemplate
-                                    isParent={true}
-                                    name={this.props.parent.author.user.username}
-                                    image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
-                                    item={this.state.parent}
-                                    updateReactions={this.props.updateReactions}
-                                />
-                            </Comment.Group>
-                        </Grid.Row>
-                    </Grid>
+                    <Comment.Group
+                        style={{
+                            margin: "10px"
+                        }}>
+                        <StatementTemplate
+                            isParent={true}
+                            name={this.props.parent.author.user.username}
+                            image={process.env.REACT_APP_API_URL.concat(this.props.parent.author.image)}
+                            item={this.state.parent}
+                            updateReactions={this.props.updateReactions}
+                        />
+                    </Comment.Group>
                 </Segment>
             </HeadingTemplate>
         );
