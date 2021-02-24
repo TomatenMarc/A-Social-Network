@@ -6,6 +6,7 @@ import StatementInput from "./StatementInput";
 import {PropTypes} from "prop-types";
 import TimeAgo from "react-timeago";
 
+// todo: add an option to visit the parent element if this component is used for statement observation
 export const StatementTemplate = (props) => {
     /**
      * This component is a template for an statement.
@@ -181,8 +182,23 @@ export const StatementTemplate = (props) => {
                                     setOpenReactionInput(true)
                                 }}>
                                 <Icon name='thumbs down'/>
-                                Support
+                                Attack
                             </Comment.Action>
+                            {
+                                /**
+                                 * This is used to go to the parent of the statement. If this statement is an reaction.
+                                 */
+                                props.item["relation_to_parent"] ?
+                                    <Comment.Action onClick={() => {
+                                        history.push({
+                                            pathname: "/statement/".concat(props.item["relation_to_parent"][0].parent.id)
+                                        })
+                                    }}>
+                                        <Icon name='hand point up'/>
+                                        Show Context
+                                    </Comment.Action> : null
+                            }
+
                         </div>
 
                 }
