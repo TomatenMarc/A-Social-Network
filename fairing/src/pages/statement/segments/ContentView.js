@@ -3,6 +3,10 @@ import StickyContentGrid from "../../../components/StickyContentGrid";
 import {Segment} from "semantic-ui-react";
 import Contents from "./Contents";
 import {PropTypes} from "prop-types";
+import ReactionInformation from "../components/ReactionInformation";
+import SupportInformation from "../components/SupportInformation";
+import AttackInformation from "../components/AttackInformation";
+import InvertedStackableGrid from "../components/InvertedStackableGrid";
 
 class ContentView extends Component {
     /**
@@ -15,8 +19,7 @@ class ContentView extends Component {
         menuOffset: PropTypes.number.isRequired,
         parent: PropTypes.object.isRequired
     };
-
-
+    
     /**
      * This component shows the reactions and all information regarding the parent statement to be observed.
      * @param props
@@ -38,7 +41,13 @@ class ContentView extends Component {
                         contextRef={this.contextRef}
                         menuOffset={this.props.menuOffset}
                         left={
-                            <div>Pretty empty!</div>
+                            <Segment basic>
+                                <InvertedStackableGrid
+                                    left={<ReactionInformation reactions={this.props.parent.reactions}/>}
+                                    center={<SupportInformation reactions={this.props.parent.reactions}/>}
+                                    right={<AttackInformation reactions={this.props.parent.reactions}/>}
+                                />
+                            </Segment>
                         }
                         center={
                             <Contents parent={this.props.parent}/>
