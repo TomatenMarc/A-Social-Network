@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import MenuBar from "../../components/MenuBar";
 import Heading from "./segments/Heading";
-import ContentView from "../main/segments/ContentView";
 import {PropTypes} from "prop-types";
+import ContentView from "./segments/ContentView";
 
 class TopicPage extends Component {
 
@@ -41,7 +41,7 @@ class TopicPage extends Component {
             <div>
                 <MenuBar/>
                 <Heading tag={this.state.tag}/>
-                <ContentView menuOffset={this.state.menuHeight}/>
+                <ContentView/>
             </div>
         );
     }
