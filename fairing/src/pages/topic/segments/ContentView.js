@@ -13,7 +13,8 @@ class ContentView extends Component {
      */
     static propTypes = {
         menuOffset: PropTypes.number.isRequired,
-        updateReactions: PropTypes.func.isRequired
+        updateReactions: PropTypes.func.isRequired,
+        tag: PropTypes.string.isRequired
     };
 
     /**
@@ -39,6 +40,7 @@ class ContentView extends Component {
                         center={
                             <div>
                                 <StatementInput
+                                    hashtag={this.props.tag}
                                     updateReactions={this.props.updateReactions}
                                     sticky={true}
                                     context={this.contextRef}

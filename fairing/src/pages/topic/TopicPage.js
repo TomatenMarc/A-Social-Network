@@ -57,7 +57,6 @@ class TopicPage extends Component {
                     results: result,
                     loading: false
                 })
-                console.log(this.state.results)
             }
         }).catch(error => {
             this.setState({
@@ -91,6 +90,7 @@ class TopicPage extends Component {
                 <MenuBar/>
                 <Heading tag={this.state.tag}/>
                 <ContentView
+                    tag={this.state.tag}
                     updateReactions={this.updateReactions}
                     menuOffset={this.state.menuHeight}
                     results={this.state.results}

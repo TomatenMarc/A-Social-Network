@@ -24,7 +24,8 @@ class StatementInput extends Component {
         sticky: PropTypes.bool.isRequired,
         handleClose: PropTypes.func,
         reaction: PropTypes.object,
-        updateReactions: PropTypes.func
+        updateReactions: PropTypes.func,
+        hashtag: PropTypes.string
     };
 
     /**
@@ -42,6 +43,7 @@ class StatementInput extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkForHashtagUsed = this.checkForHashtagUsed.bind(this);
     }
 
     /**
@@ -54,6 +56,22 @@ class StatementInput extends Component {
         this.setState({
             input: event.target.value
         })
+    }
+
+    /**
+     * If this component is used in the context of an hashtag observation it must be checked if the
+     * input contains the observed hashtag. If the observed hashtag is not present in the input this method will
+     * append it at the end.
+     * @param input to be checked for the hashtag.
+     * @returns {*}
+     */
+    checkForHashtagUsed = (input) => {
+        if (this.props.hashtag) {
+            if (input.includes(this.props.hashtag))
+                return input
+            return input.concat(" #" + this.props.hashtag)
+        }
+        return input
     }
 
     /**
@@ -70,7 +88,7 @@ class StatementInput extends Component {
         const utkn = cookies.get("utkn")
         if (this.state.input !== "")
             axios.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
-                input: this.state.input,
+                input: this.checkForHashtagUsed(this.state.input),
                 reaction: this.props.reaction
             }, {
                 headers: {
@@ -135,6 +153,14 @@ class StatementInput extends Component {
                                 </Card.Content> : null
                         }
                         <Card.Content>
+                            {
+                                this.props.hashtag ?
+                                    <div style={{
+                                        fontStyle: "italic"
+                                    }}>
+                                        Regarding #{this.props.hashtag}
+                                    </div> : null
+                            }
                             {
                                 // if there is a closing function provided by the parent
                                 // then there must be an element to close the input.
