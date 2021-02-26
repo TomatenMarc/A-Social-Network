@@ -64,7 +64,7 @@ class StatementInput extends Component {
         event.preventDefault()
         // to prevent double sending
         this.setState({
-            input:""
+            input: ""
         })
         const {cookies} = this.props
         const utkn = cookies.get("utkn")
@@ -94,9 +94,9 @@ class StatementInput extends Component {
                     if (this.props.handleClose)
                         this.props.handleClose()
                     // if there is an function provided to update the reactions of an parent and the validated input
-                    // of the backend contains the information vote (indicating) and reaction, then this must be added
+                    // of the backend contains the information vote (indicating) and reaction or an statement itself, then this must be added
                     // to the parent statement to update the content view.
-                    if (this.props.updateReactions && res.data.vote)
+                    if (this.props.updateReactions)
                         this.props.updateReactions(res.data)
                 }
             }).catch((error) => {
