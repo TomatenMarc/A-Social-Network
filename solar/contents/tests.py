@@ -130,3 +130,10 @@ class TestGetStatement(APITestCase):
         self.assertEqual(self.statement_2.get_parent(), self.statement_1)
         self.assertIsNone(self.statement_1.get_parent())
         self.assertEqual(self.statement_2.get_reaction_to_parent()[0].vote, 2)
+
+    def test_statements_with_hashtags_can_be_provided(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_bernd))
+        response: Response = self.client.get(path="/contents/statements/with/hashtag/?q=Foo")
+        self.assertTrue(len(response.data) != 0)
+
+        self.assertEqual(response.data[0]["id"], self.statement_1.id)
