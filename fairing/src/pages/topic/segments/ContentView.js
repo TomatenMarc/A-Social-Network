@@ -20,7 +20,12 @@ class ContentView extends Component {
                     <StickyContentGrid
                         menuOffset={this.props.menuOffset}
                         left={<div>left</div>}
-                        center={<div>middle</div>}
+                        center={
+                            <div>
+                                middle
+                                {console.log(this.props.statements?this.props.statements:"Loading")}
+                            </div>
+                        }
                         right={<div>right</div>}
                         contextRef={this.contextRef}/>
                 </div>
