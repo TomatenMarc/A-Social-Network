@@ -6,12 +6,13 @@ class InvertedStackableGrid extends Component {
     /**
      * This component is the inverted stackable grid as it is not provided by semantic ui.
      * This grid is stacked vertically on mobile and horizontally on computer and tablet.
+     * Depending on the given elements left, center and right the grid size changes.
      * @type {{left: *, center: *, right: *}}
      */
     static propTypes = {
-        left: PropTypes.node.isRequired,
-        center: PropTypes.node.isRequired,
-        right: PropTypes.node.isRequired
+        left: PropTypes.node,
+        center: PropTypes.node,
+        right: PropTypes.node
     }
 
     /**
@@ -23,15 +24,15 @@ class InvertedStackableGrid extends Component {
             <Grid columns='equal' padded relaxed>
                 <Grid.Row centered only={"computer tablet"}>
                     <div>
-                        <div style={{margin: 10}}>{this.props.left}</div>
-                        <div style={{margin: 10}}>{this.props.center}</div>
-                        <div style={{margin: 10}}>{this.props.right}</div>
+                        {this.props.left ? <div style={{margin: 10}}>{this.props.left}</div> : null}
+                        {this.props.center ? <div style={{margin: 10}}>{this.props.center}</div> : null}
+                        {this.props.right ? <div style={{margin: 10}}>{this.props.right}</div> : null}
                     </div>
                 </Grid.Row>
                 <Grid.Row centered only={"mobile"}>
-                    <Grid.Column>{this.props.left}</Grid.Column>
-                    <Grid.Column>{this.props.center}</Grid.Column>
-                    <Grid.Column>{this.props.right}</Grid.Column>
+                    {this.props.left ? <Grid.Column>{this.props.left}</Grid.Column> : null}
+                    {this.props.center ? <Grid.Column>{this.props.center}</Grid.Column> : null}
+                    {this.props.right ? <Grid.Column>{this.props.right}</Grid.Column> : null}
                 </Grid.Row>
             </Grid>
         );

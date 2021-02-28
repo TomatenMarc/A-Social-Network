@@ -4,6 +4,7 @@ import StickyContentGrid from "../../../../components/StickyContentGrid";
 import Contents from "../../segments/Contents";
 import Following from "../../components/Following";
 import Follower from "../../components/Follower";
+import InvertedStackableGrid from "../../../../components/InvertedStackableGrid";
 
 
 class ContentView extends Component {
@@ -32,8 +33,10 @@ class ContentView extends Component {
                         menuOffset={this.props.menuOffset}
                         left={
                             <Segment vertical>
-                                <Following following={this.props.account["related_to"]}/>
-                                <Follower follower={this.props.account["related_by"]}/>
+                                <InvertedStackableGrid
+                                    left={<Following following={this.props.account["related_to"]}/>}
+                                    right={<Follower follower={this.props.account["related_by"]}/>}
+                                />
                             </Segment>
                         }
                         center={

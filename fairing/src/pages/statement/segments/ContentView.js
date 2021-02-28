@@ -6,7 +6,7 @@ import {PropTypes} from "prop-types";
 import ReactionInformation from "../components/ReactionInformation";
 import SupportInformation from "../components/SupportInformation";
 import AttackInformation from "../components/AttackInformation";
-import InvertedStackableGrid from "../components/InvertedStackableGrid";
+import InvertedStackableGrid from "../../../components/InvertedStackableGrid";
 
 class ContentView extends Component {
     /**
