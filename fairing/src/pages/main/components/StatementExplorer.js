@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Button, Container, Header, Image, Label, Card} from "semantic-ui-react";
+import {Button, Card, Header, Image, Label, Segment} from "semantic-ui-react";
 
 class StatementExplorer extends Component {
+    // todo: fill this with life and make it responsive
     selections = [
         /**
          * These are example selection.
@@ -87,7 +88,7 @@ class StatementExplorer extends Component {
 
     render() {
         return (
-            <Container>
+            <Segment basic textAlign={"center"}>
                 <Header as="h1">
                     What do you think?
                 </Header>
@@ -141,7 +142,7 @@ class StatementExplorer extends Component {
                     </Card>
                 </Card.Group>
 
-            </Container>
+            </Segment>
         );
     }
 }

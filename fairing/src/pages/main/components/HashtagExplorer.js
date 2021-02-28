@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Container, Header, Image, Label} from "semantic-ui-react";
+import {Container, Header, Image, Label, Segment} from "semantic-ui-react";
 
 class HashtagExplorer extends Component {
+    // todo: fill this with life and make it responsive
     /**
      * This component will advertise a trending hashtag.
      * It will show the hashtags, the information regarding this hashtag and three participants.
@@ -11,7 +12,7 @@ class HashtagExplorer extends Component {
      */
     render() {
         return (
-            <Container>
+            <Segment basic textAlign={"center"}>
                 <Header as='h3' style={{fontSize: '2em'}}>
                     #Elections
                 </Header>
@@ -34,7 +35,7 @@ class HashtagExplorer extends Component {
                     </Label.Group>
                 </Container>
 
-            </Container>
+            </Segment>
         );
     }
 }

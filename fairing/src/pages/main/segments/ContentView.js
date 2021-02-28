@@ -1,9 +1,12 @@
 import React, {Component, createRef} from 'react';
-import {Image, Segment} from "semantic-ui-react";
+import {Segment} from "semantic-ui-react";
 import StatementInput from "../../../components/input/StatementInput";
 import StickyContentGrid from "../../../components/StickyContentGrid";
 import {PropTypes} from "prop-types";
 import Contents from "./Contents";
+import HashtagExplorer from "../components/HashtagExplorer";
+import StatementExplorer from "../components/StatementExplorer";
+import AccountExplorer from "./AccountExplorer";
 
 class ContentView extends Component {
 
@@ -48,9 +51,10 @@ class ContentView extends Component {
                         contextRef={this.contextRef}
                         menuOffset={this.props.menuOffset}
                         left={
-                            <Segment basic>
-                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
-                            </Segment>
+                            <div>
+                                <StatementExplorer/>
+                                <HashtagExplorer/>
+                            </div>
                         }
                         center={
                             <div>
@@ -63,9 +67,7 @@ class ContentView extends Component {
                             </div>
                         }
                         right={
-                            <Segment basic>
-                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png'/>
-                            </Segment>
+                            <AccountExplorer/>
                         }
                     >
                     </StickyContentGrid>

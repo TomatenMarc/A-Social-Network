@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Heading from "./segments/Heading";
-import SocialExplorer from "./segments/SocialExplorer";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
 import AccountExplorer from "./segments/AccountExplorer";
@@ -77,8 +76,6 @@ class MainPage extends Component {
             <div>
                 <MenuBar/>
                 <Heading/>
-                <SocialExplorer/>
-                <AccountExplorer/>
                 <ContentView
                     updateReactions={this.updateReactions}
                     menuOffset={this.state.menuHeight}
