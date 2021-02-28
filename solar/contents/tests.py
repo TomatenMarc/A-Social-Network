@@ -137,3 +137,34 @@ class TestGetStatement(APITestCase):
         self.assertTrue(len(response.data) != 0)
 
         self.assertEqual(response.data[0]["id"], self.statement_1.id)
+
+
+class TestGetStatementFeed(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
+        self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
+
+        self.user_beate = User.objects.create_user(username="Beate", email="Rote@Beate.de", password="Beate")
+        self.account_beate: Account = Account.objects.create(user=self.user_beate)
+        self.account_beate.add_relationship(self.account_bernd)
+        self.token_beate = Token.objects.create(user=self.user_beate)
+
+        self.statement_1: Statement = Statement.objects.create(author=self.account_bernd, content="I like @Bernd #Foo")
+        self.statement_2: Statement = Statement.objects.create(author=self.account_bernd, content="I like Beate")
+        self.statement_3: Statement = Statement.objects.create(author=self.account_beate, content="I like Bernd")
+        self.statement_1.add_reaction(self.statement_2, 2)
+
+    def test_feed_contains_correct_data(self):
+        self.statement_1.add_reaction(self.statement_2, 2)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
+        response: Response = self.client.get(path="/contents/statements/feed/")
+        result = response.data
+        self.assertTrue(len(result), 3)
+        self.assertEqual(result[0].get("id"), self.statement_3.id)
+        self.assertEqual(result[1].get("id"), self.statement_2.id)
+        self.assertEqual(result[2].get("id"), self.statement_1.id)
+        self.assertTrue(result[0].get("id") > result[1].get("id"))
+        self.assertTrue(result[0].get("created") > result[1].get("created"))
+        self.assertTrue(result[1].get("id") > result[2].get("id"))
+        self.assertTrue(result[1].get("created") > result[2].get("created"))
