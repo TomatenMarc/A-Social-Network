@@ -3,6 +3,7 @@ import {Segment} from "semantic-ui-react";
 import StickyContentGrid from "../../../../components/StickyContentGrid";
 import Following from "../../components/Following";
 import Contents from "../../segments/Contents";
+import InvertedStackableGrid from "../../../../components/InvertedStackableGrid";
 
 class ContentView extends Component {
 
@@ -25,7 +26,8 @@ class ContentView extends Component {
                         menuOffset={this.props.menuOffset}
                         left={
                             <Segment vertical>
-                                <Following following={this.props.account["related_to"]}/>
+                                <InvertedStackableGrid
+                                    center={<Following following={this.props.account["related_to"]}/>}/>
                             </Segment>
                         }
                         center={
