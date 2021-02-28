@@ -26,7 +26,7 @@ class StickyContentGrid extends Component {
      */
     render() {
         return (
-            <Grid centered columns={3} stackable divided>
+            <Grid centered columns={3} stackable divided style={{minHeight: "33vh"}}>
                 {/*
                     The following two elements are shown above the center part on mobile view.
                     On mobile the left and right elements are not sticky.
@@ -39,17 +39,17 @@ class StickyContentGrid extends Component {
                     {this.props.right}
                 </Grid.Column>
 
-                <Grid.Column only={"computer tablet"}>
+                <Grid.Column only={"computer tablet"} style={{maxWidth: "25vw"}}>
                     <Sticky context={this.props.contextRef} offset={this.props.menuOffset}>
                         {this.props.left}
                     </Sticky>
                 </Grid.Column>
 
-                <Grid.Column>
+                <Grid.Column style={{minWidth: "50vw"}}>
                     {this.props.center}
                 </Grid.Column>
 
-                <Grid.Column only={"computer tablet"}>
+                <Grid.Column only={"computer tablet"} style={{maxWidth: "25vw"}}>
                     <Sticky context={this.props.contextRef} offset={this.props.menuOffset}>
                         {this.props.right}
                     </Sticky>

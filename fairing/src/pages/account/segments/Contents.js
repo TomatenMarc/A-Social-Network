@@ -23,7 +23,7 @@ class Contents extends Component {
             return <EmptyContentInformation/>
         return (
             <Segment basic>
-                <Comment.Group>
+                <Comment.Group style={{minWidth: "100%"}}>
                     {
                         this.props.account["statements"].map((item, index) => {
                             return <StatementTemplate
