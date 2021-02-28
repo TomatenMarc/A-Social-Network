@@ -1,12 +1,9 @@
 import React, {Component, createRef} from 'react';
 import {Image, Segment} from "semantic-ui-react";
 import StatementInput from "../../../components/input/StatementInput";
-import _ from "lodash";
 import StickyContentGrid from "../../../components/StickyContentGrid";
 import {PropTypes} from "prop-types";
-
-
-const Placeholder = () => <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png'/>
+import Contents from "./Contents";
 
 class ContentView extends Component {
 
@@ -58,11 +55,7 @@ class ContentView extends Component {
                                     sticky={true}
                                     context={this.contextRef}
                                     offset={this.props.menuOffset}/>
-                                <Segment>
-                                    {_.times(10, (i) => (
-                                        <Placeholder key={i}/>
-                                    ))}
-                                </Segment>
+                                <Contents/>
                             </div>
                         }
                         right={
