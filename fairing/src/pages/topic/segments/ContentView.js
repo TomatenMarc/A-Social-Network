@@ -14,7 +14,8 @@ class ContentView extends Component {
     static propTypes = {
         menuOffset: PropTypes.number.isRequired,
         updateReactions: PropTypes.func.isRequired,
-        tag: PropTypes.string.isRequired
+        tag: PropTypes.string.isRequired,
+        results: PropTypes.array.isRequired
     };
 
     /**

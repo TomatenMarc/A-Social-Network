@@ -11,10 +11,13 @@ class ContentView extends Component {
      * This component is the content view of the main page.
      * Notice: The view must provide a context for the sticky elements in the grid.
      * Also the middle element does not contain a stick element for customization purpose.
+     * This component also passes the results of the statement feed down to the content view.
      * @type {{menuOffset: *}}
      */
     static propTypes = {
-        menuOffset: PropTypes.number.isRequired
+        menuOffset: PropTypes.number.isRequired,
+        results: PropTypes.object.isRequired,
+        updateReactions: PropTypes.func.isRequired
     };
 
     /**
@@ -52,10 +55,11 @@ class ContentView extends Component {
                         center={
                             <div>
                                 <StatementInput
+                                    updateReactions={this.props.updateReactions}
                                     sticky={true}
                                     context={this.contextRef}
                                     offset={this.props.menuOffset}/>
-                                <Contents/>
+                                <Contents results={this.props.results}/>
                             </div>
                         }
                         right={
