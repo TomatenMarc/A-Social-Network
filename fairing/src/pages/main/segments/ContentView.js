@@ -52,7 +52,6 @@ class ContentView extends Component {
                         menuOffset={this.props.menuOffset}
                         left={
                             <div>
-                                <StatementExplorer/>
                                 <HashtagExplorer/>
                             </div>
                         }

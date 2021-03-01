@@ -33,7 +33,8 @@ function PrivateRoute({component: Component, ...rest}) {
             }
         }).catch((err) => {
             setAuth(false);
-            removeCookie('utkn')
+            //todo: maybe wrong?
+            //removeCookie('utkn')
         }).then(() =>
             setTimeout(function () {
                 setIsTokenValidated(true)

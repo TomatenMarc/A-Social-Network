@@ -15,7 +15,7 @@ class ContentView extends Component {
         menuOffset: PropTypes.number.isRequired,
         updateReactions: PropTypes.func.isRequired,
         tag: PropTypes.string.isRequired,
-        results: PropTypes.array.isRequired
+        results: PropTypes.object.isRequired
     };
 
     /**
