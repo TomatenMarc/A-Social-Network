@@ -15,6 +15,17 @@ class HashtagSerializer(serializers.ModelSerializer):
         fields = ("id", "tag",)
 
 
+class TrendingHashtagSerializer(HashtagSerializer):
+    count = serializers.SerializerMethodField('_count')
+
+    def _count(self, obj: Hashtag):
+        return self.context["counted"][obj.id]
+
+    class Meta:
+        model = Hashtag
+        fields = HashtagSerializer.Meta.fields + ('count',)
+
+
 class AccountSerializer(serializers.ModelSerializer):
     """
     This serializer serializes the accounts and their data.

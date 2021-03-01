@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from accounts.models import Account
 from contents.models import Statement, Hashtag, HashtagTagging
-from contents.serializers import StatementObservationSerializer, StatementSerializer
+from contents.serializers import StatementObservationSerializer, StatementSerializer, TrendingHashtagSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -98,10 +98,16 @@ class ShowTrendingHashtag(APIView):
 
     @staticmethod
     def get(request: Request):
-        hashtags: QuerySet[Dict] = HashtagTagging.objects.values('hashtag__tag', 'hashtag')
+        hashtags: QuerySet[Dict] = HashtagTagging.objects.values('hashtag')
         hashtags_counted: QuerySet[Dict] = hashtags.annotate(
             the_count=Count('hashtag')
         ).order_by("-the_count")
+        counted: Dict = {item["hashtag"]: item["the_count"] for item in hashtags_counted}
+        hashtags: QuerySet[Hashtag] = Hashtag.objects.filter(id__in=counted.keys())
         if not hashtags_counted:
             return Response(status=status.HTTP_200_OK, data={"empty": True})
-        return Response(status=status.HTTP_200_OK, data=hashtags_counted)
+        serializer: TrendingHashtagSerializer = TrendingHashtagSerializer(
+            instance=hashtags,
+            many=True,
+            context={"counted": counted})
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
