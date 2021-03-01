@@ -1,8 +1,8 @@
 import logging
 # Create your views here.
-from typing import Optional, List
+from typing import Optional, List, Dict
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Count
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
-from contents.models import Statement, Hashtag
+from contents.models import Statement, Hashtag, HashtagTagging
 from contents.serializers import StatementObservationSerializer, StatementSerializer
 
 logger = logging.getLogger(__name__)
@@ -92,3 +92,16 @@ class ShowStatementFeed(APIView):
         feed: QuerySet[Statement] = Statement.objects.filter(author__in=following)
         serializer: StatementSerializer = StatementSerializer(instance=feed, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+
+class ShowTrendingHashtag(APIView):
+
+    @staticmethod
+    def get(request: Request):
+        hashtags: QuerySet[Dict] = HashtagTagging.objects.values('hashtag__tag', 'hashtag')
+        hashtags_counted: QuerySet[Dict] = hashtags.annotate(
+            the_count=Count('hashtag')
+        ).order_by("-the_count")
+        if not hashtags_counted:
+            return Response(status=status.HTTP_200_OK, data={"empty": True})
+        return Response(status=status.HTTP_200_OK, data=hashtags_counted)
