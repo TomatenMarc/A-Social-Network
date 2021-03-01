@@ -95,9 +95,25 @@ class ShowStatementFeed(APIView):
 
 
 class ShowTrendingHashtag(APIView):
+    """
+    This view is for getting the five most trending hashtags.
+    The calling user must be authenticated.
+    Also the calling user is not included as an participant of the hashtag,
+    since those others are for recommendation.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def get(request: Request):
+        """
+        This method handles the request for trending hashtags.
+        Therefore the tagging of hashtags are counted and turned into an trending hashtag representation.
+        The TrendingHashtagSerializer adds all needed information like the count of uses and other participants.
+        The calling account is excluded from the participants.
+        :param request: Request containing the the token for identification.
+        :return: 200 OK with empty or not empty data section. The data section is empty if there are not hashtags.
+        """
         hashtags: QuerySet[Dict] = HashtagTagging.objects.values('hashtag')
         hashtags_counted: QuerySet[Dict] = hashtags.annotate(
             the_count=Count('hashtag')
@@ -105,9 +121,9 @@ class ShowTrendingHashtag(APIView):
         counted: Dict = {item["hashtag"]: item["the_count"] for item in hashtags_counted}
         hashtags: QuerySet[Hashtag] = Hashtag.objects.filter(id__in=counted.keys())
         if not hashtags_counted:
-            return Response(status=status.HTTP_200_OK, data={"empty": True})
+            return Response(status=status.HTTP_200_OK, data=[])
         serializer: TrendingHashtagSerializer = TrendingHashtagSerializer(
             instance=hashtags,
             many=True,
-            context={"counted": counted})
+            context={"counted": counted, "calling_user": request.user.id})
         return Response(status=status.HTTP_200_OK, data=serializer.data)

@@ -1,6 +1,10 @@
+from typing import OrderedDict
+
 from django.apps import apps
+from django.db.models import QuerySet
 from rest_framework import serializers
 
+from accounts.models import Account
 from authentication.serializers import UserPublicSerializer
 from .models import Statement, Hashtag, Reaction
 
@@ -16,14 +20,44 @@ class HashtagSerializer(serializers.ModelSerializer):
 
 
 class TrendingHashtagSerializer(HashtagSerializer):
+    """
+    This serializer is for the serialization of trending hashtags.
+    In addition to the serialization of the hashtags this serializer adds the usage and participants.
+    This serializer needs an context. The context must include:
+        - counted: Dict with the hashtag id as key and the usage as value.
+        - calling_user: Id of the calling user.
+    """
     count = serializers.SerializerMethodField('_count')
+    participants = serializers.SerializerMethodField('_participants')
 
-    def _count(self, obj: Hashtag):
+    def _count(self, obj: Hashtag) -> int:
+        """
+        This method adds the precalculated usage of the hashtag.
+        :param obj: The current hashtag.
+        :return: The amount of usage of the specific hashtag.
+        """
         return self.context["counted"][obj.id]
+
+    def _participants(self, obj: Hashtag) -> OrderedDict:
+        """
+        This method takes all usage of the hashtag in combination ith an statements and returns the authors.
+        Therefore one can get the participants of an conversation regarding this hashtag.
+        The calling account is excluded from the results.
+        :param obj: The current hashtag.
+        :return: The participants of an hashtag with out the requesting account.
+        """
+        tagged: QuerySet[HashtagTagging] = HashtagTagging.objects.filter(hashtag=obj.id)
+        tagged = tagged.exclude(statement__author=self.context["calling_user"])
+
+        authors: QuerySet[Account] = Account.objects.filter(
+            user__id__in=tagged.values_list('statement__author', flat=True).distinct()
+        )
+        serializer: AccountSerializer = AccountSerializer(instance=authors, many=True)
+        return serializer.data
 
     class Meta:
         model = Hashtag
-        fields = HashtagSerializer.Meta.fields + ('count',)
+        fields = HashtagSerializer.Meta.fields + ('count', 'participants')
 
 
 class AccountSerializer(serializers.ModelSerializer):
