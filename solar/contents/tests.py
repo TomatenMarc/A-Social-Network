@@ -168,3 +168,39 @@ class TestGetStatementFeed(APITestCase):
         self.assertTrue(result[0].get("created") > result[1].get("created"))
         self.assertTrue(result[1].get("id") > result[2].get("id"))
         self.assertTrue(result[1].get("created") > result[2].get("created"))
+
+
+class TestTrendingHashtag(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user_bernd = User.objects.create_user(username="Bernd", email="Bernd@Brot.de", password="Brot")
+        self.account_bernd: Account = Account.objects.create(user=self.user_bernd)
+
+        self.user_beate = User.objects.create_user(username="Beate", email="Rote@Beate.de", password="Beate")
+        self.account_beate: Account = Account.objects.create(user=self.user_beate)
+        self.token_beate = Token.objects.create(user=self.user_beate)
+
+    def test_trending_hashtag_is_empty(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
+        response: Response = self.client.get(path="/contents/trending/hashtag/")
+        self.assertEqual(response.data, [])
+
+    def test_trending_hashtag_not_empty(self):
+        self.statement_1: Statement = Statement.objects.create(author=self.account_bernd, content="#Foo#Bar!")
+        self.statement_2: Statement = Statement.objects.create(author=self.account_beate, content="#Foo #Bar#Baz")
+        self.statement_3: Statement = Statement.objects.create(author=self.account_beate,
+                                                               content="I like @Beate#Foo#Baz#Bizz!")
+        self.statement_1.add_reaction(self.statement_3, 2)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + str(self.token_beate))
+        response: Response = self.client.get(path="/contents/trending/hashtag/")
+        self.assertEqual(response.data[0]["count"], 3)
+        self.assertEqual(response.data[0]["tag"], "Foo")
+        self.assertEqual(len(response.data[0]["participants"]), 1)
+        self.assertEqual(response.data[0]["participants"][0]["user"]["id"], self.user_bernd.id)
+        self.assertEqual(response.data[1]["count"], 2)
+        self.assertEqual(response.data[1]["tag"], "Bar")
+        self.assertEqual(len(response.data[1]["participants"]), 1)
+        self.assertEqual(response.data[1]["participants"][0]["user"]["id"], self.user_bernd.id)
+        self.assertTrue(response.data[2]["count"], 2)
+        self.assertEqual(response.data[2]["tag"], "Baz")
+        self.assertEqual(len(response.data[2]["participants"]), 0)

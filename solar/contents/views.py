@@ -126,4 +126,4 @@ class ShowTrendingHashtag(APIView):
             instance=hashtags,
             many=True,
             context={"counted": counted, "calling_user": request.user.id})
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        return Response(status=status.HTTP_200_OK, data=serializer.data[:3])

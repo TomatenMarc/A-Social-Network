@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from accounts.models import Account
 from authentication.serializers import UserPublicSerializer
-from .models import Statement, Hashtag, Reaction
+from .models import Statement, Hashtag, Reaction, HashtagTagging
 
 
 class HashtagSerializer(serializers.ModelSerializer):
