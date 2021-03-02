@@ -67,7 +67,9 @@ class StatementInput extends Component {
      */
     checkForHashtagUsed = (input) => {
         if (this.props.hashtag) {
-            if (input.includes(this.props.hashtag))
+            if (input.replaceAll(/#(\w+)/g, " #$1 ").split(" ").map((input, index) => {
+                return input === "#" + this.props.hashtag
+            }).includes(true))
                 return input
             return input.concat(" #" + this.props.hashtag)
         }
