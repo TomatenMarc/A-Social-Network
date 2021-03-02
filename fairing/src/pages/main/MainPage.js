@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Heading from "./segments/Heading";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
-import AccountExplorer from "./segments/AccountExplorer";
 import ContentView from "./segments/ContentView";
 import {withCookies} from "react-cookie";
 import axios from "axios";

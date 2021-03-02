@@ -21,7 +21,7 @@ class Contents extends Component {
      * @returns {JSX.Element}
      */
     render() {
-        if (this.props.results.length === 0)
+        if (this.props.results.data.length === 0)
             return <EmptyContentInformation/>
         return (
             <Segment>

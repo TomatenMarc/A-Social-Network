@@ -4,6 +4,7 @@ import {withCookies} from "react-cookie";
 import InvertedStackableGrid from "../../../components/InvertedStackableGrid";
 import {Container, Grid, Header, Icon, Image, Label, List, Segment} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import EmptyHashtagInformation from "../../../components/EmptyHashtagInformation";
 
 class HashtagExplorer extends Component {
     /**
@@ -50,16 +51,20 @@ class HashtagExplorer extends Component {
      * @returns {JSX.Element|null}
      */
     trendingHashtagMobile = (result) => {
-        if (result["participants"].length > 0) {
-            return <Header as={Link} to={"/topic/".concat(result.tag)} style={{
-                margin: 0
-            }} icon textAlign='center'>
-                <Icon name={'hashtag'} circular/>
-                {
-                    result.tag
-                }
-            </Header>
+        if (result !== undefined) {
+
+            if (result["participants"].length > 0) {
+                return <Header as={Link} to={"/topic/".concat(result.tag)} style={{
+                    margin: 0
+                }} icon textAlign='center'>
+                    <Icon name={'hashtag'} circular/>
+                    {
+                        result.tag
+                    }
+                </Header>
+            }
         }
+
         return null
     }
 
@@ -69,26 +74,29 @@ class HashtagExplorer extends Component {
      * @returns {JSX.Element|null}
      */
     trendingHashtag = (result) => {
-        let random = Math.floor(Math.random() * Math.floor(result["participants"].length));
-        let participant = result["participants"][random]
-
-        if (result["participants"].length > 0) {
-            return <List.Item>
-                <Segment basic>
-                    <Header as={Link} to={"/topic/".concat(result.tag)}>
-                        #{result.tag}
-                    </Header>
-                    <Container>
-                        <p>Argue with <b>{result["participants"].length}</b> others like:</p>
-                        <Label as={Link} to={"/public/account/".concat(participant.user.id)} image color={"blue"}>
-                            <Image avatar
-                                   size={"tiny"}
-                                   src={process.env.REACT_APP_API_URL.concat(participant.image)}/>
-                            {participant.user.username}
-                        </Label>
-                    </Container>
-                </Segment>
-            </List.Item>
+        if (result !== undefined) {
+            let random = Math.floor(Math.random() * Math.floor(result["participants"].length));
+            let participant = result["participants"][random]
+            if (result["participants"].length === 0)
+                return <EmptyHashtagInformation/>
+            if (result["participants"].length > 0) {
+                return <List.Item>
+                    <Segment basic>
+                        <Header as={Link} to={"/topic/".concat(result.tag)}>
+                            #{result.tag}
+                        </Header>
+                        <Container>
+                            <p>Argue with <b>{result["participants"].length}</b> others like:</p>
+                            <Label as={Link} to={"/public/account/".concat(participant.user.id)} image color={"blue"}>
+                                <Image avatar
+                                       size={"tiny"}
+                                       src={process.env.REACT_APP_API_URL.concat(participant.image)}/>
+                                {participant.user.username}
+                            </Label>
+                        </Container>
+                    </Segment>
+                </List.Item>
+            }
         }
         return null
     }
@@ -105,6 +113,9 @@ class HashtagExplorer extends Component {
             return <div>
                 Fetching...
             </div>
+        }
+        if (this.state.results.length === 0) {
+            return <EmptyHashtagInformation/>
         }
         return (
             <Grid columns='equal' padded relaxed>

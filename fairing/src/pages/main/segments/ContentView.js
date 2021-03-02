@@ -5,7 +5,6 @@ import StickyContentGrid from "../../../components/StickyContentGrid";
 import {PropTypes} from "prop-types";
 import Contents from "./Contents";
 import HashtagExplorer from "../components/HashtagExplorer";
-import StatementExplorer from "../components/StatementExplorer";
 import AccountExplorer from "./AccountExplorer";
 
 class ContentView extends Component {
