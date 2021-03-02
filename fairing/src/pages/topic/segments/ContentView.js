@@ -4,6 +4,9 @@ import StickyContentGrid from "../../../components/StickyContentGrid";
 import {PropTypes} from "prop-types";
 import Contents from "./Contents";
 import StatementInput from "../../../components/input/StatementInput";
+import InvertedStackableGrid from "../../../components/InvertedStackableGrid";
+import ReactionInformation from "../../statement/components/ReactionInformation";
+import InformationTemplate from "../../statement/components/InformationTemplate";
 
 class ContentView extends Component {
     /**
@@ -25,6 +28,7 @@ class ContentView extends Component {
     constructor(props) {
         super(props);
         this.contextRef = createRef()
+        console.log(props.results)
     }
 
     /**
@@ -37,9 +41,20 @@ class ContentView extends Component {
                 <div ref={this.contextRef}>
                     <StickyContentGrid
                         menuOffset={this.props.menuOffset}
-                        left={<div>left</div>}
+                        left={
+                            <Segment vertical>
+                                <InvertedStackableGrid
+                                    left={<ReactionInformation reactions={this.props.results.data}/>}
+                                    right={<InformationTemplate icon={'group'}>
+                                        {[...new Set(this.props.results.data.map((item, index) => {
+                                            return item.author.user.username
+                                        }))].length} Participants
+                                    </InformationTemplate>}
+                                />
+                            </Segment>
+                        }
                         center={
-                            <div>
+                            <div style={{minHeight: "50vh"}}>
                                 <StatementInput
                                     hashtag={this.props.tag}
                                     updateReactions={this.props.updateReactions}
@@ -49,7 +64,7 @@ class ContentView extends Component {
                                 <Contents results={this.props.results}/>
                             </div>
                         }
-                        right={<div>right</div>}
+                        right={<div>Coming soon!</div>}
                         contextRef={this.contextRef}/>
                 </div>
             </Segment>

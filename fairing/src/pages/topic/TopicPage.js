@@ -5,6 +5,7 @@ import {PropTypes} from "prop-types";
 import ContentView from "./segments/ContentView";
 import axios from "axios";
 import {withCookies} from "react-cookie";
+import Footer from "../../components/Footer";
 
 class TopicPage extends Component {
 
@@ -95,6 +96,7 @@ class TopicPage extends Component {
                     menuOffset={this.state.menuHeight}
                     results={this.state.results}
                 />
+                <Footer/>
             </div>
         );
     }
