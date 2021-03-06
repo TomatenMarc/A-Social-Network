@@ -12,9 +12,10 @@ setup(
     version='0.0.1',
     packages=find_packages(),
     include_package_data=True,
-    license='MIT License',  # example license
+    license='MIT License',
     description='A simple SOcial FrAMEork to enable the development of social networks sites with Django.',
     long_description=README,
+    long_description_content_type="text/markdown",
     url='http://www.marc-feger.de/',
     author='Marc Feger',
     author_email='yourname@example.com',
