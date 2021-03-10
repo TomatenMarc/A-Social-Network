@@ -108,7 +108,7 @@ class Account(models.Model):
         :param new_image: The new image to be added for the account.
         :return: Nothing
         """
-        if self.image != "/account/default/Argunaut.png":
+        if self.image != "account/default/Argunaut.png":
             self.image.delete(save=True)
         self.image = new_image
         self.save()
