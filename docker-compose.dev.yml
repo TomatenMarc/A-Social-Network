@@ -16,7 +16,7 @@ services:
     depends_on:
       - solar
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/development/:/etc/nginx/conf.d
       - ./solar/django_static/:/code/django_static
       - ./solar/media/:/code/media
       - ./fairing/build:/var/www/fairing
