@@ -61,3 +61,30 @@ Otherwise this can also be done manually using:
 
 	$ npm -prefix fairing/ run build
 	$ docker-compose -f docker-compose.dev.yml up
+
+## Production
+
+Again, make sure that the appropriate environment variables from `solar/` and `fairing/` have been set for production mode.
+
+If the entire project is to be put into production mode, then if there is no folder `certbot/` with an existing SSL certificate, `init-letsencrypt.sh` must be downloaded.
+This can be done by using the following command:
+
+	 $ curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
+
+Accordingly, the `domains` and `data_path` fields in `init-letsencrypt.sh` must be adjusted to meet the specifications in `docker-compose.prod.yml`.
+Also, the docker-compose calls must be used so that `docker-compose.prod.yml` is used.
+
+`letsencrypt.sh` can then be run as follows:
+
+	$ chmod +x init-letsencrypt.sh
+	$ ./init-letsencrypt.sh
+
+This will create an initial certificate in `certbot/`.
+
+After doing this, the entire project is up and running and can be used to renew certificates or reboot using the following command.
+
+	$ docker-compose -f docker-compose.prod.yml restart
+
+However, if a certificate already exists and the project has not yet been started, the entire project can be started using the following command.
+
+	$ docker-compose -f docker-compose.prod.yml up -d
