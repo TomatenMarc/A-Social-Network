@@ -19,6 +19,6 @@ Accordingly, separate arrangements must be made for `solar/` and `fairing/`.
 ## fairing/ :rocket:
 * Npm >= 7.7.6
 
-## solar/ :brain:
+## solar/ :sun_with_face:
 * Pipenv >= 2020.8.13
 * Python >= 3.9.0
