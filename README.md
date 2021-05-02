@@ -13,12 +13,12 @@ This project is divided into the backend `solar/` and the frontend `fairing/`.
 Accordingly, separate arrangements must be made for `solar/` and `fairing/`.
 
 ## Infrastructure :whale: 
-* Docker >= 19.03.13
-* Docker-Compose >= 1.27.4
+* [Docker](https://www.docker.com/) >= 19.03.13
+* [Docker-Compose](https://docs.docker.com/compose/) >= 1.27.4
 
 ## fairing/ :rocket:
-* Npm >= 7.7.6
+* [npm](https://www.npmjs.com/) >= 7.7.6
 
 ## solar/ :sun_with_face:
-* Pipenv >= 2020.8.13
-* Python >= 3.9.0
+* [Pipenv](https://github.com/pypa/pipenv) >= 2020.8.13
+* [Python](https://www.python.org/) >= 3.9.0
