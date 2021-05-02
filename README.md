@@ -12,6 +12,11 @@ There are instructions on how to start the respective subprojects as well as inf
 This project is divided into the backend `solar/` and the frontend `fairing/`.
 Accordingly, separate arrangements must be made for `solar/` and `fairing/`.
 
+## IDEs
+
+* [PyCharm](https://www.jetbrains.com/de-de/pycharm/)
+* [Webstorm](https://www.jetbrains.com/de-de/webstorm/)
+
 ## Infrastructure :whale: 
 * [Docker](https://www.docker.com/) >= 19.03.13
 * [Docker-Compose](https://docs.docker.com/compose/) >= 1.27.4
