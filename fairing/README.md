@@ -5,14 +5,27 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 This subproject can be extended arbitrarily and must always fall back on the backend `solar/`.
 
-
 ## Environment
-Before one can start this project a '.env' file must be defined.
+
+Before one can start this project a environment file must be defined regarding the mode in which this project should operate in.
+
+### Development
+
+For the development mode of this project one must specify an `.env.development.local` file.
 This file should include:
 
 | Variable           | Use                                                          |
 |:------------------:|:------------------------------------------------------------:|
-| REACT_APP_API_URL  | Base URL of the backend API (default: http://localhost:8000) |
+| REACT_APP_API_URL  | Base URL of the backend API (http://localhost:8000)          |
+
+### Production
+
+For the production mode of this project one must specify an `.env.production.local` file.
+This file should include:
+
+| Variable           | Use                                                                                                                                   |
+|:------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
+| REACT_APP_API_URL  | Base URL of the backend API (Should be "" because fairing is served by nginx under [solar.marc-feger.de](https://solar.marc-feger.de) |
 
 ## Available Scripts
 
