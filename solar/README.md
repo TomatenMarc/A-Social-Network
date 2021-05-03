@@ -24,6 +24,7 @@ Afterwards this project should be ready to use.
 ## Environment
 
 Before one can start this project a environment file must be defined regarding the mode in which this project should operate in.
+Therefore the variables inside `.env` can be changed accordingly.
 
 | Variable             | Development | Production          | Use                                                                    |
 |:--------------------:|:-----------:|:-------------------:|:----------------------------------------------------------------------:|
