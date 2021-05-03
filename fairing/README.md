@@ -1,4 +1,4 @@
-# Fairing (The frontend of SolAr)
+# Fairing
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 `fairing/` is the frontend of `solar/`, which was developed with [React](https://github.com/facebook/create-react-app) and [Semantic UI React](https://react.semantic-ui.com/).
