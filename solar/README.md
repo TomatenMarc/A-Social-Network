@@ -33,4 +33,32 @@ Therefore the variables inside `.env` can be changed accordingly.
 | DJANGO_ALLOWED_HOSTS | *           | solar.marc-feger.de | List of strings representing the host/domain names this site can serve |
 | SECRET_KEY           | ------      | ------              | For cryptographic signing. Should be a unique, unpredictable value.    |
 
+### Development
 
+For the development mode of this project one must specify an `.env` file like specified in the table above.
+Any code changes will we validated and added after the automated refresh of the running service.
+
+To start this project the following command can be used:
+
+    $ pipenv run python runserver
+
+### Database 
+
+If any new database model has been added to the project one must add the migrations with:
+
+    $ pipenv run python manage.py makemigrations
+    
+To make those migrations visible and to add them permanently to the database one must use:
+
+    $ pipenv run python manage.py migrate
+    
+### Testing
+
+Each application in this project contains test to validate the working code of this project.
+To test everything one can use:
+
+    $ pipenv run python manage.py test
+
+To test specific applications one can use:
+
+    $ pipenv run python manage.py <e.g. accounts or contents ...> 
