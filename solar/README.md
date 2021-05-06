@@ -4,6 +4,9 @@
 
 This subproject is the basis for any possible frontend like `fairing`.
 
+Use the [Postman-Documentation](https://documenter.getpostman.com/view/13331140/TzRNFVaC) and run it locally for a detailed overview about the API.
+Make sure the database is seeded with corresponding data.
+
 ## Requirements
 
 Before using this subproject one must create the corresponding virtual environment if there is none.
