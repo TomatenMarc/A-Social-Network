@@ -22,7 +22,7 @@ class Footer extends Component {
                             <Grid.Column width={4}>
                                 <Header inverted as='h4' content='Services'/>
                                 <List link inverted>
-                                    <List.Item as='a'>API-Documentation</List.Item>
+                                    <List.Item as='a' href="https://documenter.getpostman.com/view/13331140/TzRNFVaC">API-Documentation</List.Item>
                                     <List.Item as='a'>Code-Documentation</List.Item>
                                     <List.Item as='a'>FAQ</List.Item>
                                 </List>
