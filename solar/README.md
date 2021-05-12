@@ -43,7 +43,7 @@ Any code changes will we validated and added after the automated refresh of the 
 
 To start this project the following command can be used:
 
-    $ pipenv run python runserver
+    $ pipenv run python manage.py runserver
 
 ### Database 
 
