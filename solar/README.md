@@ -64,4 +64,4 @@ To test everything one can use:
 
 To test specific applications one can use:
 
-    $ pipenv run python manage.py <e.g. accounts or contents ...> 
+    $ pipenv run python manage.py test <e.g. accounts or contents ...> 
