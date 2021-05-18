@@ -39,6 +39,7 @@ Furthermore, one must join the corresponding virtual environment with all python
 For local development, the corresponding part in `solar/` or `fairing/` must be seen in advance and the respective environment variables must be set in the corresponding subprojects.
 In addition, the database entries must also be set accordingly for `solar/`.
 To do this, you can also look in the corresponding `README.md`.
+Make sure to use the corresponding virtual environment for `solar/` and make sure to run the command in the right location.
 If these environment variables are set accordingly, both subprojects can be started as follows:
 
 ### Fairing
