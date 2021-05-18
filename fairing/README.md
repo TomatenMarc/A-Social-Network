@@ -17,7 +17,6 @@ Before one can start this project a environment file must be defined regarding t
 ### Development
 
 For the development mode of this project one must specify an `.env.development.local` file.
-This file must also be used when using `npm run build`.
 This file should include:
 
 | Variable           | Use                                                          |
@@ -27,6 +26,7 @@ This file should include:
 ### Production
 
 For the production mode of this project one must specify an `.env.production.local` file.
+This file must also be used when using `npm run build`.
 This file should include:
 
 | Variable           | Use                                                                                                                                   |
