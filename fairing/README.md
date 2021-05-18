@@ -26,12 +26,14 @@ This file should include:
 ### Production
 
 For the production mode of this project one must specify an `.env.production.local` file.
+
 This file must also be used when using `npm run build`.
+
 This file should include:
 
-| Variable           | Use                                                                                                                                   |
-|:------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
-| REACT_APP_API_URL  | Base URL of the backend API (Should be "" because fairing is served by nginx under [solar.marc-feger.de](https://solar.marc-feger.de) |
+| Variable           | Use                                                                                                                                    |
+|:------------------:|:--------------------------------------------------------------------------------------------------------------------------------------:|
+| REACT_APP_API_URL  | Base URL of the backend API (Should be "" because fairing is served by nginx under [solar.marc-feger.de](https://solar.marc-feger.de)) |
 
 ## Available Scripts
 
