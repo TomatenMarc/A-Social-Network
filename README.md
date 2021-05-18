@@ -73,7 +73,7 @@ This can be done by using the following command:
 	 $ curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
 
 Accordingly, the `domains` and `data_path` fields in `init-letsencrypt.sh` must be adjusted to meet the specifications in `docker-compose.prod.yml`.
-Also, the docker-compose calls must be used so that `docker-compose.prod.yml` is used.
+Also, the `docker-compose` calls must be modified s.t. `docker-compose.prod.yml` is used.
 
 `letsencrypt.sh` can then be run as follows:
 
