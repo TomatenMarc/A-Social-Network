@@ -89,3 +89,6 @@ After doing this, the entire project is up and running and can be used to renew 
 However, if a certificate already exists and the project has not yet been started, the entire project can be started using the following command.
 
 	$ docker-compose -f docker-compose.prod.yml up -d
+
+# Contributors
+Marc Feger
