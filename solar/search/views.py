@@ -20,7 +20,6 @@ class Search(APIView):
     """
     This view is for searching hashtags and accounts.
     The search requires an user registration.
-    Todo: Add tests.
     """
     authentication_classes = [TokenAuthentication]
     permission_classes = (IsAuthenticated,)
