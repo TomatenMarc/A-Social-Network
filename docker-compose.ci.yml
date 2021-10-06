@@ -2,6 +2,6 @@ version: "3"
 services:
   web:
     build: ./solar
-    image: ${REGISTRY}/cn-tsn/students/master/ma-feger-code/web:latest
+    image: ${REGISTRY}/cn-tsn/project/solar/web:latest
     volumes:
       - ./solar:/code
