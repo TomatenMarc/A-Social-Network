@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  # notice: this needs an valid certbot directory with an dummy certificate (chicken and egg problem)
-  certbot:
-    image: certbot/certbot:latest
-    command: certonly --webroot --webroot-path=/var/www/certbot --email marc.feger@uni-duesseldorf.de --agree-tos --no-eff-email -d solar.marc-feger.de --keep-until-expiring
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/logs:/var/log/letsencrypt
-      - ./certbot/data:/var/www/certbot
-
   solar:
     container_name: solar
     build: ./solar
@@ -32,13 +23,22 @@ services:
       - ./solar/django_static/:/code/django_static
       - ./solar/media/:/code/media
       - ./fairing/build:/var/www/fairing
-      - ./certbot/conf:/etc/nginx/ssl
-      - ./certbot/data:/var/www/certbot
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
     networks:
       - webnet
     ports:
       - "80:80"
       - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot:latest
+    restart: unless-stopped
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   webnet:
