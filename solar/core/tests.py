@@ -484,7 +484,7 @@ class TestStatement(TestCase):
     def test_account_has_statement_from_database(self):
         statements: List[Statement] = self.account_bernd.get_statements()
         self.assertNotEqual(statements, [])
-        self.assertEqual(statements[0], self.statement)
+        self.assertEqual(statements[1], self.statement)
 
     def test_account_can_add_statement(self):
         self.account_bernd.add_statement("I <3 burgers")
