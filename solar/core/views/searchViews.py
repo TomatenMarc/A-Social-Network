@@ -14,7 +14,6 @@ from ..serializers.contentSerializers import HashtagSerializer
 
 logger = logging.getLogger(__name__)
 
-
 class Search(APIView):
     """
     This view is for searching hashtags and accounts.
@@ -42,35 +41,17 @@ class Search(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         result_filter: str = request.query_params.get('filter', None)
 
-        if not result_filter:
+        result: dict = {}
+        
+        if result_filter == "account" or not result_filter:
             accounts: Account = Account.objects.filter(user__username__contains=query)[:limit]
-            account_serializer: AccountSerializer = AccountSerializer(instance=accounts, many=True)
+            result["accounts"] = AccountSerializer(instance=accounts, many=True).data
 
+        if result_filter == "hashtag" or not result_filter:
             hashtags: Hashtag = Hashtag.objects.filter(tag__contains=query)[:limit]
-            hashtag_serializer: HashtagSerializer = HashtagSerializer(instance=hashtags, many=True)
-
-            result: dict = {
-                "accounts": account_serializer.data,
-                "hashtags": hashtag_serializer.data
-            }
-            return Response(data=result, status=status.HTTP_200_OK)
-
-        if result_filter == "account":
-            accounts: Account = Account.objects.filter(user__username__contains=query)[:limit]
-            account_serializer: AccountSerializer = AccountSerializer(instance=accounts, many=True)
-
-            result: dict = {
-                "accounts": account_serializer.data,
-            }
-            return Response(data=result, status=status.HTTP_200_OK)
-
-        if result_filter == "hashtag":
-            hashtags: Hashtag = Hashtag.objects.filter(tag__contains=query)[:limit]
-            hashtag_serializer: HashtagSerializer = HashtagSerializer(instance=hashtags, many=True)
-
-            result: dict = {
-                "hashtags": hashtag_serializer.data
-            }
+            result["hashtags"] = HashtagSerializer(instance=hashtags, many=True).data
+        
+        if result:
             return Response(data=result, status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
