@@ -10,9 +10,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Account
-from contents.models import Statement, Hashtag, HashtagTagging
-from contents.serializers import StatementObservationSerializer, StatementSerializer, TrendingHashtagSerializer
+from ..models import Account, Statement, Hashtag, HashtagTagging
+from ..serializers.contentSerializers import StatementObservationSerializer, StatementSerializer, TrendingHashtagSerializer
 
 logger = logging.getLogger(__name__)
 

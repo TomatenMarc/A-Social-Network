@@ -1,9 +1,11 @@
 import logging
+from typing import List, Optional, Tuple
 import re
-from typing import List, Tuple, Optional
 
-from django.apps import apps
+from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.apps import apps
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +14,7 @@ class Statement(models.Model):
     """
     This model represents an statement of an specific account.
     """
-    author = models.ForeignKey('accounts.Account', on_delete=models.CASCADE)
+    author = models.ForeignKey('core.Account', on_delete=models.CASCADE)
     content = models.CharField(max_length=120, blank=False)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     # Add an hashtag between statements and hashtags  over the tagging model
@@ -22,7 +24,7 @@ class Statement(models.Model):
                                     symmetrical=False,
                                     related_name='tags',
                                     default=None)
-    mentioned = models.ManyToManyField('accounts.Account',
+    mentioned = models.ManyToManyField('core.Account',
                                        blank=True,
                                        through='AccountTagging',
                                        symmetrical=False,
@@ -60,7 +62,7 @@ class Statement(models.Model):
         used_mentions: List[str] = self.__extract_mentioning()
         # resolve mentions after saving the statement
         for used_mention in used_mentions:
-            account: 'accounts.Account' = apps.get_model("accounts", "Account").objects.filter(
+            account: 'core.Account' = apps.get_model("core", "Account").objects.filter(
                 user__username=used_mention).first()
             if account:
                 self.add_mentioning(account=account)
@@ -154,7 +156,7 @@ class Statement(models.Model):
         ).delete()
         return deleted
 
-    def __extract_mentioning(self) -> List['accounts.Account']:
+    def __extract_mentioning(self) -> List['core.Account']:
         """
         This method extracts the mentions of accounts in the calling statement.
         Accounts names are alpha numeric words.
@@ -163,7 +165,7 @@ class Statement(models.Model):
         """
         return re.findall(r"@(\w+)", self.content)
 
-    def add_mentioning(self, account: 'accounts.Account'):
+    def add_mentioning(self, account: 'core.Account'):
         """
         This method is for adding an mention of an account to the corresponding statement.
         :param account: The account to be mentioned.
@@ -172,7 +174,7 @@ class Statement(models.Model):
         mentioning, created = AccountTagging.objects.get_or_create(statement=self, account=account)
         return created
 
-    def get_mentioning(self) -> List['accounts.Account']:
+    def get_mentioning(self) -> List['core.Account']:
         """
         This method is to get all accounts mentioned by the calling statement.
 
@@ -180,7 +182,7 @@ class Statement(models.Model):
         """
         return list(self.mentioned.all())
 
-    def remove_mentioning(self, account: 'accounts.Account'):
+    def remove_mentioning(self, account: 'core.Account'):
         """
         This method is used to delete an specific mentioning of an account for the calling statement.
 
@@ -192,6 +194,9 @@ class Statement(models.Model):
             account=account
         ).delete()
         return deleted
+
+
+
 
 
 class Hashtag(models.Model):
@@ -239,7 +244,7 @@ class AccountTagging(Tagging):
     This model is to represent the mention of an account within an statement.
     """
     # Which account should be mentioned?
-    account = models.ForeignKey('accounts.Account', related_name='account', on_delete=models.CASCADE)
+    account = models.ForeignKey('core.Account', related_name='account', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-created',)
@@ -277,3 +282,137 @@ class Reaction(models.Model):
             parent_content=self.parent.content,
             parent_author=self.parent.author.user.username,
         )
+
+class Account(models.Model):
+    """
+    This model is for handling user accounts.
+    Therefore all data regarding an user is stored in this model.
+    The account is separated from the user since the default user model is used.
+    """
+    # Link the account to an user
+    user: User = models.OneToOneField(to=User,
+                                      on_delete=models.CASCADE,
+                                      primary_key=True)
+    # Add an relationship between accounts over the relationship model
+    related_to = models.ManyToManyField('self',
+                                        blank=True,
+                                        through='Relationship',
+                                        symmetrical=False,
+                                        related_name='related_by',
+                                        default=None)
+    # This is the image of the account
+    image = models.ImageField(upload_to='account/images',
+                              default='account/default/Argunaut.png')
+
+    biography = models.CharField(blank=False,
+                                 max_length=1000,
+                                 default="Hey there, nice to meet you!".format(user))
+
+    # The default manager
+    objects = models.Manager()
+
+    def __str__(self):
+        return "{username}".format(username=self.user.username)
+
+    def add_relationship(self, account: 'Account') -> bool:
+        """
+        This method adds an relationship for an instance.
+
+        :param account: Who should be added to an relation with the instance.
+        :return: True if the relationship was created, false otherwise.
+        """
+        relationship, created = Relationship.objects.get_or_create(
+            from_account=self,
+            to_account=account)
+        return created
+
+    def remove_relationship(self, account: 'Account'):
+        """
+        This method deletes the relationship to an other Account.
+
+        :param account: The user with whom the relationship is to be terminated.
+        :return: True if the relationship was deleted, false otherwise.
+        """
+        deleted: bool = Relationship.objects.filter(
+            from_account=self,
+            to_account=account).delete()
+        return deleted
+
+    def get_related_to(self) -> List['Account']:
+        """
+        This method returns all accounts related to the calling instance of this method.
+        Therefore this returns accounts the calling accounts relates to.
+
+        :return: All related accounts of the calling instance.
+        """
+        return list(self.related_to.filter(to_account__from_account=self))
+
+    def get_related_by(self) -> List['Account']:
+        """
+        This method returns all accounts who relates with the calling account.
+        
+        :return: All accounts who relates to the calling account.
+        """
+        return list(self.related_by.filter(from_account__to_account=self))
+
+    def get_statements(self) -> List['Statement']:
+        """
+        This method returns all all statements made by the calling account.
+
+        :return: All statements made by the calling account.
+        """
+        return list(self.statement_set.all())
+
+    def add_statement(self, content: str) -> Statement:
+        """
+        This methods add a statement for the calling account.
+
+        :param content: The content of the statement.
+        :return: The added statement.
+        """
+        statement: Statement = Statement(author=self, content=content)
+        self.statement_set.add(statement, bulk=False)
+        return statement
+
+    def update_image(self, new_image: InMemoryUploadedFile):
+        """
+        This method overwrites the image of an account.
+        If the account uses the default image the image will not be deleted.
+        :param new_image: The new image to be added for the account.
+        :return: Nothing
+        """
+        if self.image != "account/default/Argunaut.png":
+            self.image.delete(save=True)
+        self.image = new_image
+        self.save()
+
+    def update_biography(self, new_biography: str):
+        """
+        This method overwrites the biography of an account if it is not none.
+        :param new_biography: The new biography to be added for the account.
+        :return: Nothing
+        """
+        if new_biography and self.biography != new_biography:
+            self.biography = new_biography
+            self.save()
+
+
+class Relationship(models.Model):
+    """
+    This model handles relations between users.
+    By using this model it is possible to create more detailed relationships.
+    """
+    # Who wants to have an relation?
+    from_account = models.ForeignKey(Account, related_name='from_account', on_delete=models.CASCADE)
+    # To whom should a relationship be established?
+    to_account = models.ForeignKey(Account, related_name='to_account', on_delete=models.CASCADE)
+    # When was this relation created?
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    # The default manager
+    objects = models.Manager()
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "{from_user} related to {to_user}".format(from_user=self.from_account, to_user=self.to_account)

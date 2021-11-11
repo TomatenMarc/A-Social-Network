@@ -1,7 +1,6 @@
 from django.urls import path
 
-from accounts.views import PublicAccounts, OwnAccount, OwnAccountFollow, OwnAccountUnfollow, AllPublicAccounts, \
-    OwnAccountUpdate, AddStatement
+from ..views.accountViews import *
 
 urlpatterns = [
     path('show/<int:id>/', PublicAccounts.as_view(), name='show'),

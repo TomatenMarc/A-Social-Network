@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from accounts.models import Account
-from authentication.serializers import UserPublicSerializer, UserOwnSerializer
-from contents.serializers import StatementSerializer
+from ..models import Account
+from ..serializers.authenticationSerializers import UserPublicSerializer, UserOwnSerializer
+from ..serializers.contentSerializers import StatementSerializer
 
 
 class AccountSerializer(serializers.ModelSerializer):

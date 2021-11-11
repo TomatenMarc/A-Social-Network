@@ -11,9 +11,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Account
-from authentication import Operations
-from authentication.validation import validate_request_data_for
+from ..models import Account
+from .. import Operations
+from ..validation import validate_request_data_for
 
 logger = logging.getLogger(__name__)
 

@@ -13,10 +13,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Account
-from accounts.serializers import AccountPublicSerializer, AccountOwnSerializer
-from contents.models import Statement
-from contents.serializers import ReactionSerializer, StatementSerializer
+from ..models import Account, Statement
+from ..serializers.accountSerializers import AccountPublicSerializer, AccountOwnSerializer
+from ..serializers.contentSerializers import ReactionSerializer, StatementSerializer
 
 logger = logging.getLogger(__name__)
 

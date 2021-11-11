@@ -4,9 +4,8 @@ from django.apps import apps
 from django.db.models import QuerySet
 from rest_framework import serializers
 
-from accounts.models import Account
-from authentication.serializers import UserPublicSerializer
-from .models import Statement, Hashtag, Reaction, HashtagTagging
+from ..models import Account, Statement, Hashtag, Reaction, HashtagTagging
+from ..serializers.authenticationSerializers import UserPublicSerializer
 
 
 class HashtagSerializer(serializers.ModelSerializer):
@@ -69,7 +68,7 @@ class AccountSerializer(serializers.ModelSerializer):
     user = UserPublicSerializer()
 
     class Meta:
-        model = apps.get_model("accounts", "Account")
+        model = apps.get_model("core", "Account")
         fields = ('user', 'image',)
 
 
