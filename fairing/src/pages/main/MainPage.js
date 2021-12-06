@@ -1,14 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Heading from "./segments/Heading";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
 import ContentView from "./segments/ContentView";
-import {withCookies} from "react-cookie";
-import axios from "axios";
-
+import { withCookies } from "react-cookie";
+import { AuthenticationContext } from "../../AuthenticationContext";
 
 class MainPage extends Component {
-
+    static contextType = AuthenticationContext;
 
     /**
      * This component represents the main page of solar.
@@ -29,14 +28,7 @@ class MainPage extends Component {
      * Todo: Replace this with an SSE stream.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/contents/statements/feed/"),
-            {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn)
-                }
-            }).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/contents/statements/feed/")).then(result => {
             if (result.status === 200) {
                 this.setState({
                     results: result,
@@ -56,9 +48,9 @@ class MainPage extends Component {
      * @param reaction to be added (simple statement).
      */
     updateReactions = (reaction) => {
-        let results = {...this.state.results}
+        let results = { ...this.state.results }
         results["data"] = [reaction].concat(results["data"])
-        this.setState({results})
+        this.setState({ results })
     }
 
     /**
@@ -73,14 +65,14 @@ class MainPage extends Component {
         }
         return (
             <div>
-                <MenuBar/>
-                <Heading/>
+                <MenuBar />
+                <Heading />
                 <ContentView
                     updateReactions={this.updateReactions}
                     menuOffset={this.state.menuHeight}
                     results={this.state.results}
                 />
-                <Footer/>
+                <Footer />
             </div>
         );
     }

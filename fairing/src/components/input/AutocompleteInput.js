@@ -1,16 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import TextareaAutosize from "react-textarea-autosize";
 import emoji from "@jukben/emoji-search";
-import axios from "axios";
-import {PropTypes} from "prop-types";
-import {withCookies} from "react-cookie";
+import { PropTypes } from "prop-types";
+import { withCookies } from "react-cookie";
+import { AuthenticationContext } from '../../AuthenticationContext';
 
-const Emoji = ({entity: {name, char}}) => <div>{`${name}: ${char}`}</div>; // Placeholder for the recommended emojis.
-const Item = ({entity: {name}}) => <div>{`${name}`}</div>; // Placeholder for the recommended items.
+const Emoji = ({ entity: { name, char } }) => <div>{`${name}: ${char}`}</div>; // Placeholder for the recommended emojis.
+const Item = ({ entity: { name } }) => <div>{`${name}`}</div>; // Placeholder for the recommended items.
 const Loading = () => <div>Wait</div>; // Placeholder for the waiting of data to be recommended.
 
 class AutocompleteInput extends Component {
+    static contextType = AuthenticationContext;
 
     /**
      * This component is a simple autocompletion textarea.
@@ -43,29 +44,19 @@ class AutocompleteInput extends Component {
      * @param filter to be added [account or hashtag].
      */
     handleSearch = (term, filter) => {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
         if (term !== "" && (filter === "account" || filter === "hashtag"))
-            axios.get(process.env.REACT_APP_API_URL.concat("/search/"), {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn),
-                },
-                params: {
-                    q: term,
-                    filter: filter
-                }
-            }).then(result => {
+            this.context.get(process.env.REACT_APP_API_URL.concat("/search/"), { q: term, filter: filter }).then(result => {
                 if (result.status === 200) {
                     if (filter === "account")
                         this.setState({
                             accounts: result.data.accounts.map(function (result) {
-                                return {name: result.user.username}
+                                return { name: result.user.username }
                             })
                         })
                     if (filter === "hashtag")
                         this.setState({
                             hashtags: result.data.hashtags.map(function (result) {
-                                return {name: result.tag}
+                                return { name: result.tag }
                             })
                         })
                 }
@@ -105,14 +96,14 @@ class AutocompleteInput extends Component {
                 onChange={this.props.handleChange}
                 value={this.props.input}
                 placeholder={"Place your statement!"}
-                style={{resize: "none", margin: "5px 0"}}
+                style={{ resize: "none", margin: "5px 0" }}
                 minChar={0}
                 trigger={{
                     ":": {
                         dataProvider: token => {
                             return emoji(token)
                                 .slice(0, 5)
-                                .map(({name, char}) => ({name, char}));
+                                .map(({ name, char }) => ({ name, char }));
                         },
                         component: Emoji,
                         output: (item, trigger) => item.char

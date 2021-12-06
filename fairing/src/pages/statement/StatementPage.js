@@ -1,20 +1,21 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MenuBar from "../../components/MenuBar";
 import Heading from "./segments/Heading";
-import {Cookies, withCookies} from "react-cookie";
-import axios from "axios";
-import {instanceOf, PropTypes} from "prop-types";
+import { withCookies } from "react-cookie";
+import { PropTypes } from "prop-types";
 import ContentView from "./segments/ContentView";
 import Footer from "../../components/Footer";
+import { AuthenticationContext } from "../../AuthenticationContext";
 
 class StatementPage extends Component {
+    static contextType = AuthenticationContext;
+
     /**
      * This component uses the statement id (sid) in the request to the backend.
      * Furthermore, to get the statement one must have an valid user token.
      * @type {{match: *}}
      */
     static propTypes = {
-        cookies: instanceOf(Cookies).isRequired,
         match: PropTypes.shape({
             params: PropTypes.shape({
                 sid: PropTypes.string.isRequired
@@ -42,15 +43,7 @@ class StatementPage extends Component {
      * Todo: Add children of the statement.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        console.log(utkn)
-        axios.get(process.env.REACT_APP_API_URL.concat("/contents/statements/get/").concat(this.state.sid).concat("/"),
-            {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn)
-                }
-            }).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/contents/statements/get/").concat(this.state.sid).concat("/")).then(result => {
             if (result.status === 200) {
                 this.setState({
                     parent: result.data[0],
@@ -71,9 +64,9 @@ class StatementPage extends Component {
      * @param reaction (object) to be added to the reactions of the parent.
      */
     updateReactions = (reaction) => {
-        let parent = {...this.state.parent}
+        let parent = { ...this.state.parent }
         parent["reactions"] = [reaction].concat(parent["reactions"])
-        this.setState({parent})
+        this.setState({ parent })
     }
 
     /**
@@ -86,13 +79,13 @@ class StatementPage extends Component {
             return <div>Loading...</div>
         return (
             <div>
-                <MenuBar/>
+                <MenuBar />
                 <Heading
                     updateReactions={this.updateReactions}
-                    parent={this.state.parent}/>
+                    parent={this.state.parent} />
                 <ContentView menuOffset={65}
-                             parent={this.state.parent}/>
-                <Footer/>
+                    parent={this.state.parent} />
+                <Footer />
             </div>
         );
     }

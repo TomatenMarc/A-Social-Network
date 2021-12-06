@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MenuBar from "../../components/MenuBar";
 import Heading from "./segments/Heading";
-import {PropTypes} from "prop-types";
+import { PropTypes } from "prop-types";
 import ContentView from "./segments/ContentView";
-import axios from "axios";
-import {withCookies} from "react-cookie";
+import { withCookies } from "react-cookie";
 import Footer from "../../components/Footer";
+import { AuthenticationContext } from "../../AuthenticationContext";
 
 class TopicPage extends Component {
+    static contextType = AuthenticationContext;
 
     /**
      * This component is for the conversation around specific topics.
@@ -42,17 +43,7 @@ class TopicPage extends Component {
      * This method loads all statements given for the particular hashtag.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/contents/statements/with/hashtag/"),
-            {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn)
-                },
-                params: {
-                    q: this.state.tag
-                }
-            }).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/contents/statements/with/hashtag/"), { q: this.state.tag }).then(result => {
             if (result.status === 200) {
                 this.setState({
                     results: result,
@@ -72,9 +63,9 @@ class TopicPage extends Component {
      * @param reaction to be added (simple statement).
      */
     updateReactions = (reaction) => {
-        let results = {...this.state.results}
+        let results = { ...this.state.results }
         results["data"] = [reaction].concat(results["data"])
-        this.setState({results})
+        this.setState({ results })
     }
 
     /**
@@ -88,15 +79,15 @@ class TopicPage extends Component {
             </div>
         return (
             <div>
-                <MenuBar/>
-                <Heading tag={this.state.tag}/>
+                <MenuBar />
+                <Heading tag={this.state.tag} />
                 <ContentView
                     tag={this.state.tag}
                     updateReactions={this.updateReactions}
                     menuOffset={this.state.menuHeight}
                     results={this.state.results}
                 />
-                <Footer/>
+                <Footer />
             </div>
         );
     }
