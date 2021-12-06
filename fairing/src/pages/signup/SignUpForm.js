@@ -29,19 +29,43 @@ class SignUpForm extends Component {
     }
 
     /**
-     * This method is used to update the state for each change in the corresponding fields.
-     * This means the state is updated if the corresponding form field of e.g. the Username is changed.
-     * @param event: The event of the input.
+     * This method will handle the changes in the password field.
+     * It will update the state.
+     * @param event of typing in the password.
      */
-    handleChange = (event) => {
-        event.preventDefault()
-        if (event.target.name === "usernameInput")
-            this.setState({ username: event.target.value })
-        else if (event.target.name === "passwordInput")
-            this.setState({ password: event.target.value })
-        else if (event.target.name === "emailInput")
-            this.setState({ email: event.target.value })
-    }
+     onChangePassword = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ password: event.target.value });
+    };
+
+    /**
+     * This method will handle the changes in the username field.
+     * It will update the state.
+     * @param event of typing in the username.
+     */
+     onChangeUsername = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ username: event.target.value });
+    };
+
+    /**
+     * This method will handle the changes in the email field.
+     * It will update the state.
+     * @param event of typing in the email.
+     */
+    onChangeEMail = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ email: event.target.value });
+    };
 
     /**
      * This method is used to handle the communication with the backend.
@@ -105,7 +129,7 @@ class SignUpForm extends Component {
                                     placeholder='Username'
                                     type='text'
                                     value={this.state.username}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangeUsername}
                                 />
                                 <Form.Input
                                     name="passwordInput"
@@ -116,7 +140,7 @@ class SignUpForm extends Component {
                                     placeholder='Password'
                                     type='password'
                                     value={this.state.password}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangePassword}
                                 />
                                 <Form.Input
                                     name="emailInput"
@@ -127,7 +151,7 @@ class SignUpForm extends Component {
                                     placeholder='E-Mail'
                                     type='email'
                                     value={this.state.email}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangeEMail}
                                 />
                                 <Form.Button
                                     type='submit'

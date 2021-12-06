@@ -40,17 +40,30 @@ class LoginForm extends Component {
     }
 
     /**
-     * This method will handle the changes in the password and username field.
+     * This method will handle the changes in the password field.
      * It will update the state.
-     * @param event of typing in the username or password.
+     * @param event of typing in the password.
      */
-    handleChange = (event) => {
+    onChangePassword = (event) => {
+        if (!event)
+            return;
+
         event.preventDefault();
-        if (event.target.name === "usernameInput")
-            this.setState({ username: event.target.value })
-        else if (event.target.name === "passwordInput")
-            this.setState({ password: event.target.value })
-    }
+        this.setState({ password: event.target.value });
+    };
+
+    /**
+     * This method will handle the changes in the username field.
+     * It will update the state.
+     * @param event of typing in the username.
+     */
+    onChangeUsername = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ username: event.target.value });
+    };
 
     /**
      * This method is for the validation of the provided user data.
@@ -111,7 +124,7 @@ class LoginForm extends Component {
                                     placeholder='Username'
                                     type='text'
                                     value={this.state.username}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangeUsername}
                                 />
                                 <Form.Input
                                     name="passwordInput"
@@ -122,7 +135,7 @@ class LoginForm extends Component {
                                     placeholder='Password'
                                     type='password'
                                     value={this.state.password}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangePassword}
                                 />
                                 <Form.Button
                                     type='submit'
