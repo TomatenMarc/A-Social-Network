@@ -86,7 +86,7 @@ class MainPage extends Component {
                 });
             }
         }).catch(error => {
-            this.setState({ loading: true });
+            this.setState({ loading: false });
         });
     }
 
