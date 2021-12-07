@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import {Button, Icon} from "semantic-ui-react";
-import {Cookies, withCookies} from "react-cookie";
-import axios from "axios";
-import {instanceOf, PropTypes} from "prop-types";
+import React, { Component } from 'react';
+import { Button, Icon } from "semantic-ui-react";
+import { Cookies, withCookies } from "react-cookie";
+import { instanceOf, PropTypes } from "prop-types";
+import { AuthenticationContext } from "../../../AuthenticationContext";
 
 class FollowUnfollowButton extends Component {
+    static contextType = AuthenticationContext;
 
     /**
      * This component is a follow/unfollow button.
@@ -41,17 +42,11 @@ class FollowUnfollowButton extends Component {
      */
     handleClick = (event) => {
         event.preventDefault();
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
         let url = process.env.REACT_APP_API_URL.concat('/accounts/follow/').concat(this.state.uid).concat("/")
         if (this.state.friend)
-            url =  process.env.REACT_APP_API_URL.concat('/accounts/unfollow/').concat(this.state.uid).concat("/")
+            url = process.env.REACT_APP_API_URL.concat('/accounts/unfollow/').concat(this.state.uid).concat("/")
 
-        axios.post(url, {}, {
-            headers: {
-                'Authorization': 'Token '.concat(utkn)
-            }
-        }).then((res) => {
+        this.context.post(url, {}).then((res) => {
             if (res.status === 200) {
                 this.setState({
                     friend: !this.state.friend
@@ -71,7 +66,7 @@ class FollowUnfollowButton extends Component {
             <Button inverted animated='fade' onClick={this.handleClick}>
                 <Button.Content visible>{this.state.friend ? "Unfollow" : "Follow"}</Button.Content>
                 <Button.Content hidden>
-                    <Icon name={this.state.friend ? 'delete' : 'handshake'}/>
+                    <Icon name={this.state.friend ? 'delete' : 'handshake'} />
                 </Button.Content>
             </Button>
         );

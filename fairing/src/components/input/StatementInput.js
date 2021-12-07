@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
-import {Button, Card, Message, Segment, Sticky} from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Button, Card, Message, Segment, Sticky } from "semantic-ui-react";
 import "../../scss/Autocomplete.css"
-import {withCookies} from "react-cookie";
-import axios from "axios";
-import {PropTypes} from "prop-types";
+import { withCookies } from "react-cookie";
+import { PropTypes } from "prop-types";
 import AutocompleteInput from "./AutocompleteInput";
+import { AuthenticationContext } from '../../AuthenticationContext';
 
 class StatementInput extends Component {
+    static contextType = AuthenticationContext;
 
     /**
      * This component needs an offset to stick under the menubar.
@@ -86,23 +87,17 @@ class StatementInput extends Component {
         this.setState({
             input: ""
         })
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
+
         if (this.state.input !== "")
-            axios.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
+            this.context.post(process.env.REACT_APP_API_URL.concat("/accounts/operation/add/statement/"), {
                 input: this.checkForHashtagUsed(this.state.input),
                 reaction: this.props.reaction
-            }, {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn),
-                },
-                onUploadProgress: (ev) => {
-                    const progress = ev.loaded / ev.total * 100;
-                    console.log(Math.round(progress));
-                    this.setState({
-                        loading: Math.round(progress) < 100
-                    })
-                }
+            }, (ev) => {
+                const progress = ev.loaded / ev.total * 100;
+                console.log(Math.round(progress));
+                this.setState({
+                    loading: Math.round(progress) < 100
+                })
             }).then((res) => {
                 if (res.status === 200) {
                     this.setState({
@@ -134,7 +129,7 @@ class StatementInput extends Component {
      */
     render() {
         return (
-            <Segment basic style={{padding: 0}} loading={this.state.loading}>
+            <Segment basic style={{ padding: 0 }} loading={this.state.loading}>
                 <Sticky offset={this.props.offset} context={this.props.context} active={this.props.sticky}>
                     <Card fluid>
                         {
@@ -189,9 +184,9 @@ class StatementInput extends Component {
                         <Card.Content extra>
                             {this.state.maxLength - this.state.input.length} left
                             <Button primary
-                                    floated='right'
-                                    disabled={!(this.state.input.length > 0 && this.state.input.length <= this.state.maxLength)}
-                                    onClick={this.handleSubmit}>
+                                floated='right'
+                                disabled={!(this.state.input.length > 0 && this.state.input.length <= this.state.maxLength)}
+                                onClick={this.handleSubmit}>
                                 Place
                             </Button>
                         </Card.Content>

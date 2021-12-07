@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
-import axios from "axios";
+import React, { Component } from 'react';
 import MenuBar from "../../../components/MenuBar";
 import Avatar from "../segments/Avatar";
-import {Cookies, withCookies} from "react-cookie";
-import {instanceOf, PropTypes} from "prop-types";
+import { withCookies } from "react-cookie";
+import { PropTypes } from "prop-types";
 import Footer from "../../../components/Footer";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import ContentView from "./components/ContentView";
+import { AuthenticationContext } from "../../../AuthenticationContext";
 
 class PublicAccountPage extends Component {
+    static contextType = AuthenticationContext;
+
     /**
      * This component can be used to display a public account.
      * Therefore an uid the requested user is required.
@@ -17,7 +19,6 @@ class PublicAccountPage extends Component {
      * @type {{cookies: Validator<NonNullable<Cookies>>}}
      */
     static propTypes = {
-        cookies: instanceOf(Cookies).isRequired,
         match: PropTypes.shape({
             params: PropTypes.shape({
                 uid: PropTypes.string.isRequired
@@ -46,15 +47,7 @@ class PublicAccountPage extends Component {
      */
     componentDidMount() {
         //todo: show an error page if the requested user does not exist.
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/").concat(this.state.uid).concat("/"),
-            {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn)
-                }
-            }
-        ).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/accounts/show/").concat(this.state.uid).concat("/")).then(result => {
             if (result.status === 200) {
                 this.setState({
                     account: result.data[0],
@@ -80,10 +73,10 @@ class PublicAccountPage extends Component {
                 Fetching ...
             </div>
         if (this.state.account["self_request"])
-            return <Redirect to={{pathname: '/account'}}/>
+            return <Redirect to={{ pathname: '/account' }} />
         return (
             <div>
-                <MenuBar/>
+                <MenuBar />
                 <Avatar
                     forPublicUse={true}
                     uid={this.state.uid}
@@ -94,8 +87,8 @@ class PublicAccountPage extends Component {
                 />
                 <ContentView
                     menuOffset={this.state.menuHeight}
-                    account={this.state.account}/>
-                <Footer/>
+                    account={this.state.account} />
+                <Footer />
             </div>
         );
     }

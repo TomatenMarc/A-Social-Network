@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import {Button, Form, Image, Modal, Progress, TextArea} from "semantic-ui-react";
-import {PropTypes} from "prop-types";
-import axios from "axios";
-import {withCookies} from "react-cookie";
+import React, { Component } from 'react';
+import { Button, Form, Image, Modal, Progress, TextArea } from "semantic-ui-react";
+import { PropTypes } from "prop-types";
+import { withCookies } from "react-cookie";
+import { AuthenticationContext } from "../AuthenticationContext";
 
 class EditAccountModal extends Component {
+    static contextType = AuthenticationContext;
 
     /**
      * This component is for editing the account.
@@ -62,7 +63,7 @@ class EditAccountModal extends Component {
      */
     biographyChange = (event) => {
         event.preventDefault();
-        this.setState({biography: event.target.value, success: false})
+        this.setState({ biography: event.target.value, success: false })
     }
 
     /**
@@ -76,27 +77,18 @@ class EditAccountModal extends Component {
         const formData = new FormData();
         formData.append("file", this.state.file);
         formData.append('biography', this.state.biography);
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.put(url, formData, {
-            headers: {
-                'Authorization': 'Token '.concat(utkn),
-                "Content-type": "multipart/form-data"
-            },
-            onUploadProgress: (ev) => {
-                const progress = ev.loaded / ev.total * 100;
-                console.log(Math.round(progress));
-                this.setState({
-                    success: false,
-                    loading: Math.round(progress) < 100
-                })
-            }
-        })
-            .then(response => {
-                this.setState({
-                    success: true
-                })
-            }).catch(error => {
+        this.context.put(url, formData, (ev) => {
+            const progress = ev.loaded / ev.total * 100;
+            console.log(Math.round(progress));
+            this.setState({
+                success: false,
+                loading: Math.round(progress) < 100
+            })
+        }).then(response => {
+            this.setState({
+                success: response && response.status === 200
+            })
+        }).catch(error => {
             this.setState({
                 success: false
             })
@@ -152,7 +144,7 @@ class EditAccountModal extends Component {
                         size={"small"}
                         centered
                         bordered
-                        label={{corner: 'left', icon: 'edit outline', color: 'blue'}}
+                        label={{ corner: 'left', icon: 'edit outline', color: 'blue' }}
                         src={this.state.file ? URL.createObjectURL(this.state.file) : this.props.image}
                         onClick={() => this.fileInputRef.current.click()}
                     />
@@ -167,22 +159,22 @@ class EditAccountModal extends Component {
                 <Modal.Content>
                     <Form widths='equal' error>
                         <Form.Input name="biographyInput"
-                                    control={TextArea}
-                                    label={"Biography"}
-                                    placeholder={this.props.biography}
-                                    defaultValue={this.props.biography}
-                                    onChange={this.biographyChange}
-                                    error={
-                                        (!this.newBiographyValidLength() && this.props.biography !== this.state.biography)
-                                        && "Hmm... "
-                                    }>
+                            control={TextArea}
+                            label={"Biography"}
+                            placeholder={this.props.biography}
+                            defaultValue={this.props.biography}
+                            onChange={this.biographyChange}
+                            error={
+                                (!this.newBiographyValidLength() && this.props.biography !== this.state.biography)
+                                && "Hmm... "
+                            }>
                         </Form.Input>
                         <Progress progress='value'
-                                  success={this.newBiographyValidLength()}
-                                  error={!this.newBiographyValidLength()}
-                                  active
-                                  value={this.state.biography.length < 100 ? this.state.biography.length : 100}
-                                  total={100}/>
+                            success={this.newBiographyValidLength()}
+                            error={!this.newBiographyValidLength()}
+                            active
+                            value={this.state.biography.length < 100 ? this.state.biography.length : 100}
+                            total={100} />
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>

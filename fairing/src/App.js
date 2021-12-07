@@ -1,9 +1,10 @@
-import React, {Component} from "react";
-import {BrowserRouter} from "react-router-dom";
-import {Routes} from "./routes/Routes";
-import {withCookies} from "react-cookie";
-import {ErrorBoundary} from "react-error-boundary";
+import React, { Component } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Routes } from "./routes/Routes";
+import { withCookies } from "react-cookie";
+import { ErrorBoundary } from "react-error-boundary";
 import ErrorScreen from "./components/ErrorScreen";
+import AuthenticationProvider from './AuthenticationContext';
 
 class App extends Component {
     /**
@@ -19,7 +20,9 @@ class App extends Component {
             <ErrorBoundary
                 FallbackComponent={ErrorScreen}>
                 <BrowserRouter forceRefresh={true}>
-                    <Routes/>
+                    <AuthenticationProvider>
+                        <Routes />
+                    </AuthenticationProvider>
                 </BrowserRouter>
             </ErrorBoundary>
         );
