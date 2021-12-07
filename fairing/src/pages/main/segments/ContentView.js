@@ -1,8 +1,8 @@
-import React, {Component, createRef} from 'react';
-import {Segment} from "semantic-ui-react";
+import React, { Component, createRef } from 'react';
+import { Segment } from "semantic-ui-react";
 import StatementInput from "../../../components/input/StatementInput";
 import StickyContentGrid from "../../../components/StickyContentGrid";
-import {PropTypes} from "prop-types";
+import { PropTypes } from "prop-types";
 import Contents from "./Contents";
 import HashtagExplorer from "../components/HashtagExplorer";
 import AccountExplorer from "./AccountExplorer";
@@ -18,8 +18,10 @@ class ContentView extends Component {
      */
     static propTypes = {
         menuOffset: PropTypes.number.isRequired,
-        results: PropTypes.object.isRequired,
-        updateReactions: PropTypes.func.isRequired
+        results: PropTypes.array.isRequired,
+        updateReactions: PropTypes.func.isRequired,
+        loadMore: PropTypes.func.isRequired,
+        children: PropTypes.node
     };
 
     /**
@@ -30,7 +32,7 @@ class ContentView extends Component {
      */
     constructor(props) {
         super(props);
-        this.contextRef = createRef()
+        this.contextRef = createRef();
     }
 
     /**
@@ -44,14 +46,14 @@ class ContentView extends Component {
      */
     render() {
         return (
-            <Segment vertical style={{zIndex: 0}}>
+            <Segment vertical style={{ zIndex: 0 }}>
                 <div ref={this.contextRef}>
                     <StickyContentGrid
                         contextRef={this.contextRef}
                         menuOffset={this.props.menuOffset}
                         left={
                             <div>
-                                <HashtagExplorer/>
+                                <HashtagExplorer />
                             </div>
                         }
                         center={
@@ -60,12 +62,12 @@ class ContentView extends Component {
                                     updateReactions={this.props.updateReactions}
                                     sticky={true}
                                     context={this.contextRef}
-                                    offset={this.props.menuOffset}/>
-                                <Contents results={this.props.results}/>
+                                    offset={this.props.menuOffset} />
+                                <Contents results={this.props.results} loadMore={this.props.loadMore} children={this.props.children}/>
                             </div>
                         }
                         right={
-                            <AccountExplorer/>
+                            <AccountExplorer />
                         }
                     >
                     </StickyContentGrid>

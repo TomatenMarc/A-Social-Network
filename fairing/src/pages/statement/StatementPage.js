@@ -83,7 +83,8 @@ class StatementPage extends Component {
                 <Heading
                     updateReactions={this.updateReactions}
                     parent={this.state.parent} />
-                <ContentView menuOffset={65}
+                <ContentView
+                    menuOffset={65}
                     parent={this.state.parent} />
                 <Footer />
             </div>
