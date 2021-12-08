@@ -21,8 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^authentication/', include('core.urls.authenticationUrls')),
-    url(r'^accounts/', include('core.urls.accountUrls')),
-    url(r'^search/', include('core.urls.searchUrls')),
-    url(r'^contents/', include('core.urls.contentUrls')),
+    url(r'^authentication/', include('the_social_network.urls.authenticationUrls')),
+    url(r'^accounts/', include('the_social_network.urls.accountUrls')),
+    url(r'^search/', include('the_social_network.urls.searchUrls')),
+    url(r'^contents/', include('the_social_network.urls.contentUrls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
