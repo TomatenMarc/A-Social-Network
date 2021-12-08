@@ -12,7 +12,7 @@ Pillow = "==8.4.0"
 django-cors-headers = "==3.10.0"
 django-dotenv = "==1.4.2"
 uwsgi = "==2.0.20"
-the_social_network = ">=0.0.3"
+the_social_network = ">=0.0.5"
 
 [requires]
 python_version = "3.9"
