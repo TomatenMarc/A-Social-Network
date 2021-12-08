@@ -32,4 +32,4 @@ test_core:
   script:
     - echo "Testing ..."
     - docker-compose -f docker-compose.ci.yml pull
-    - docker-compose -f docker-compose.ci.yml run web sh -c "pipenv run python manage.py makemigrations && pipenv run python manage.py migrate && pipenv run python manage.py test core -v 2"
+    - docker-compose -f docker-compose.ci.yml run web sh -c "pipenv run python manage.py makemigrations && pipenv run python manage.py migrate && pipenv run python manage.py test the_social_network -v 2"

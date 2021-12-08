@@ -20,9 +20,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  url(r'^authentication/', include('core.urls.authenticationUrls')),
-                  url(r'^accounts/', include('core.urls.accountUrls')),
-                  url(r'^search/', include('core.urls.searchUrls')),
-                  url(r'^contents/', include('core.urls.contentUrls')),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('admin/', admin.site.urls),
+    url(r'^authentication/', include('core.urls.authenticationUrls')),
+    url(r'^accounts/', include('core.urls.accountUrls')),
+    url(r'^search/', include('core.urls.searchUrls')),
+    url(r'^contents/', include('core.urls.contentUrls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
