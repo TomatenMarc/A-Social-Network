@@ -1,20 +1,12 @@
-import React, {Component} from 'react';
-import {Form, Grid, Image, Message, Segment} from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Form, Grid, Image, Message, Segment } from "semantic-ui-react";
 import logo from "../../resources/logo.jpg";
-import {NavLink, Redirect} from "react-router-dom";
-import {Cookies, withCookies} from "react-cookie";
-import axios from "axios";
-import {instanceOf} from "prop-types";
+import { NavLink, Redirect } from "react-router-dom";
+import { withCookies } from "react-cookie";
+import { AuthenticationContext } from "../../AuthenticationContext";
 
 class SignUpForm extends Component {
-    /**
-     * This is the sign up form to add a new account to the system.
-     * Therefore a token is required to validate the data in the backend.
-     * @type {{cookies: Validator<NonNullable<Cookies>>}}
-     */
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    };
+    static contextType = AuthenticationContext;
 
     /**
      * This component is for handling the signup of new users.
@@ -37,19 +29,43 @@ class SignUpForm extends Component {
     }
 
     /**
-     * This method is used to update the state for each change in the corresponding fields.
-     * This means the state is updated if the corresponding form field of e.g. the Username is changed.
-     * @param event: The event of the input.
+     * This method will handle the changes in the password field.
+     * It will update the state.
+     * @param event of typing in the password.
      */
-    handleChange = (event) => {
-        event.preventDefault()
-        if (event.target.name === "usernameInput")
-            this.setState({username: event.target.value})
-        else if (event.target.name === "passwordInput")
-            this.setState({password: event.target.value})
-        else if (event.target.name === "emailInput")
-            this.setState({email: event.target.value})
-    }
+     onChangePassword = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ password: event.target.value });
+    };
+
+    /**
+     * This method will handle the changes in the username field.
+     * It will update the state.
+     * @param event of typing in the username.
+     */
+     onChangeUsername = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ username: event.target.value });
+    };
+
+    /**
+     * This method will handle the changes in the email field.
+     * It will update the state.
+     * @param event of typing in the email.
+     */
+    onChangeEMail = (event) => {
+        if (!event)
+            return;
+
+        event.preventDefault();
+        this.setState({ email: event.target.value });
+    };
 
     /**
      * This method is used to handle the communication with the backend.
@@ -60,18 +76,8 @@ class SignUpForm extends Component {
      */
     handleSubmit = (event) => {
         event.preventDefault();
-        const {cookies} = this.props
-        axios.post(process.env.REACT_APP_API_URL.concat("/authentication/register/"), {
-            username: this.state.username,
-            password: this.state.password,
-            email: this.state.email
-        }).then(result => {
-            if (result.status === 201) {
-                cookies.set("utkn", result.data.token, {sameSite: 'Lax'})
-                this.setState({
-                    success: true
-                })
-            }
+        this.context.register(this.state.username, this.state.password, this.state.email).then(result => {
+            this.setState({ success: result });
         }).catch(error => {
             const response = error.response.data;
             const keys = Object.keys(response)
@@ -95,24 +101,24 @@ class SignUpForm extends Component {
      */
     render() {
         if (this.state.success)
-            return <Redirect to={{pathname: '/'}}/>
+            return <Redirect to={{ pathname: '/' }} />
         return (
             <div>
-                <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
-                    <Grid.Column style={{maxWidth: "70%"}}>
-                        <Image style={{maxWidth: "70%", marginBottom: "3em"}}
-                               src={logo}
-                               circular
-                               size="small"
-                               centered
+                <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+                    <Grid.Column style={{ maxWidth: "70%" }}>
+                        <Image style={{ maxWidth: "70%", marginBottom: "3em" }}
+                            src={logo}
+                            circular
+                            size="small"
+                            centered
                         />
                         <Form size='large'
-                              error={
-                                  this.state.errorUserField ||
-                                  this.state.errorPasswordField ||
-                                  this.state.errorEmailField
-                              }
-                              onSubmit={this.handleSubmit}>
+                            error={
+                                this.state.errorUserField ||
+                                this.state.errorPasswordField ||
+                                this.state.errorEmailField
+                            }
+                            onSubmit={this.handleSubmit}>
                             <Segment raised>
                                 <Form.Input
                                     name="usernameInput"
@@ -123,7 +129,7 @@ class SignUpForm extends Component {
                                     placeholder='Username'
                                     type='text'
                                     value={this.state.username}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangeUsername}
                                 />
                                 <Form.Input
                                     name="passwordInput"
@@ -134,7 +140,7 @@ class SignUpForm extends Component {
                                     placeholder='Password'
                                     type='password'
                                     value={this.state.password}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangePassword}
                                 />
                                 <Form.Input
                                     name="emailInput"
@@ -145,7 +151,7 @@ class SignUpForm extends Component {
                                     placeholder='E-Mail'
                                     type='email'
                                     value={this.state.email}
-                                    onChange={this.handleChange}
+                                    onChange={this.onChangeEMail}
                                 />
                                 <Form.Button
                                     type='submit'

@@ -1,21 +1,13 @@
 import React, {Component} from 'react';
 import MenuBar from "../../../components/MenuBar";
 import Avatar from "../segments/Avatar";
-import axios from "axios";
-import {Cookies, withCookies} from "react-cookie";
+import {withCookies} from "react-cookie";
 import Footer from "../../../components/Footer";
-import {instanceOf} from "prop-types";
 import ContentView from "./components/ContentView";
+import { AuthenticationContext } from "../../../AuthenticationContext";
 
 class PrivateAccountPage extends Component {
-    /**
-     * This component is for representing an private account.
-     * todo: This should add modification options for the calling user.
-     * @type {{cookies: Validator<NonNullable<Cookies>>}}
-     */
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired,
-    };
+    static contextType = AuthenticationContext;
 
     /**
      * This component will provide an account as well an loading screen.
@@ -36,13 +28,7 @@ class PrivateAccountPage extends Component {
      * The calling account is identified by the user-token.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/own/"), {
-            headers: {
-                'Authorization': 'Token '.concat(utkn)
-            }
-        }).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/accounts/show/own/")).then(result => {
             if (result.status === 200) {
                 this.setState({
                     account: result.data[0],

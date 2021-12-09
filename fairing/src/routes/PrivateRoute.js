@@ -1,11 +1,13 @@
-import {Redirect, Route} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import {useCookies} from 'react-cookie';
-import axios from "axios";
+import { Redirect, Route } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useCookies } from 'react-cookie';
 import '../scss/Loading.css'
 import LoadingScreen from "../components/LoadingScreen";
+import { AuthenticationContext } from "../AuthenticationContext";
 
-function PrivateRoute({component: Component, ...rest}) {
+function PrivateRoute({ component: Component, ...rest }) {
+    const context = useContext(AuthenticationContext);
+
     /**
      * This is a private route which communicates with the backend.
      * Therefore this function checks if an user, represented by its token, can access a particular route.
@@ -15,7 +17,7 @@ function PrivateRoute({component: Component, ...rest}) {
     const [auth, setAuth] = useState(false);
     const [isTokenValidated, setIsTokenValidated] = useState(false);
     // different to higher order component the useCookies function can be applied directly.
-    const [cookies, removeCookie] = useCookies(['utkn']);
+    const [cookies] = useCookies(['utkn']);
 
     useEffect(() => {
         /**
@@ -23,37 +25,28 @@ function PrivateRoute({component: Component, ...rest}) {
          * component.
          * In this function the effect is to validate the token in the backend.
          */
-        axios.get(process.env.REACT_APP_API_URL.concat('/authentication/validate/'), {
-            headers: {
-                'Authorization': 'Token '.concat(cookies.utkn)
-            }
-        }).then((res) => {
-            if (res.status === 200) {
-                setAuth(true);
-            }
-        }).catch((err) => {
-            setAuth(false);
-            //todo: maybe wrong?
-            //removeCookie('utkn')
-        }).then(() =>
-            setTimeout(function () {
-                setIsTokenValidated(true)
-            }, 500)
-        );
-    }, [cookies.utkn, removeCookie])
+        if (context)
+            context.loginWithToken().then((res) => { setAuth(res); }).catch((err) => {
+                setAuth(false);
+            }).then(() =>
+                setTimeout(function () {
+                    setIsTokenValidated(true)
+                }, 500)
+            );
+    }, [cookies.utkn])
 
     /**
      * While the token is validated a loading-screen is shown.
      * After validation the router will guide to the corresponding component.
      * If the validation has failed the router will redirect to the login.
      */
-    if (!isTokenValidated) return <LoadingScreen/>
+    if (!isTokenValidated) return <LoadingScreen />
     return (
         <Route
             {...rest}
             render={(props) => auth
                 ? <Component {...props} />
-                : <Redirect to={{pathname: '/login'}}/>}
+                : <Redirect to={{ pathname: '/login' }} />}
         />
     )
 }

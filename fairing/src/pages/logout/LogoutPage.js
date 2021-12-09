@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import {withCookies} from "react-cookie";
-import axios from "axios";
+import { AuthenticationContext } from "../../AuthenticationContext";
 
 class LogoutPage extends Component {
+    static contextType = AuthenticationContext;
+
     /**
      * This component can be used for logout.
      * It only uses the /logout route. Therefore the component must be used along with a private route.
@@ -24,15 +26,8 @@ class LogoutPage extends Component {
      * Those private routes will validate the token before connection to this component.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn");
-        axios.post(process.env.REACT_APP_API_URL.concat("/authentication/logout/"), {}, {
-            headers: {
-                'Authorization': 'Token '.concat(utkn)
-            }
-        }).then(result => {
-            if (result.status === 200) {
-                cookies.remove("utkn")
+        this.context.logout().then(result => {
+            if (result) {
                 this.setState({
                     loading: false
                 })

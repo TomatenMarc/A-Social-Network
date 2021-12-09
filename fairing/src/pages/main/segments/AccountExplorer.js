@@ -1,21 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AccountModal from "../../../components/AccountModal";
-import {Button, Grid, Header, Icon, Segment} from "semantic-ui-react";
-import axios from "axios";
-import {Cookies, withCookies} from "react-cookie";
-import {instanceOf} from "prop-types";
+import { Button, Grid, Header, Icon, Segment } from "semantic-ui-react";
+import { withCookies } from "react-cookie";
+import { AuthenticationContext } from "../../../AuthenticationContext";
 
 class AccountExplorer extends Component {
-
-    /**
-     * This component is to show for exploring the community.
-     * While exploring the community one can decide to visit an account.
-     * For the exploration and validation the user token must be provided.
-     * @type {{cookies: Requireable<Cookies>}}
-     */
-    static propTypes = {
-        cookies: instanceOf(Cookies),
-    };
+    static contextType = AuthenticationContext;
 
     /**
      * The community will be shown in a scrollable modal.
@@ -38,7 +28,7 @@ class AccountExplorer extends Component {
      */
     handleOpen = (event) => {
         event.preventDefault();
-        this.setState({modalOpen: true});
+        this.setState({ modalOpen: true });
     }
 
     /**
@@ -48,7 +38,7 @@ class AccountExplorer extends Component {
      */
     handleClose = (event) => {
         event.preventDefault();
-        this.setState({modalOpen: false});
+        this.setState({ modalOpen: false });
     }
 
     /**
@@ -56,13 +46,7 @@ class AccountExplorer extends Component {
      * Therefore the user token is needed.
      */
     componentDidMount() {
-        const {cookies} = this.props;
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/accounts/show/all/"), {
-            headers: {
-                'Authorization': 'Token '.concat(utkn)
-            }
-        }).then((res) => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/accounts/show/all/")).then((res) => {
             if (res.status === 200) {
                 this.setState({
                     accounts: res.data
@@ -83,9 +67,9 @@ class AccountExplorer extends Component {
             <Segment vertical>
                 <Grid celled='internally' columns='equal' stackable>
                     <Grid.Row textAlign='center'>
-                        <Grid.Column style={{paddingBottom: '5em', paddingTop: '5em'}}>
+                        <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
                             <Header icon>
-                                <Icon name="search"/>
+                                <Icon name="search" />
                                 Ready to discover the community?
                             </Header>
                             <Grid.Row textAlign='center'>
@@ -97,8 +81,8 @@ class AccountExplorer extends Component {
                     </Grid.Row>
                 </Grid>
                 <AccountModal accounts={this.state.accounts}
-                              modalOpen={this.state.modalOpen}
-                              onClose={this.handleClose}
+                    modalOpen={this.state.modalOpen}
+                    onClose={this.handleClose}
                 />
             </Segment>
         )

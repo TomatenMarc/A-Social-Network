@@ -1,12 +1,14 @@
-import React, {Component} from 'react';
-import axios from "axios";
-import {withCookies} from "react-cookie";
+import React, { Component } from 'react';
+import { withCookies } from "react-cookie";
 import InvertedStackableGrid from "../../../components/InvertedStackableGrid";
-import {Container, Grid, Header, Icon, Image, Label, List, Segment} from "semantic-ui-react";
-import {Link} from "react-router-dom";
+import { Container, Grid, Header, Icon, Image, Label, List, Segment } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import EmptyHashtagInformation from "../../../components/EmptyHashtagInformation";
+import { AuthenticationContext } from "../../../AuthenticationContext";
 
 class HashtagExplorer extends Component {
+    static contextType = AuthenticationContext;
+
     /**
      * This component shows the trending hashtags.
      * One hashtag is shown if there is at least one participant which is not the user itself.
@@ -24,14 +26,7 @@ class HashtagExplorer extends Component {
      * This method loads the trending hashtags.
      */
     componentDidMount() {
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
-        axios.get(process.env.REACT_APP_API_URL.concat("/contents/trending/hashtag/"),
-            {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn)
-                }
-            }).then(result => {
+        this.context.get(process.env.REACT_APP_API_URL.concat("/contents/trending/hashtag/")).then(result => {
             if (result.status === 200) {
                 this.setState({
                     results: result.data,
@@ -57,7 +52,7 @@ class HashtagExplorer extends Component {
                 return <Header as={Link} to={"/topic/".concat(result.tag)} style={{
                     margin: 0
                 }} icon textAlign='center'>
-                    <Icon name={'hashtag'} circular/>
+                    <Icon name={'hashtag'} circular />
                     {
                         result.tag
                     }
@@ -78,7 +73,7 @@ class HashtagExplorer extends Component {
             let random = Math.floor(Math.random() * Math.floor(result["participants"].length));
             let participant = result["participants"][random]
             if (result["participants"].length === 0)
-                return <EmptyHashtagInformation/>
+                return <EmptyHashtagInformation />
             if (result["participants"].length > 0) {
                 return <List.Item>
                     <Segment basic>
@@ -89,8 +84,8 @@ class HashtagExplorer extends Component {
                             <p>Argue with <b>{result["participants"].length}</b> others like:</p>
                             <Label as={Link} to={"/public/account/".concat(participant.user.id)} image color={"blue"}>
                                 <Image avatar
-                                       size={"tiny"}
-                                       src={process.env.REACT_APP_API_URL.concat(participant.image)}/>
+                                    size={"tiny"}
+                                    src={process.env.REACT_APP_API_URL.concat(participant.image)} />
                                 {participant.user.username}
                             </Label>
                         </Container>
@@ -115,7 +110,7 @@ class HashtagExplorer extends Component {
             </div>
         }
         if (this.state.results.length === 0) {
-            return <EmptyHashtagInformation/>
+            return <EmptyHashtagInformation />
         }
         return (
             <Grid columns='equal' padded relaxed>
@@ -127,7 +122,7 @@ class HashtagExplorer extends Component {
                     />
                 </Grid.Row>
                 <Grid.Row centered only={"computer tablet"}>
-                    <List divided style={{minWidth: "100%"}}>
+                    <List divided style={{ minWidth: "100%" }}>
                         {this.trendingHashtag(this.state.results[0])}
                         {this.trendingHashtag(this.state.results[1])}
                         {this.trendingHashtag(this.state.results[2])}

@@ -1,11 +1,13 @@
-import React, {Component} from 'react';
-import {Search} from "semantic-ui-react";
-import axios from "axios";
-import {withCookies} from "react-cookie";
+import React, { Component } from 'react';
+import { Search } from "semantic-ui-react";
+import { withCookies } from "react-cookie";
 import '../scss/Search.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { AuthenticationContext } from "../AuthenticationContext";
 
 class SearchBar extends Component {
+    static contextType = AuthenticationContext;
+
     /**
      * This component enables the search for users and hashtags.
      * The amount of shown results is determined by the backend.
@@ -31,17 +33,8 @@ class SearchBar extends Component {
      */
     handleChange = (event, data) => {
         event.preventDefault();
-        const {cookies} = this.props
-        const utkn = cookies.get("utkn")
         if (data.value !== '')
-            axios.get(process.env.REACT_APP_API_URL.concat("/search/"), {
-                headers: {
-                    'Authorization': 'Token '.concat(utkn),
-                },
-                params: {
-                    q: data.value
-                }
-            }).then(result => {
+            this.context.get(process.env.REACT_APP_API_URL.concat("/search/"), { q: data.value }).then(result => {
                 if (result.status === 200) {
                     const res = {}
                     const accounts = result.data.accounts.map(function (result) {
@@ -70,7 +63,7 @@ class SearchBar extends Component {
                             results: hashtags
                         }
                     this.setState({
-                        results: {...res}
+                        results: { ...res }
                     })
                 }
             }).catch(error => {
@@ -89,7 +82,7 @@ class SearchBar extends Component {
                     category
                     onSearchChange={this.handleChange}
                     results={this.state.results}
-                    style={{zIndex:1}}
+                    style={{ zIndex: 1 }}
                 />
             </div>
         );

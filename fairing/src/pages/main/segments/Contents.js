@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Comment, List, Segment, Transition} from "semantic-ui-react";
-import {PropTypes} from "prop-types";
+import React, { Component } from 'react';
+import { Comment, List, Segment, Transition } from "semantic-ui-react";
+import { PropTypes } from "prop-types";
 import EmptyContentInformation from "../../../components/EmptyContentInformation";
-import {StatementTemplate} from "../../../components/input/StatementTemplate";
+import { StatementTemplate } from "../../../components/input/StatementTemplate";
 
 class Contents extends Component {
 
@@ -12,8 +12,10 @@ class Contents extends Component {
      * @type {{results: *}}
      */
     static propTypes = {
-        results: PropTypes.object.isRequired
+        results: PropTypes.array.isRequired,
+        children: PropTypes.node
     };
+
 
     /**
      * This component shows all actions of the accounts the calling account is following.
@@ -22,10 +24,16 @@ class Contents extends Component {
      */
     render() {
         if (this.props.results.data.length === 0)
-            return <EmptyContentInformation/>
+            return <EmptyContentInformation />
+
+        //sort the data by id reversed
+        const data = this.props.results.data.sort((a, b) => {
+            return a.id > b.id ? -1 : 1;
+        });
+
         return (
             <Segment>
-                <Comment.Group style={{minWidth: "100%"}}>
+                <Comment.Group style={{ minWidth: "100%" }}>
                     <Transition.Group
                         as={List}
                         animation={"drop"}
@@ -33,18 +41,19 @@ class Contents extends Component {
                         divided
                     >
                         {
-                            this.props.results.data.sort(function (a, b) {
-                                return a.id > b.id // ids are representative for timestamps
-                            }).map((item, index) => {
+                            data.map((item, index) => {
                                 return <List.Item key={index}>
                                     <StatementTemplate
                                         isParent={false}
                                         key={index}
                                         name={item.author.user.username}
                                         image={process.env.REACT_APP_API_URL.concat(item.author.image)}
-                                        item={item}/>
+                                        item={item} />
                                 </List.Item>
-                            }).reverse()
+                            })
+                        }
+                        {
+                            this.props.children
                         }
                     </Transition.Group>
                 </Comment.Group>
