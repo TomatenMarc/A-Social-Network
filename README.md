@@ -1,4 +1,4 @@
-# <img src="https://solar.marc-feger.de/static/media/logo.d75338ab.jpg" alt="drawing" width="100"/> Social linked Arguments
+# <img src="https://raw.githubusercontent.com/TomatenMarc/A-Social-Network/refs/heads/development/fairing/src/resources/logo.jpg" alt="drawing" width="100"/> Social linked Arguments
 
 This project is the implementation of a minimal social argumentative network, which was made in the context of the master thesis: "Online argumentation and social media: What they can learn from each other".
 
